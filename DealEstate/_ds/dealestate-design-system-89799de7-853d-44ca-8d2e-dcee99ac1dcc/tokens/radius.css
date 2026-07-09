@@ -1,0 +1,9 @@
+/* DealEstate — Border radius (gently rounded, never sharp, never pill-everything) */
+:root {
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   10px;  /* default for inputs, buttons, small cards */
+  --radius-lg:   14px;  /* cards, sheets */
+  --radius-xl:   20px;  /* large surfaces, bottom sheets */
+  --radius-full: 999px; /* avatars, status pills, switches */
+}

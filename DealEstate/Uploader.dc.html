@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/colors.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/typography.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/radius.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/base.css">
+</helmet>
+<div dir="rtl" style="display:flex;flex-direction:column;gap:8px;font-family:var(--font-sans);">
+  <label style="font-size:13px;font-weight:500;color:var(--text-secondary);">{{ label }}</label>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px;">
+    <sc-for list="{{ items }}" as="it" hint-placeholder-count="0">
+      <div style="position:relative;aspect-ratio:1;border-radius:12px;background:linear-gradient(135deg,var(--blue-400),var(--blue-700));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.9);overflow:hidden;">
+        <span dangerouslySetInnerHTML="{{ icon }}"></span>
+        <button onClick="{{ it.remove }}" aria-label="حذف" style="position:absolute;top:5px;inset-inline-end:5px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(11,30,44,.55);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </sc-for>
+    <button onClick="{{ add }}" style="aspect-ratio:1;border-radius:12px;border:1.5px dashed var(--border-strong);background:var(--surface-sunken);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--text-muted);font-family:var(--font-sans);font-size:11px;">
+      <span dangerouslySetInnerHTML="{{ addIcon }}"></span>
+      افزودن
+    </button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:360,&quot;height&quot;:130},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;تصاویر ملک&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;kind&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;photo&quot;,&quot;video&quot;],&quot;default&quot;:&quot;photo&quot;,&quot;tsType&quot;:&quot;'photo'|'video'&quot;}}">
+class Component extends DCLogic {
+  state = { n: 0 };
+  renderVals() {
+    const isVideo = this.props.kind === 'video';
+    const photoIcon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></svg>';
+    const videoIcon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>';
+    const addPhoto = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></svg>';
+    const addVideo = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>';
+    const items = [];
+    for (let i = 0; i < this.state.n; i++) items.push({ remove: () => this.setState(s => ({ n: s.n - 1 })) });
+    return {
+      label: this.props.label || (isVideo ? 'ویدیو' : 'تصاویر'),
+      items,
+      icon: { __html: isVideo ? videoIcon : photoIcon },
+      addIcon: { __html: isVideo ? addVideo : addPhoto },
+      add: () => this.setState(s => ({ n: s.n + 1 })),
+    };
+  }
+}
+</script>
+</body>
+</html>

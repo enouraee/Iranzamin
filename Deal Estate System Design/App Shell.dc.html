@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/radius.css">
+  <link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/shadows.css">
+  <link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/base.css">
+  <link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/styles.css">
+  <script src="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/_ds_bundle.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+  </style>
+</helmet>
+
+<div style="{{ wrapStyle }}">
+
+  <div style="margin-bottom:36px; max-width:760px;">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <img src="assets/logo-mark.svg" alt="DealEstate" style="width:34px; height:34px; border-radius:9px; display:block;">
+      <div style="font-size:var(--text-2xl); font-weight:var(--weight-bold); color:var(--text-primary);">پوستهٔ اصلی برنامه</div>
+    </div>
+    <p style="margin:10px 0 0; font-size:var(--text-base); line-height:var(--leading-normal); color:var(--text-secondary);">چیدمان اصلی DealEstate — ناوبری پایین در موبایل و نوار کناری در نسخهٔ دسکتاپ (سمت راست، مطابق چیدمان راست‌به‌چپ). یک بخش از یکی را انتخاب کنید؛ هر دو نسخه هم‌زمان به‌روز می‌شوند.</p>
+  </div>
+
+  <div style="display:flex; flex-direction:row; align-items:flex-start; justify-content:flex-start; gap:56px;">
+
+    <!-- ============ MOBILE FRAME ============ -->
+    <div style="flex:none; display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; align-items:center; gap:8px; color:var(--text-secondary); font-size:var(--text-sm); font-weight:var(--weight-semibold);">
+        <span style="width:7px; height:7px; border-radius:50%; background:var(--color-primary); display:inline-block;"></span>
+        نسخهٔ موبایل
+      </div>
+
+      <div style="{{ phoneStyle }}">
+        <!-- mobile header -->
+        <header style="height:56px; flex:none; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:var(--surface-card); border-bottom:1px solid var(--border-default);">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <img src="assets/logo-mark.svg" alt="" style="width:30px; height:30px; border-radius:8px; display:block;">
+            <span style="font-size:var(--text-md); font-weight:var(--weight-bold); color:var(--text-primary);">املاک ایران زمین</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.IconButton" size="sm" aria-label="اعلان‌ها" hint-size="36px,36px">
+              <span style="position:relative; display:inline-flex;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg>
+                <span style="position:absolute; top:-1px; inset-inline-start:-1px; width:7px; height:7px; border-radius:50%; background:var(--color-danger); border:1.5px solid var(--surface-card);"></span>
+              </span>
+            </x-import>
+            <span style="width:32px; height:32px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex:none; background:var(--color-primary-soft); color:var(--blue-700); font-size:12px; font-weight:var(--weight-semibold);">رک</span>
+          </div>
+        </header>
+
+        <!-- mobile content -->
+        <main style="flex:1; min-height:0; overflow-y:auto; padding:20px 16px 88px;">
+          <h1 style="margin:0; font-size:var(--text-xl); font-weight:var(--weight-bold); color:var(--text-primary);">{{ contentTitle }}</h1>
+          <p style="margin:6px 0 0; font-size:var(--text-sm); color:var(--text-secondary);">{{ contentSubtitle }}</p>
+
+          <div style="margin-top:18px; min-height:360px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center; background:var(--surface-sunken); border:1px solid var(--border-default); border-radius:var(--radius-lg); padding:32px 20px;">
+            <span style="color:var(--gray-300); display:inline-flex;">{{ contentIconLg }}</span>
+            <p style="margin:0; max-width:240px; font-size:var(--text-sm); line-height:var(--leading-normal); color:var(--text-muted);">محتوای این بخش اینجا نمایش داده می‌شود.</p>
+          </div>
+        </main>
+
+        <!-- mobile bottom nav -->
+        <x-import component-from-global-scope="DealEstateDesignSystem_89799d.BottomNav" items="{{ bottomItems }}" value="{{ active }}" on-change="{{ setActive }}" hint-size="100%,64px"></x-import>
+      </div>
+    </div>
+
+    <!-- ============ DESKTOP FRAME ============ -->
+    <div style="flex:none; display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; align-items:center; gap:8px; color:var(--text-secondary); font-size:var(--text-sm); font-weight:var(--weight-semibold);">
+        <span style="width:7px; height:7px; border-radius:50%; background:var(--color-primary); display:inline-block;"></span>
+        نسخهٔ دسکتاپ
+      </div>
+
+      <div style="{{ desktopStyle }}">
+        <!-- desktop header -->
+        <header style="height:64px; flex:none; display:flex; align-items:center; justify-content:space-between; padding:0 24px; background:var(--surface-card); border-bottom:1px solid var(--border-default);">
+          <div style="display:flex; align-items:center; gap:11px;">
+            <img src="assets/logo-mark.svg" alt="" style="width:38px; height:38px; border-radius:10px; display:block;">
+            <div style="display:flex; flex-direction:column; line-height:1.25;">
+              <span style="font-size:var(--text-lg); font-weight:var(--weight-bold); color:var(--text-primary);">املاک ایران زمین</span>
+              <span style="font-size:11px; letter-spacing:0.06em; font-weight:var(--weight-semibold); color:var(--text-muted);">DEALESTATE</span>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.IconButton" aria-label="اعلان‌ها" hint-size="44px,44px">
+              <span style="position:relative; display:inline-flex;">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg>
+                <span style="position:absolute; top:0; inset-inline-start:0; width:8px; height:8px; border-radius:50%; background:var(--color-danger); border:2px solid var(--surface-card);"></span>
+              </span>
+            </x-import>
+            <div style="width:1px; height:26px; background:var(--border-default);"></div>
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span style="width:40px; height:40px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex:none; background:var(--color-primary-soft); color:var(--blue-700); font-size:15px; font-weight:var(--weight-semibold);">رک</span>
+              <div style="display:flex; flex-direction:column; line-height:1.3;">
+                <span style="font-size:var(--text-sm); font-weight:var(--weight-semibold); color:var(--text-primary);">رضا کریمی</span>
+                <span style="font-size:var(--text-xs); color:var(--text-muted);">مشاور املاک</span>
+              </div>
+            </div>
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Button" variant="ghost" size="sm" icon="{{ logoutIcon }}" hint-size="auto,36px">خروج</x-import>
+          </div>
+        </header>
+
+        <!-- desktop body: sidebar (RTL → right) + content -->
+        <div style="flex:1; min-height:0; display:flex; flex-direction:row;">
+          <!-- sidebar -->
+          <aside style="{{ sidebarStyle }}">
+            <nav style="display:flex; flex-direction:column; gap:4px;">
+              <sc-for list="{{ sidebarItems }}" as="item" hint-placeholder-count="5">
+                <button onClick="{{ item.onClick }}" style="{{ item.style }}" style-hover="{{ item.hoverStyle }}">
+                  <span style="display:inline-flex; flex:none;">{{ item.iconEl }}</span>
+                  <span style="{{ item.labelStyle }}">{{ item.label }}</span>
+                </button>
+              </sc-for>
+            </nav>
+          </aside>
+
+          <!-- content -->
+          <main style="flex:1; min-width:0; overflow-y:auto; background:var(--bg-app); padding:32px 36px;">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin-bottom:28px;">
+              <div>
+                <h1 style="margin:0; font-size:var(--text-3xl); font-weight:var(--weight-bold); color:var(--text-primary);">{{ contentTitle }}</h1>
+                <p style="margin:8px 0 0; font-size:var(--text-md); color:var(--text-secondary);">{{ contentSubtitle }}</p>
+              </div>
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Button" variant="primary" icon="{{ addIcon }}" hint-size="auto,44px">ثبت فایل جدید</x-import>
+            </div>
+
+            <div style="min-height:380px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; text-align:center; background:var(--surface-card); border:1px solid var(--border-default); border-radius:var(--radius-lg); box-shadow:var(--shadow-sm); padding:48px;">
+              <span style="color:var(--gray-300); display:inline-flex;">{{ contentIconLg }}</span>
+              <p style="margin:0; max-width:320px; font-size:var(--text-md); line-height:var(--leading-normal); color:var(--text-muted);">محتوای این بخش اینجا نمایش داده می‌شود.</p>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 1780, &quot;height&quot;: 1000 },
+  &quot;defaultSection&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;dashboard&quot;, &quot;properties&quot;, &quot;customers&quot;, &quot;contracts&quot;, &quot;requests&quot;], &quot;default&quot;: &quot;properties&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;sidebarCollapsed&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot; },
+  &quot;brandColor&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#1F4A6B&quot;, &quot;options&quot;: [&quot;#1F4A6B&quot;, &quot;#173A54&quot;, &quot;#2E5F86&quot;, &quot;#1F8A54&quot;], &quot;tsType&quot;: &quot;string&quot; }
+}">
+class Component extends DCLogic {
+  state = { active: null };
+
+  // یک آیکون خطی Lucide می‌سازد؛ رنگ از currentColor والد ارث می‌برد.
+  icon(inner, opts) {
+    opts = opts || {};
+    return React.createElement('svg', {
+      width: opts.size || 20,
+      height: opts.size || 20,
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: opts.strokeWidth || 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      dangerouslySetInnerHTML: { __html: inner },
+    });
+  }
+
+  setActive = (v) => this.setState({ active: v });
+
+  renderVals() {
+    const ICON = {
+      home: '<path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M9 21v-6h6v6"/>',
+      building: '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/>',
+      users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+      file: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>',
+      list: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
+    };
+
+    const nav = [
+      { value: 'dashboard', label: 'داشبورد', subtitle: 'نمای کلی فعالیت‌های دفتر', svg: ICON.home },
+      { value: 'properties', label: 'فایل‌ها', subtitle: 'مدیریت فایل‌های ملکی', svg: ICON.building },
+      { value: 'customers', label: 'مشتریان', subtitle: 'مالکان، مستأجران و مشتریان', svg: ICON.users },
+      { value: 'contracts', label: 'قراردادها', subtitle: 'قراردادهای فروش و اجاره', svg: ICON.file },
+      { value: 'requests', label: 'درخواست‌ها', subtitle: 'درخواست‌های خرید و اجارهٔ مشتریان', svg: ICON.list },
+    ];
+
+    const active = this.state.active != null ? this.state.active : (this.props.defaultSection || 'properties');
+    const collapsed = this.props.sidebarCollapsed === true;
+    const brand = this.props.brandColor || '#1F4A6B';
+
+    const itemBase = {
+      display: 'flex', alignItems: 'center', gap: 12, width: '100%',
+      padding: collapsed ? '12px 0' : '11px 14px',
+      justifyContent: collapsed ? 'center' : 'flex-start',
+      border: 'none', borderInlineStart: '3px solid transparent',
+      borderRadius: 'var(--radius-md)', background: 'transparent',
+      color: 'var(--text-secondary)', fontFamily: 'var(--font-sans)',
+      fontSize: 'var(--text-base)', fontWeight: 'var(--weight-medium)',
+      cursor: 'pointer', textAlign: 'start',
+      transition: 'background 140ms ease, color 140ms ease',
+    };
+    const itemActive = {
+      background: 'var(--color-primary-soft)', color: 'var(--color-primary)',
+      fontWeight: 'var(--weight-semibold)', borderInlineStart: '3px solid var(--color-primary)',
+    };
+
+    const sidebarItems = nav.map((n) => {
+      const on = n.value === active;
+      return {
+        value: n.value,
+        label: n.label,
+        iconEl: this.icon(n.svg, { size: 20, strokeWidth: on ? 2.3 : 2 }),
+        onClick: () => this.setActive(n.value),
+        style: Object.assign({}, itemBase, on ? itemActive : {}),
+        hoverStyle: on ? {} : { background: 'var(--surface-sunken)', color: 'var(--text-primary)' },
+        labelStyle: { display: collapsed ? 'none' : 'inline', whiteSpace: 'nowrap' },
+      };
+    });
+
+    const bottomItems = nav.map((n) => ({
+      value: n.value,
+      label: n.label,
+      icon: (isActive) => this.icon(n.svg, { size: 24, strokeWidth: isActive ? 2.4 : 2 }),
+    }));
+
+    const current = nav.find((n) => n.value === active) || nav[0];
+
+    return {
+      active,
+      setActive: this.setActive,
+      sidebarItems,
+      bottomItems,
+      contentTitle: current.label,
+      contentSubtitle: current.subtitle,
+      contentIconLg: this.icon(current.svg, { size: 60, strokeWidth: 1.6 }),
+      logoutIcon: this.icon('<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>', { size: 17 }),
+      addIcon: this.icon('<circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/>', { size: 18 }),
+
+      wrapStyle: {
+        direction: 'rtl', fontFamily: 'var(--font-sans)',
+        width: 'max-content', minWidth: '100%', minHeight: '100vh',
+        boxSizing: 'border-box', padding: '48px',
+        background: '#E9EDF2',
+        '--color-primary': brand, '--color-primary-hover': brand,
+      },
+      phoneStyle: {
+        flex: 'none', display: 'flex', flexDirection: 'column',
+        width: 380, height: 800, position: 'relative', overflow: 'hidden',
+        background: 'var(--bg-app)', borderRadius: 34,
+        border: '1px solid var(--border-strong)', boxShadow: 'var(--shadow-xl)',
+        '--bottomnav-h': '64px',
+      },
+      desktopStyle: {
+        flex: 'none', display: 'flex', flexDirection: 'column',
+        width: 1180, height: 760, overflow: 'hidden',
+        background: 'var(--bg-app)', borderRadius: 'var(--radius-lg)',
+        border: '1px solid var(--border-strong)', boxShadow: 'var(--shadow-xl)',
+      },
+      sidebarStyle: {
+        flex: 'none', width: collapsed ? 78 : 248, height: '100%',
+        background: 'var(--surface-card)', borderInlineEnd: '1px solid var(--border-default)',
+        padding: '18px 14px', overflowY: 'auto',
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

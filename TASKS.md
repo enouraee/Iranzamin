@@ -164,20 +164,20 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 
 ## Foundation
 
-- [ ] **21. Scaffold Django project (uv, split settings, PyMySQL)**
+- [x] **21. Scaffold Django project (uv, split settings, PyMySQL)**
   - **Scope:** `backend/` project via **uv**. Deps: `django`, `djangorestframework`, `django-cors-headers`, `django-filter`, `django-environ`, `PyMySQL`, `djangorestframework-simplejwt`, `django-jalali`; dev: `pytest`, `pytest-django`, `factory_boy`, `pytest-cov`, `ruff`, `mypy`. Split settings `config/settings/{base,local,test,production}.py`. `pymysql.install_as_MySQLdb()` in `config/__init__.py`. `.env` (gitignored) + `.env.example` with `DATABASE_URL=mysql://root:abcd%401234@127.0.0.1:3306/iranzamin`. Base `apps/` package.
   - **Tests:** `uv run pytest` runs (0 tests ok); `migrate` connects to MySQL.
-  - **Done:** server boots, DB connects. `_____ / commit _____`
+  - **Done:** 2026-07-09 / commit e67add3
 
-- [ ] **22. Auth (JWT) — login by mobile + password** 🔒⚠️
+- [x] **22. Auth (JWT) — login by mobile + password** 🔒⚠️
   - **Scope:** custom User keyed on mobile number. `simplejwt` login/refresh. `services.py` for user create/password. Thin login api.
   - **Tests:** ⚠️ valid login returns tokens, wrong password 401, unknown mobile 401, malformed phone 400, refresh works.
-  - **Done:** JWT login works. `_____ / commit _____`
+  - **Done:** 2026-07-09 / commit 250a431
 
-- [ ] **23. Profile / me endpoint + settings** 🔒
+- [x] **23. Profile / me endpoint + settings** 🔒
   - **Scope:** `GET/PATCH /api/me/` — name, phone, notification pref, dark-mode pref. Selector `user_get`, service `user_update`.
   - **Tests:** unauth 401, get shape, patch persists, invalid field rejected.
-  - **Done:** profile api works. `_____ / commit _____`
+  - **Done:** 2026-07-09 / commit 250a431
 
 - [ ] **24. Core: BaseModel, ApplicationError, exception handler, pagination**
   - **Scope:** `apps/common/`: `BaseModel` (`created_at`/`updated_at`), `ApplicationError`, DRF custom exception handler → structured errors, shared pagination + base serializers. Wire in settings.

@@ -216,10 +216,10 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ status flip validation, tenant required when پر, partial update, unauthorized agent rejected.
   - **Done:** 2026-07-10 / commit a524f44
 
-- [ ] **31. Property delete + urls wiring**
+- [x] **31. Property delete + urls wiring**
   - **Scope:** `property_delete` service, delete api, `apps/properties/urls.py` explicit named patterns under `/api/`.
   - **Tests:** delete removes + cascades correctly, 404 on missing, unauth 401.
-  - **Done:** full property CRUD routed. `_____ / commit _____`
+  - **Done:** full property CRUD routed. `2026-07-10 / commit fa4e299`
 
 - [ ] **32. Dashboard stats selector + api**
   - **Scope:** `selectors.dashboard_stats` (counts: total files, خالی/پر, contracts, open requests, recent files). Thin api.

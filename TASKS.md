@@ -206,10 +206,10 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** existing id 200 shape, missing id 404 via ApplicationError, occupied includes tenant+dates.
   - **Done:** 2026-07-10 / commit ca80949
 
-- [ ] **29. Property create service + api** ⚠️
+- [x] **29. Property create service + api** ⚠️
   - **Scope:** `services.property_create(*, agent, type, region, ...)` — `full_clean()` + `transaction.atomic()`, type-specific field handling, owner link, media. `PropertyCreateApi`.
   - **Tests:** ⚠️ happy path per type, **land + rent/rahn rejected**, occupied-without-dates rejected, missing owner rejected, huge price stored as int, atomic rollback on failure.
-  - **Done:** create api enforces all rules. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit TBD
 
 - [ ] **30. Property update + status/media services** ⚠️
   - **Scope:** `property_update`, `property_set_status` (خالی/پر + tenant/dates), media add/remove. Update apis.

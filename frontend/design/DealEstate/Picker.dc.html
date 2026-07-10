@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/colors.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/typography.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/radius.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/shadows.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/base.css">
+</helmet>
+<div dir="rtl" style="display:flex;flex-direction:column;gap:6px;font-family:var(--font-sans);">
+  <sc-if value="{{ hasLabel }}" hint-placeholder-val="{{ true }}">
+    <label style="font-size:13px;font-weight:500;color:var(--text-secondary);">{{ label }}</label>
+  </sc-if>
+
+  <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;align-items:center;gap:10px;height:46px;padding:0 14px;background:var(--color-primary-soft);border:1px solid var(--color-primary);border-radius:10px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+      <span style="flex:1;font-size:15px;font-weight:600;color:var(--blue-700);">{{ selected }}</span>
+      <button onClick="{{ change }}" style="border:none;background:none;color:var(--color-primary);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:pointer;flex:none;">تغییر</button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ noSel }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;align-items:center;gap:8px;height:46px;padding:0 14px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:10px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input value="{{ q }}" onChange="{{ onQ }}" placeholder="{{ placeholder }}" style="flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:var(--font-sans);font-size:15px;color:var(--text-primary);text-align:right;" />
+    </div>
+    <sc-if value="{{ showList }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;background:var(--surface-card);border:1px solid var(--border-default);border-radius:10px;box-shadow:var(--shadow-md);overflow:hidden;">
+        <sc-for list="{{ results }}" as="o" hint-placeholder-count="3">
+          <button onClick="{{ o.onPick }}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 14px;border:none;border-bottom:1px solid var(--border-default);background:var(--surface-card);cursor:pointer;font-family:var(--font-sans);text-align:right;" style-hover="background:var(--surface-hover);">
+            <span style="font-size:14px;font-weight:500;color:var(--text-primary);">{{ o.label }}</span>
+            <sc-if value="{{ o.hasSub }}"><span style="font-size:12px;color:var(--text-muted);direction:ltr;">{{ o.sub }}</span></sc-if>
+          </button>
+        </sc-for>
+        <sc-if value="{{ showAdd }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ onAdd }}" style="display:flex;align-items:center;gap:8px;padding:12px 14px;border:none;background:var(--color-primary-soft);cursor:pointer;font-family:var(--font-sans);text-align:right;color:var(--color-primary);font-weight:600;font-size:14px;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>
+            {{ addLabel }} «{{ qTrim }}»
+          </button>
+        </sc-if>
+      </div>
+    </sc-if>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:360,&quot;height&quot;:140},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;منطقه&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;placeholder&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;جستجو...&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;addmsg&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;افزودن مورد جدید&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;options&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{label:string,sub?:string}[]&quot;}}">
+class Component extends DCLogic {
+  state = { q: '', sel: '' };
+  renderVals() {
+    const opts = this.props.options || [];
+    const q = this.state.q; const qt = q.trim();
+    const filtered = opts.filter(o => !qt || (String(o.label) + (o.sub || '')).includes(qt));
+    const exact = opts.some(o => o.label === qt);
+    const set = (name) => this.setState({ sel: name, q: '' });
+    return {
+      label: this.props.label || '', hasLabel: !!this.props.label,
+      placeholder: this.props.placeholder || 'جستجو...',
+      addLabel: this.props.addmsg || 'افزودن',
+      selected: this.state.sel, hasSel: !!this.state.sel, noSel: !this.state.sel,
+      q, qTrim: qt, showList: qt.length > 0, showAdd: qt.length > 0 && !exact,
+      results: filtered.slice(0, 6).map(o => ({ label: o.label, sub: o.sub || '', hasSub: !!o.sub, onPick: () => set(o.label) })),
+      onQ: (e) => this.setState({ q: e.target.value }),
+      onAdd: () => set(qt),
+      change: () => this.setState({ sel: '', q: '' }),
+    };
+  }
+}
+</script>
+</body>
+</html>

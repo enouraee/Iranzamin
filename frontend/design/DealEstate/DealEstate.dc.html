@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/colors.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/typography.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/radius.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/shadows.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/base.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/styles.css">
+<script src="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/_ds_bundle.js"></script>
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg-app);font-family:var(--font-sans);}
+  .de-bottomnav{display:flex;}
+  .de-sidebar{display:none;}
+  .de-shell{padding-right:0;}
+  .de-fab{inset-inline-start:20px;bottom:84px;}
+  @media(min-width:920px){
+    .de-bottomnav{display:none;}
+    .de-sidebar{display:flex;}
+    .de-shell{padding-right:248px;}
+    .de-content{padding-bottom:56px !important;}
+    .de-fab{inset-inline-start:auto;inset-inline-end:32px;bottom:32px;}
+  }
+  .de-noscroll::-webkit-scrollbar{height:0;width:0;}
+  .de-noscroll{scrollbar-width:none;}
+</style>
+</helmet>
+
+<div class="de-shell" dir="rtl" style="min-height:100vh;background:var(--bg-app);color:var(--text-primary);font-family:var(--font-sans);position:relative;">
+
+  <aside class="de-sidebar" style="position:fixed;top:0;right:0;bottom:0;width:248px;background:var(--surface-card);border-left:1px solid var(--border-default);flex-direction:column;padding:22px 16px;z-index:40;">
+    <div style="display:flex;align-items:center;gap:10px;padding:0 6px 4px;">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;background:var(--color-primary);color:#fff;flex:none;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/><path d="M9 9v.01M9 13v.01M9 17v.01"/></svg>
+      </span>
+      <div style="display:flex;flex-direction:column;line-height:1.3;">
+        <strong style="font-size:15px;font-weight:700;color:var(--text-primary);">املاک ایران زمین</strong>
+        <span style="font-size:11px;color:var(--text-muted);letter-spacing:.04em;">DealEstate</span>
+      </div>
+    </div>
+    <div style="height:1px;background:var(--border-default);margin:16px 0;"></div>
+    <nav style="display:flex;flex-direction:column;gap:4px;flex:1;">
+      <button onClick="{{ nav.dashboard }}" style="display:flex;align-items:center;gap:11px;padding:11px 12px;border:none;border-radius:10px;cursor:pointer;font-family:var(--font-sans);font-size:15px;font-weight:500;background:{{ navBg.dashboard }};color:{{ navCol.dashboard }};transition:background 140ms;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M9 21v-6h6v6"/></svg>
+        داشبورد
+      </button>
+      <button onClick="{{ nav.files }}" style="display:flex;align-items:center;gap:11px;padding:11px 12px;border:none;border-radius:10px;cursor:pointer;font-family:var(--font-sans);font-size:15px;font-weight:500;background:{{ navBg.files }};color:{{ navCol.files }};transition:background 140ms;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>
+        فایل‌ها
+      </button>
+      <button onClick="{{ nav.customers }}" style="display:flex;align-items:center;gap:11px;padding:11px 12px;border:none;border-radius:10px;cursor:pointer;font-family:var(--font-sans);font-size:15px;font-weight:500;background:{{ navBg.customers }};color:{{ navCol.customers }};transition:background 140ms;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+        مشتریان
+      </button>
+      <button onClick="{{ nav.contracts }}" style="display:flex;align-items:center;gap:11px;padding:11px 12px;border:none;border-radius:10px;cursor:pointer;font-family:var(--font-sans);font-size:15px;font-weight:500;background:{{ navBg.contracts }};color:{{ navCol.contracts }};transition:background 140ms;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>
+        قراردادها
+      </button>
+      <button onClick="{{ nav.requests }}" style="display:flex;align-items:center;gap:11px;padding:11px 12px;border:none;border-radius:10px;cursor:pointer;font-family:var(--font-sans);font-size:15px;font-weight:500;background:{{ navBg.requests }};color:{{ navCol.requests }};transition:background 140ms;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg>
+        درخواست‌ها
+      </button>
+    </nav>
+    <button onClick="{{ openProfile }}" style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:var(--surface-sunken);border:none;cursor:pointer;font-family:var(--font-sans);text-align:right;width:100%;">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--color-primary-soft);color:var(--blue-700);font-weight:600;font-size:14px;flex:none;">ر.ک</span>
+      <div style="display:flex;flex-direction:column;line-height:1.35;min-width:0;">
+        <strong style="font-size:13px;font-weight:600;">رضا کریمی</strong>
+        <span style="font-size:11px;color:var(--text-muted);">مشاور املاک</span>
+      </div>
+    </button>
+  </aside>
+
+  <header class="de-header" style="position:sticky;top:0;z-index:30;height:60px;background:var(--surface-card);border-bottom:1px solid var(--border-default);display:flex;align-items:center;justify-content:space-between;padding:0 14px;">
+    <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+      <sc-if value="{{ showBack }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ back }}" aria-label="بازگشت" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:none;background:transparent;border-radius:10px;cursor:pointer;color:var(--text-secondary);flex:none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </sc-if>
+      <strong style="font-size:17px;font-weight:700;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ headerTitle }}</strong>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="de-sidebar" style="font-size:14px;font-weight:600;color:var(--text-secondary);">{{ today }}</span>
+      <button aria-label="اعلان‌ها" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:none;background:transparent;border-radius:10px;cursor:pointer;color:var(--text-secondary);position:relative;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+        <span style="position:absolute;top:9px;inset-inline-start:10px;width:7px;height:7px;border-radius:50%;background:var(--color-danger);border:1.5px solid var(--surface-card);"></span>
+      </button>
+      <button onClick="{{ openProfile }}" aria-label="پروفایل و تنظیمات" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;border:none;background:var(--color-primary-soft);color:var(--blue-700);font-weight:600;font-size:14px;flex:none;cursor:pointer;font-family:var(--font-sans);">ر.ک</button>
+    </div>
+  </header>
+
+  <main class="de-content" style="max-width:840px;margin:0 auto;padding:18px 16px 100px;">
+
+    <!-- ========== DASHBOARD ========== -->
+    <sc-if value="{{ r_dashboard }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <h2 style="margin:0;font-size:22px;font-weight:700;">سلام، رضا 👋</h2>
+          <p style="margin:0;font-size:14px;color:var(--text-secondary);">خلاصه‌ی فعالیت دفتر در یک نگاه.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;">
+          <x-import component-from-global-scope="DealEstateDesignSystem_89799d.StatCard" label="فایل‌های فعال" value="۴۸" accent="primary" hint-size="100%,108px"></x-import>
+          <x-import component-from-global-scope="DealEstateDesignSystem_89799d.StatCard" label="قرارداد این ماه" value="۷" accent="success" trend="up" trend-value="۲" hint-size="100%,108px"></x-import>
+          <x-import component-from-global-scope="DealEstateDesignSystem_89799d.StatCard" label="درخواست در انتظار" value="۱۲" accent="accent" hint-size="100%,108px"></x-import>
+          <x-import component-from-global-scope="DealEstateDesignSystem_89799d.StatCard" label="نزدیک به پایان" value="۳" accent="danger" hint-size="100%,108px"></x-import>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <h3 style="margin:0;font-size:16px;font-weight:600;">قراردادهای نزدیک به پایان</h3>
+            <button onClick="{{ nav.contracts }}" style="border:none;background:none;color:var(--color-primary);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:pointer;">همه</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <sc-for list="{{ endingContracts }}" as="c" hint-placeholder-count="3">
+              <div onClick="{{ c.onOpen }}" style="display:flex;align-items:center;gap:12px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:14px;padding:13px 14px;box-shadow:var(--shadow-sm);cursor:pointer;">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:10px;background:var(--color-danger-soft);color:var(--color-danger);flex:none;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                </span>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;">
+                  <strong style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ c.title }}</strong>
+                  <span style="font-size:12px;color:var(--text-secondary);">{{ c.party }} · {{ c.typeLabel }}</span>
+                </div>
+                <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;background:var(--color-danger-soft);color:var(--color-danger-text);white-space:nowrap;flex:none;">{{ c.daysLeft }} روز مانده</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <h3 style="margin:0;font-size:16px;font-weight:600;">آخرین فایل‌ها</h3>
+            <button onClick="{{ nav.files }}" style="border:none;background:none;color:var(--color-primary);font-family:var(--font-sans);font-size:13px;font-weight:600;cursor:pointer;">همه فایل‌ها</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <sc-for list="{{ recentProps }}" as="p" hint-placeholder-count="2">
+              <div onClick="{{ p.onOpen }}" style="display:flex;gap:12px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:14px;padding:12px;box-shadow:var(--shadow-sm);cursor:pointer;">
+                <div style="width:74px;height:74px;flex:none;border-radius:10px;background:linear-gradient(135deg,var(--blue-500),var(--blue-700));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+                </div>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+                    <strong style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ p.title }}</strong>
+                    <span style="{{ p.status.style }}">{{ p.status.text }}</span>
+                  </div>
+                  <span style="font-size:12px;color:var(--text-secondary);">{{ p.region }} · {{ p.area }} متر</span>
+                  <span style="font-size:15px;font-weight:700;color:var(--color-primary);margin-top:auto;">{{ p.priceLabel }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== PROPERTIES LIST ========== -->
+    <sc-if value="{{ r_properties }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div style="flex:1;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" placeholder="جستجوی آدرس، منطقه یا کد فایل..." value="{{ q }}" on-change="{{ onSearch }}" hint-size="100%,46px"></x-import></div>
+          <button onClick="{{ openFileFilter }}" aria-label="فیلتر پیشرفته" style="display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:10px;border:1px solid {{ filterBtnBorder }};background:{{ filterBtnBg }};color:{{ filterBtnCol }};cursor:pointer;flex:none;position:relative;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+            <sc-if value="{{ hasAdvFilter }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:7px;inset-inline-start:7px;width:9px;height:9px;border-radius:50%;background:var(--color-primary);border:2px solid var(--surface-card);"></span></sc-if>
+          </button>
+        </div>
+        <div class="de-noscroll" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin:0 -16px;padding-inline:16px;">
+          <sc-for list="{{ filterChips }}" as="f" hint-placeholder-count="7">
+            <button onClick="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:13px;color:var(--text-muted);">{{ propCount }} فایل</div>
+          <sc-if value="{{ hasAdvFilter }}" hint-placeholder-val="{{ false }}"><button onClick="{{ clearAdvFilter }}" style="display:inline-flex;align-items:center;gap:5px;border:none;background:none;color:var(--color-danger);font-family:var(--font-sans);font-size:13px;font-weight:500;cursor:pointer;padding:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>پاک کردن فیلترها</button></sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <sc-for list="{{ properties }}" as="p" hint-placeholder-count="5">
+            <div onClick="{{ p.onOpen }}" style="display:flex;gap:13px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:14px;padding:12px;box-shadow:var(--shadow-sm);cursor:pointer;transition:box-shadow 160ms,transform 120ms;" style-hover="transform:translateY(-2px);box-shadow:var(--shadow-md);">
+              <div style="width:92px;height:92px;flex:none;border-radius:10px;background:linear-gradient(135deg,var(--blue-500),var(--blue-700));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);position:relative;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/><path d="M9 9v.01M9 13v.01M9 17v.01"/></svg>
+                <span style="position:absolute;bottom:6px;inset-inline-start:6px;display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:999px;background:rgba(11,30,44,.55);color:#fff;font-size:11px;backdrop-filter:blur(2px);">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></svg>
+                  {{ p.photos }}
+                </span>
+              </div>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:6px;min-width:0;">
+                    <span style="{{ p.typePill.style }}">{{ p.typePill.text }}</span>
+                    <strong style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ p.region }}</strong>
+                  </div>
+                  <span style="{{ p.status.style }}">{{ p.status.text }}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                  {{ p.address }}
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-muted);">
+                  <span style="display:inline-flex;align-items:center;gap:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3a1 1 0 0 1-1.4 0l-4.6-4.6a1 1 0 0 1 0-1.4L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4Z"/></svg>{{ p.area }} متر</span>
+                  <sc-if value="{{ p.hasBeds }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;align-items:center;gap:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"/></svg>{{ p.beds }} خواب</span></sc-if>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;">
+                  <div style="display:flex;gap:5px;">
+                    <sc-for list="{{ p.pills }}" as="pl"><span style="{{ pl.style }}">{{ pl.text }}</span></sc-for>
+                  </div>
+                  <span style="font-size:15px;font-weight:700;color:var(--color-primary);white-space:nowrap;">{{ p.priceLabel }}</span>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ propEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align:center;padding:48px 16px;color:var(--text-muted);font-size:14px;">ملکی با این مشخصات یافت نشد.</div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== ADD PROPERTY — TYPE SELECTOR ========== -->
+    <sc-if value="{{ r_addType }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <h2 style="margin:0;font-size:20px;font-weight:700;">افزودن فایل جدید</h2>
+        <p style="margin:0 0 8px;font-size:14px;color:var(--text-secondary);">نوع ملک را انتخاب کنید.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <sc-for list="{{ typeCards }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:16px;text-align:right;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm);cursor:pointer;font-family:var(--font-sans);transition:box-shadow 160ms,transform 120ms,border-color 140ms;" style-hover="transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--color-primary);">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:14px;background:var(--color-primary-soft);color:var(--color-primary);flex:none;" dangerouslySetInnerHTML="{{ t.icon }}"></span>
+              <span style="flex:1;display:flex;flex-direction:column;gap:3px;">
+                <strong style="font-size:17px;font-weight:700;">{{ t.title }}</strong>
+                <span style="font-size:13px;color:var(--text-secondary);">{{ t.desc }}</span>
+              </span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== PERSONS LIST ========== -->
+    <sc-if value="{{ r_persons }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Tabs" items="{{ personTabs }}" value="{{ personKind }}" on-change="{{ onPersonTab }}" hint-size="100%,46px"></x-import>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <div style="flex:1;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" placeholder="جستجوی نام یا شماره تلفن..." value="{{ personQ }}" on-change="{{ onPersonSearch }}" hint-size="100%,46px"></x-import></div>
+          <button onClick="{{ addPerson }}" style="display:inline-flex;align-items:center;gap:6px;height:46px;padding:0 16px;border:none;border-radius:10px;background:var(--color-primary);color:#fff;font-family:var(--font-sans);font-size:14px;font-weight:600;cursor:pointer;flex:none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>افزودن
+          </button>
+        </div>
+        <div class="de-noscroll" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin:0 -16px;padding-inline:16px;">
+          <sc-for list="{{ personFilterChips }}" as="pfc" hint-placeholder-count="3">
+            <button onClick="{{ pfc.onClick }}" style="{{ pfc.style }}">{{ pfc.label }}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ personEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:48px 16px;color:var(--text-muted);font-size:14px;">شخصی با این مشخصات یافت نشد.</div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ persons }}" as="ps" hint-placeholder-count="5">
+            <div onClick="{{ ps.onOpen }}" style="display:flex;align-items:center;gap:12px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:14px;padding:13px 14px;box-shadow:var(--shadow-sm);cursor:pointer;">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--color-primary-soft);color:var(--blue-700);font-weight:600;font-size:15px;flex:none;">{{ ps.initials }}</span>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;">
+                <strong style="font-size:15px;font-weight:600;">{{ ps.name }}</strong>
+                <span style="display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--text-secondary);direction:ltr;justify-content:flex-end;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.8 19.8a17.9 17.9 0 0 1-7.6-7.6 3 3 0 0 1 .5-3.6l1-1a1.6 1.6 0 0 1 2.3.2l1.3 1.7a1.6 1.6 0 0 1 0 2l-.6.8a13 13 0 0 0 3 3l.8-.6a1.6 1.6 0 0 1 2 0l1.7 1.3a1.6 1.6 0 0 1 .2 2.3l-1 1a3 3 0 0 1-3.6.5Z"/></svg>{{ ps.phone }}</span>
+              </div>
+              <sc-if value="{{ ps.hasProps }}" hint-placeholder-val="{{ true }}">
+                <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;background:var(--color-primary-soft);color:var(--blue-700);white-space:nowrap;flex:none;">{{ ps.propCount }} ملک</span>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== CONTRACTS LIST ========== -->
+    <sc-if value="{{ r_contracts }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <p style="margin:0;font-size:14px;color:var(--text-secondary);">{{ contractCount }} قرارداد ثبت‌شده</p>
+          <button onClick="{{ startContract }}" style="display:inline-flex;align-items:center;gap:6px;height:42px;padding:0 16px;border:none;border-radius:10px;background:var(--color-primary);color:#fff;font-family:var(--font-sans);font-size:14px;font-weight:600;cursor:pointer;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>ثبت قرارداد
+          </button>
+        </div>
+        <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" placeholder="جستجوی نام طرفین یا عنوان ملک..." value="{{ contractSearch }}" on-change="{{ onContractSearch }}" hint-size="100%,46px"></x-import>
+        <div class="de-noscroll" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin:0 -16px;padding-inline:16px;">
+          <sc-for list="{{ contractFilterChips }}" as="cfc" hint-placeholder-count="4">
+            <button onClick="{{ cfc.onClick }}" style="{{ cfc.style }}">{{ cfc.label }}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ contractEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:48px 16px;color:var(--text-muted);font-size:14px;">قراردادی با این مشخصات یافت نشد.</div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ contractList }}" as="c" hint-placeholder-count="4">
+            <div style="display:flex;flex-direction:column;gap:9px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:14px;padding:14px;box-shadow:var(--shadow-sm);">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+                <strong style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ c.title }}</strong>
+                <span style="{{ c.typePill.style }}">{{ c.typePill.text }}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>{{ c.party }}
+              </div>
+              <div style="height:1px;background:var(--border-default);"></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text-muted);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>{{ c.dates }}</span>
+                <span style="font-size:14px;font-weight:700;color:var(--color-primary);">{{ c.amount }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== REQUESTS LIST ========== -->
+    <sc-if value="{{ r_requests }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <p style="margin:0;font-size:14px;color:var(--text-secondary);">{{ requestCount }} درخواست در جریان</p>
+          <button onClick="{{ startRequest }}" style="display:inline-flex;align-items:center;gap:6px;height:42px;padding:0 16px;border:none;border-radius:10px;background:var(--color-primary);color:#fff;font-family:var(--font-sans);font-size:14px;font-weight:600;cursor:pointer;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>ثبت درخواست
+          </button>
+        </div>
+        <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" placeholder="جستجوی نام، شماره تلفن یا توضیحات..." value="{{ requestSearch }}" on-change="{{ onRequestSearch }}" hint-size="100%,46px"></x-import>
+        <div class="de-noscroll" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin:0 -16px;padding-inline:16px;">
+          <sc-for list="{{ requestFilterChips }}" as="rfc" hint-placeholder-count="4">
+            <button onClick="{{ rfc.onClick }}" style="{{ rfc.style }}">{{ rfc.label }}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ requestEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:48px 16px;color:var(--text-muted);font-size:14px;">درخواستی با این مشخصات یافت نشد.</div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ requestList }}" as="rq" hint-placeholder-count="5">
+            <div style="display:flex;flex-direction:column;gap:9px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:14px;padding:14px;box-shadow:var(--shadow-sm);">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+                <div style="display:flex;align-items:center;gap:9px;min-width:0;">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--color-primary-soft);color:var(--blue-700);font-weight:600;font-size:13px;flex:none;">{{ rq.initials }}</span>
+                  <div style="display:flex;flex-direction:column;min-width:0;">
+                    <strong style="font-size:14px;font-weight:600;">{{ rq.name }}</strong>
+                    <span style="font-size:12px;color:var(--text-muted);direction:ltr;text-align:right;">{{ rq.phone }}</span>
+                  </div>
+                </div>
+                <span style="{{ rq.typePill.style }}">{{ rq.typePill.text }}</span>
+              </div>
+              <p style="margin:0;font-size:13px;color:var(--text-secondary);line-height:1.6;">{{ rq.summary }}</p>
+              <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-muted);">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>مهلت: {{ rq.deadline }}
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== PROPERTY DETAIL ========== -->
+    <sc-if value="{{ r_detail }}" hint-placeholder-val="{{ false }}">
+      <sc-if value="{{ detail }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="position:relative;border-radius:16px;overflow:hidden;height:200px;background:linear-gradient(135deg,var(--blue-500),var(--blue-800));display:flex;align-items:flex-end;padding:14px;">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/><path d="M9 9v.01M9 13v.01M9 17v.01"/></svg></div>
+            <span style="position:absolute;top:12px;inset-inline-start:12px;display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;background:rgba(11,30,44,.55);color:#fff;font-size:12px;backdrop-filter:blur(3px);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></svg>{{ detail.photos }} عکس</span>
+            <span style="{{ detail.statusStyle }}">{{ detail.statusText }}</span>
+          </div>
+          <div style="display:flex;gap:8px;overflow-x:auto;" class="de-noscroll">
+            <sc-for list="{{ detail.gallery }}" as="g" hint-placeholder-count="4"><div style="flex:none;width:72px;height:72px;border-radius:10px;background:linear-gradient(135deg,var(--blue-400),var(--blue-700));"></div></sc-for>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <h2 style="margin:0;font-size:20px;font-weight:700;">{{ detail.typeLabel }} {{ detail.region }}</h2>
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:500;background:var(--surface-sunken);color:var(--text-secondary);">{{ detail.typeLabel }}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:14px;color:var(--text-secondary);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              {{ detail.address }}
+            </div>
+            <div style="display:flex;gap:6px;margin-top:4px;"><sc-for list="{{ detail.pills }}" as="pl"><span style="{{ pl.style }}">{{ pl.text }}</span></sc-for></div>
+          </div>
+
+          <!-- مشخصات -->
+          <div style="display:flex;flex-direction:column;gap:14px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:18px;box-shadow:var(--shadow-sm);">
+            <div style="display:flex;align-items:center;gap:9px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;background:var(--color-primary-soft);color:var(--color-primary);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3a1 1 0 0 1-1.4 0l-4.6-4.6a1 1 0 0 1 0-1.4L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4Z"/></svg></span><strong style="font-size:15px;font-weight:600;">مشخصات</strong></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;">
+              <sc-for list="{{ detail.specs }}" as="sp" hint-placeholder-count="4">
+                <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:12px;color:var(--text-muted);">{{ sp.label }}</span><span style="font-size:14px;font-weight:600;color:var(--text-primary);">{{ sp.value }}</span></div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ detail.hasAmenities }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-wrap:wrap;gap:7px;padding-top:4px;border-top:1px solid var(--border-default);margin-top:2px;padding-top:14px;">
+                <sc-for list="{{ detail.amenityChips }}" as="a"><span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:500;background:var(--color-primary-soft);color:var(--blue-700);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>{{ a }}</span></sc-for>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- قیمت -->
+          <div style="display:flex;flex-direction:column;gap:14px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:18px;box-shadow:var(--shadow-sm);">
+            <div style="display:flex;align-items:center;gap:9px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;background:var(--color-success-soft);color:var(--color-success);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg></span><strong style="font-size:15px;font-weight:600;">قیمت</strong></div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <sc-for list="{{ detail.priceRows }}" as="pr" hint-placeholder-count="2">
+                <div style="display:flex;flex-direction:column;gap:3px;padding-bottom:12px;border-bottom:1px solid var(--border-default);">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;"><span style="font-size:14px;color:var(--text-secondary);">{{ pr.label }}</span><span style="font-size:16px;font-weight:700;color:var(--color-primary);">{{ pr.value }}</span></div>
+                  <span style="font-size:12px;color:var(--text-muted);text-align:left;">{{ pr.words }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- مالک -->
+          <div style="display:flex;align-items:center;gap:12px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:16px;box-shadow:var(--shadow-sm);cursor:pointer;" onClick="{{ detail.owner.onOpen }}">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;background:var(--color-primary-soft);color:var(--blue-700);font-weight:600;font-size:15px;flex:none;">{{ detail.owner.initials }}</span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;">
+              <span style="font-size:12px;color:var(--text-muted);">مالک</span>
+              <strong style="font-size:15px;font-weight:600;">{{ detail.owner.name }}</strong>
+              <span style="font-size:13px;color:var(--text-secondary);direction:ltr;text-align:right;">{{ detail.owner.phone }}</span>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="m15 18-6-6 6-6"/></svg>
+          </div>
+
+          <!-- وضعیت اشغال -->
+          <sc-if value="{{ detail.occupied }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:12px;background:var(--color-danger-soft);border:1px solid var(--red-100);border-radius:16px;padding:16px;">
+              <div style="display:flex;align-items:center;gap:8px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><strong style="font-size:15px;font-weight:600;color:var(--color-danger-text);">وضعیت اشغال</strong></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:12px;color:var(--text-muted);">مستأجر</span><span style="font-size:14px;font-weight:600;">{{ detail.renter.name }}</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:12px;color:var(--text-muted);">مبلغ</span><span style="font-size:14px;font-weight:600;">{{ detail.renter.amount }}</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:12px;color:var(--text-muted);">شروع</span><span style="font-size:14px;font-weight:600;">{{ detail.renter.start }}</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:12px;color:var(--text-muted);">پایان</span><span style="font-size:14px;font-weight:600;">{{ detail.renter.end }}</span></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- bottom actions -->
+          <div style="display:flex;gap:10px;padding-top:4px;">
+            <button onClick="{{ detail.onEdit }}" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;border:1px solid var(--border-strong);background:var(--surface-card);color:var(--color-primary);border-radius:12px;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>ویرایش
+            </button>
+            <button onClick="{{ detail.onContract }}" style="flex:1.4;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;border:none;background:var(--color-primary);color:#fff;border-radius:12px;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-xs);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>ثبت قرارداد
+            </button>
+          </div>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <!-- ========== PERSON DETAIL ========== -->
+    <sc-if value="{{ r_personDetail }}" hint-placeholder-val="{{ false }}">
+      <sc-if value="{{ personD }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;gap:14px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:18px;box-shadow:var(--shadow-sm);">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:50%;background:var(--color-primary-soft);color:var(--blue-700);font-weight:700;font-size:20px;flex:none;">{{ personD.initials }}</span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
+              <strong style="font-size:18px;font-weight:700;">{{ personD.name }}</strong>
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:500;background:var(--color-primary-soft);color:var(--blue-700);width:max-content;">{{ personD.kindLabel }}</span>
+            </div>
+            <button onClick="{{ personD.onEdit }}" aria-label="ویرایش" style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid var(--border-default);background:var(--surface-card);border-radius:10px;color:var(--text-secondary);cursor:pointer;flex:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:0;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:4px 18px;box-shadow:var(--shadow-sm);">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 0;border-bottom:1px solid var(--border-default);"><span style="font-size:13px;color:var(--text-muted);">نام</span><span style="font-size:14px;font-weight:600;">{{ personD.first }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 0;border-bottom:1px solid var(--border-default);"><span style="font-size:13px;color:var(--text-muted);">نام خانوادگی</span><span style="font-size:14px;font-weight:600;">{{ personD.last }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 0;border-bottom:1px solid var(--border-default);"><span style="font-size:13px;color:var(--text-muted);">شماره تلفن</span><span style="font-size:14px;font-weight:600;direction:ltr;">{{ personD.phone }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 0;border-bottom:1px solid var(--border-default);"><span style="font-size:13px;color:var(--text-muted);">کد ملی</span><span style="font-size:14px;font-weight:600;color:var(--text-secondary);">{{ personD.nid }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 0;"><span style="font-size:13px;color:var(--text-muted);">تاریخ تولد</span><span style="font-size:14px;font-weight:600;color:var(--text-secondary);">{{ personD.birth }}</span></div>
+          </div>
+
+          <!-- collapsible history -->
+          <div style="background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;box-shadow:var(--shadow-sm);overflow:hidden;">
+            <button onClick="{{ personD.toggleHist }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:16px 18px;border:none;background:none;cursor:pointer;font-family:var(--font-sans);">
+              <span style="display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--text-primary);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>تاریخچه تغییرات</span>
+              <sc-if value="{{ personD.histOpen }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></sc-if>
+              <sc-if value="{{ personD.histClosed }}" hint-placeholder-val="{{ true }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></sc-if>
+            </button>
+            <sc-if value="{{ personD.histOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:0;padding:0 18px 8px;">
+                <sc-for list="{{ personD.history }}" as="hh" hint-placeholder-count="3">
+                  <div style="display:flex;gap:11px;padding:12px 0;border-top:1px solid var(--border-default);">
+                    <span style="width:8px;height:8px;border-radius:50%;background:var(--color-primary);margin-top:6px;flex:none;"></span>
+                    <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:14px;color:var(--text-primary);">{{ hh.what }}</span><span style="font-size:12px;color:var(--text-muted);">{{ hh.when }}</span></div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- linked properties (owners) -->
+          <sc-if value="{{ personD.hasLinked }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <h3 style="margin:0;font-size:16px;font-weight:600;">املاک مرتبط ({{ personD.linkedCount }})</h3>
+              <sc-for list="{{ personD.linked }}" as="lp" hint-placeholder-count="2">
+                <div onClick="{{ lp.onOpen }}" style="display:flex;align-items:center;gap:12px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:14px;padding:12px;box-shadow:var(--shadow-sm);cursor:pointer;">
+                  <div style="width:54px;height:54px;flex:none;border-radius:10px;background:linear-gradient(135deg,var(--blue-500),var(--blue-700));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg></div>
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;"><strong style="font-size:14px;font-weight:600;">{{ lp.typeLabel }} {{ lp.region }}</strong><span style="{{ lp.status.style }}">{{ lp.status.text }}</span></div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;"><span style="font-size:12px;color:var(--text-muted);">{{ lp.area }} متر</span><span style="font-size:14px;font-weight:700;color:var(--color-primary);">{{ lp.priceLabel }}</span></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <!-- ========== PROFILE & SETTINGS ========== -->
+    <sc-if value="{{ r_settings }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:center;gap:14px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:18px;box-shadow:var(--shadow-sm);">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:50%;background:var(--color-primary-soft);color:var(--blue-700);font-weight:700;font-size:20px;flex:none;">ر.ک</span>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;"><strong style="font-size:18px;font-weight:700;">{{ st_name }}</strong><span style="font-size:13px;color:var(--text-secondary);">مشاور املاک · املاک ایران زمین</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:18px;box-shadow:var(--shadow-sm);">
+          <strong style="font-size:15px;font-weight:600;">اطلاعات حساب</strong>
+          <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="نام و نام خانوادگی" value="{{ st_name }}" onChange="{{ onStName }}" hint-size="100%,72px"></x-import>
+          <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="شماره تماس" value="{{ st_phone }}" onChange="{{ onStPhone }}" hint-size="100%,72px"></x-import>
+          <button onClick="{{ onStEdit }}" style="align-self:flex-start;display:inline-flex;align-items:center;gap:7px;height:42px;padding:0 18px;border:none;border-radius:10px;background:var(--color-primary);color:#fff;font-family:var(--font-sans);font-size:14px;font-weight:600;cursor:pointer;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>ذخیره تغییرات</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:6px 18px;box-shadow:var(--shadow-sm);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--border-default);"><span style="font-size:15px;font-weight:500;">اعلان‌ها</span><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Switch" checked="{{ st_notif }}" onChange="{{ toggleNotif }}" hint-size="44px,26px"></x-import></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--border-default);"><span style="font-size:15px;font-weight:500;">حالت تاریک</span><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Switch" checked="{{ st_dark }}" onChange="{{ toggleDark }}" hint-size="44px,26px"></x-import></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;"><span style="font-size:15px;font-weight:500;">زبان</span><span style="font-size:14px;color:var(--text-secondary);">فارسی</span></div>
+        </div>
+        <button onClick="{{ doLogout }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;border:1px solid var(--red-100);background:var(--color-danger-soft);color:var(--color-danger-text);border-radius:12px;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>خروج از حساب</button>
+        <p style="margin:0;text-align:center;font-size:12px;color:var(--text-muted);">نسخه ۲٫۴ · پشتیبانی ۰۲۱-۸۸۸۸۸۸۸۸</p>
+      </div>
+    </sc-if>
+
+    <!-- ========== WIZARD ========== -->
+    <sc-if value="{{ r_wizard }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <!-- progress -->
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:16px 14px 12px;box-shadow:var(--shadow-sm);">
+          <sc-for list="{{ steps }}" as="stp" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;flex:1;">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:54px;">
+                <span style="{{ stp.circleStyle }}">{{ stp.num }}</span>
+                <span style="{{ stp.labelStyle }}">{{ stp.label }}</span>
+              </div>
+              <sc-if value="{{ stp.showLine }}"><span style="{{ stp.lineStyle }}"></span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- step body -->
+        <div style="display:flex;flex-direction:column;gap:16px;background:var(--surface-card);border:1px solid var(--border-default);border-radius:16px;padding:18px;box-shadow:var(--shadow-sm);">
+
+          <!-- APARTMENT STEP 1 -->
+          <sc-if value="{{ w_aptBasic }}" hint-placeholder-val="{{ false }}">
+            <dc-import name="Picker" label="منطقه" placeholder="جستجوی منطقه..." addmsg="افزودن منطقه جدید" options="{{ regionOptions }}" hint-size="100%,120px"></dc-import>
+            <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">آدرس</label><textarea value="{{ wv.address }}" onChange="{{ h.address }}" rows="3" placeholder="آدرس کامل ملک" style="width:100%;border:1px solid var(--border-default);border-radius:10px;padding:12px 14px;font-family:var(--font-sans);font-size:15px;color:var(--text-primary);background:var(--surface-card);resize:vertical;text-align:right;line-height:1.7;"></textarea></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="پلاک" value="{{ wv.plak }}" onChange="{{ h.plak }}" placeholder="۱۴" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="طبقه" value="{{ wv.floor }}" onChange="{{ h.floor }}" placeholder="۳" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="واحد" value="{{ wv.unit }}" onChange="{{ h.unit }}" placeholder="۷" hint-size="100%,72px"></x-import>
+            </div>
+          </sc-if>
+
+          <!-- KALNAGI / LAND STEP 1 -->
+          <sc-if value="{{ w_klBasic }}" hint-placeholder-val="{{ false }}">
+            <dc-import name="Picker" label="منطقه" placeholder="جستجوی منطقه..." addmsg="افزودن منطقه جدید" options="{{ regionOptions }}" hint-size="100%,120px"></dc-import>
+            <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">آدرس</label><textarea value="{{ wv.address }}" onChange="{{ h.address }}" rows="3" placeholder="آدرس کامل ملک" style="width:100%;border:1px solid var(--border-default);border-radius:10px;padding:12px 14px;font-family:var(--font-sans);font-size:15px;color:var(--text-primary);background:var(--surface-card);resize:vertical;text-align:right;line-height:1.7;"></textarea></div>
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="پلاک" value="{{ wv.plak }}" onChange="{{ h.plak }}" placeholder="۴۵" hint-size="100%,72px"></x-import>
+          </sc-if>
+
+          <!-- APARTMENT STEP 2 -->
+          <sc-if value="{{ w_apt2 }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">امکانات</label><div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ amenityChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end;">
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="متراژ (متر)" value="{{ wv.area }}" onChange="{{ h.area }}" placeholder="۹۲" hint-size="100%,72px"></x-import>
+              <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">تعداد خواب</label><div style="display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border-default);border-radius:10px;overflow:hidden;height:46px;"><button onClick="{{ st.beds.dec }}" style="width:46px;height:46px;border:none;background:var(--surface-sunken);color:var(--color-primary);font-size:22px;cursor:pointer;font-family:var(--font-sans);">−</button><span style="flex:1;text-align:center;font-size:16px;font-weight:700;">{{ bedsVal }}</span><button onClick="{{ st.beds.inc }}" style="width:46px;height:46px;border:none;background:var(--surface-sunken);color:var(--color-primary);font-size:22px;cursor:pointer;font-family:var(--font-sans);">+</button></div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">جنس کابینت</label><div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ cabinetChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Select" label="سال ساخت" options="{{ yearOpts }}" value="{{ wv.year }}" onChange="{{ h.year }}" placeholder="انتخاب سال" hint-size="100%,72px"></x-import>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;background:var(--surface-sunken);border-radius:12px;"><span style="font-size:15px;font-weight:500;">انباری</span><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Switch" checked="{{ w.anbari }}" onChange="{{ tg.anbari }}" hint-size="44px,26px"></x-import></div>
+            <sc-if value="{{ w.anbari }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:12px;padding:14px;border:1px dashed var(--border-strong);border-radius:12px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><span style="font-size:14px;font-weight:500;">انباری سندی</span><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Switch" checked="{{ w.anbariSanadi }}" onChange="{{ tg.anbariSanadi }}" hint-size="44px,26px"></x-import></div>
+                <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="متراژ انباری (متر)" value="{{ wv.anbariArea }}" onChange="{{ h.anbariArea }}" placeholder="۶" hint-size="100%,72px"></x-import>
+              </div>
+            </sc-if>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;background:var(--surface-sunken);border-radius:12px;"><span style="font-size:15px;font-weight:500;">تبدیل دارد</span><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Switch" checked="{{ w.tabdil }}" onChange="{{ tg.tabdil }}" hint-size="44px,26px"></x-import></div>
+          </sc-if>
+
+          <!-- KALNAGI STEP 2 -->
+          <sc-if value="{{ w_kal2 }}" hint-placeholder-val="{{ false }}">
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="متراژ (متر)" value="{{ wv.area }}" onChange="{{ h.area }}" placeholder="۲۲۰" hint-size="100%,72px"></x-import>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;background:var(--surface-sunken);border-radius:12px;"><span style="font-size:15px;font-weight:500;">عقب‌نشینی دارد</span><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Switch" checked="{{ w.aqab }}" onChange="{{ tg.aqab }}" hint-size="44px,26px"></x-import></div>
+            <sc-if value="{{ w.aqab }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">توضیحات عقب‌نشینی</label><textarea value="{{ wv.aqabDesc }}" onChange="{{ h.aqabDesc }}" rows="2" placeholder="مثلاً حدود ۲ متر از بر شمالی" style="width:100%;border:1px solid var(--border-default);border-radius:10px;padding:12px 14px;font-family:var(--font-sans);font-size:15px;color:var(--text-primary);background:var(--surface-card);resize:vertical;text-align:right;line-height:1.7;"></textarea></div></sc-if>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="تعداد بر" value="{{ wv.bar }}" onChange="{{ h.bar }}" placeholder="۱" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="گذر کوچه (متر)" value="{{ wv.gozar }}" onChange="{{ h.gozar }}" placeholder="۸" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="تعداد طبقات" value="{{ wv.floors }}" onChange="{{ h.floors }}" placeholder="۲" hint-size="100%,72px"></x-import>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;background:var(--surface-sunken);border-radius:12px;"><span style="font-size:15px;font-weight:500;">حیاط دارد</span><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Switch" checked="{{ w.hayat }}" onChange="{{ tg.hayat }}" hint-size="44px,26px"></x-import></div>
+            <sc-if value="{{ w.hayat }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="متراژ حیاط (متر)" value="{{ wv.hayatArea }}" onChange="{{ h.hayatArea }}" placeholder="۶۰" hint-size="100%,72px"></x-import></sc-if>
+          </sc-if>
+
+          <!-- LAND STEP 2 -->
+          <sc-if value="{{ w_land2 }}" hint-placeholder-val="{{ false }}">
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="متراژ (متر)" value="{{ wv.area }}" onChange="{{ h.area }}" placeholder="۴۵۰" hint-size="100%,72px"></x-import>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;background:var(--surface-sunken);border-radius:12px;"><span style="font-size:15px;font-weight:500;">عقب‌نشینی دارد</span><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Switch" checked="{{ w.aqab }}" onChange="{{ tg.aqab }}" hint-size="44px,26px"></x-import></div>
+            <sc-if value="{{ w.aqab }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">توضیحات عقب‌نشینی</label><textarea value="{{ wv.aqabDesc }}" onChange="{{ h.aqabDesc }}" rows="2" placeholder="توضیحات" style="width:100%;border:1px solid var(--border-default);border-radius:10px;padding:12px 14px;font-family:var(--font-sans);font-size:15px;color:var(--text-primary);background:var(--surface-card);resize:vertical;text-align:right;line-height:1.7;"></textarea></div></sc-if>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="تعداد بر" value="{{ wv.bar }}" onChange="{{ h.bar }}" placeholder="۱" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="گذر کوچه (متر)" value="{{ wv.gozar }}" onChange="{{ h.gozar }}" placeholder="۱۲" hint-size="100%,72px"></x-import>
+            </div>
+          </sc-if>
+
+          <!-- APARTMENT / KALNAGI STEP 3 (price + status) -->
+          <sc-if value="{{ w_prop3 }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">نوع معامله (چند انتخابی)</label><div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ contractChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+            <sc-if value="{{ w.hasSale }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:12px;padding:14px;border:1px solid var(--color-primary-soft);border-radius:12px;background:var(--blue-50);">
+                <strong style="font-size:13px;color:var(--blue-700);">فروش</strong>
+                <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="قیمت هر متر (تومان)" value="{{ pv.perMeter.disp }}" onChange="{{ h.perMeter }}" placeholder="۲۸۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.perMeter.words }}"><span style="font-size:12px;color:var(--color-primary);text-align:left;">{{ pv.perMeter.words }}</span></sc-if></div>
+                <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="قیمت کل (تومان)" value="{{ pv.total.disp }}" onChange="{{ h.total }}" placeholder="۲۵٬۷۶۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.total.words }}"><span style="font-size:12px;color:var(--color-primary);text-align:left;">{{ pv.total.words }}</span></sc-if></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ w.hasRent }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:12px;padding:14px;border:1px solid var(--color-accent-soft);border-radius:12px;background:var(--gold-50);">
+                <strong style="font-size:13px;color:var(--gold-700);">اجاره</strong>
+                <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="پول پیش (تومان)" value="{{ pv.deposit.disp }}" onChange="{{ h.deposit }}" placeholder="۸۰۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.deposit.words }}"><span style="font-size:12px;color:var(--gold-700);text-align:left;">{{ pv.deposit.words }}</span></sc-if></div>
+                <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="اجاره ماهیانه (تومان)" value="{{ pv.rent.disp }}" onChange="{{ h.rent }}" placeholder="۷۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.rent.words }}"><span style="font-size:12px;color:var(--gold-700);text-align:left;">{{ pv.rent.words }}</span></sc-if></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ w.hasMortgage }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:12px;padding:14px;border:1px solid var(--border-default);border-radius:12px;background:var(--surface-sunken);">
+                <strong style="font-size:13px;color:var(--text-secondary);">رهن کامل</strong>
+                <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="پول رهن (تومان)" value="{{ pv.mortgage.disp }}" onChange="{{ h.mortgage }}" placeholder="۴٬۵۰۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.mortgage.words }}"><span style="font-size:12px;color:var(--text-secondary);text-align:left;">{{ pv.mortgage.words }}</span></sc-if></div>
+              </div>
+            </sc-if>
+            <div style="display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px solid var(--border-default);"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">وضعیت</label><div style="display:flex;gap:8px;"><sc-for list="{{ statusChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+            <sc-if value="{{ w.occupied }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:14px;padding:14px;border:1px dashed var(--border-strong);border-radius:12px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><dc-import name="JDate" label="تاریخ شروع" hint-size="100%,110px"></dc-import><dc-import name="JDate" label="تاریخ پایان" hint-size="100%,110px"></dc-import></div>
+                <dc-import name="Picker" label="مستأجر" placeholder="جستجوی نام یا تلفن..." addmsg="افزودن مستأجر جدید" options="{{ renterOptions }}" hint-size="100%,120px"></dc-import>
+              </div>
+            </sc-if>
+          </sc-if>
+
+          <!-- LAND STEP 3 (sale only) -->
+          <sc-if value="{{ w_land3 }}" hint-placeholder-val="{{ false }}">
+            <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:500;background:var(--color-primary-soft);color:var(--blue-700);width:max-content;">فروش</div>
+            <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="قیمت هر متر (تومان)" value="{{ pv.perMeter.disp }}" onChange="{{ h.perMeter }}" placeholder="۱۵۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.perMeter.words }}"><span style="font-size:12px;color:var(--color-primary);text-align:left;">{{ pv.perMeter.words }}</span></sc-if></div>
+            <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="قیمت کل (تومان)" value="{{ pv.total.disp }}" onChange="{{ h.total }}" placeholder="۶۷٬۵۰۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.total.words }}"><span style="font-size:12px;color:var(--color-primary);text-align:left;">{{ pv.total.words }}</span></sc-if></div>
+          </sc-if>
+
+          <!-- PROPERTY STEP 4 (owner + media) -->
+          <sc-if value="{{ w_prop4 }}" hint-placeholder-val="{{ false }}">
+            <dc-import name="Picker" label="مالک" placeholder="جستجوی نام یا تلفن مالک..." addmsg="افزودن مالک جدید" options="{{ ownerOptions }}" hint-size="100%,120px"></dc-import>
+            <div style="height:1px;background:var(--border-default);"></div>
+            <dc-import name="Uploader" label="تصاویر ملک" kind="photo" hint-size="100%,140px"></dc-import>
+            <dc-import name="Uploader" label="ویدیو ملک" kind="video" hint-size="100%,140px"></dc-import>
+          </sc-if>
+
+          <!-- CONTRACT STEP 1 -->
+          <sc-if value="{{ w_con1 }}" hint-placeholder-val="{{ false }}">
+            <dc-import name="Picker" label="انتخاب ملک" placeholder="جستجوی آدرس، منطقه یا مالک..." addmsg="افزودن ملک جدید" options="{{ propertyOptions }}" hint-size="100%,120px"></dc-import>
+            <div style="display:flex;flex-direction:column;gap:8px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">نوع قرارداد</label><div style="display:flex;gap:8px;flex-wrap:wrap;"><sc-for list="{{ ctypeChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+          </sc-if>
+
+          <!-- CONTRACT STEP 2 (parties) -->
+          <sc-if value="{{ w_con2 }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px;"><span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--color-primary-soft);color:var(--blue-700);width:max-content;">مالک / فروشنده</span><dc-import name="Picker" label="" placeholder="جستجوی مالک..." addmsg="افزودن مالک جدید" options="{{ ownerOptions }}" hint-size="100%,120px"></dc-import></div>
+            <div style="display:flex;flex-direction:column;gap:8px;"><span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--color-accent-soft);color:var(--gold-700);width:max-content;">{{ buyerLabel }}</span><dc-import name="Picker" label="" placeholder="جستجوی نام یا تلفن..." addmsg="افزودن شخص جدید" options="{{ partyOptions }}" hint-size="100%,120px"></dc-import></div>
+          </sc-if>
+
+          <!-- CONTRACT STEP 3 (dates + price) -->
+          <sc-if value="{{ w_con3 }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <dc-import name="JDate" label="تاریخ شروع" hint-size="100%,110px"></dc-import>
+              <sc-if value="{{ w.conSale }}" hint-placeholder-val="{{ false }}"><div></div></sc-if>
+              <sc-if value="{{ w.conRent }}" hint-placeholder-val="{{ false }}"><dc-import name="JDate" label="تاریخ پایان" hint-size="100%,110px"></dc-import></sc-if>
+              <sc-if value="{{ w.conMortgage }}" hint-placeholder-val="{{ false }}"><dc-import name="JDate" label="تاریخ پایان" hint-size="100%,110px"></dc-import></sc-if>
+            </div>
+            <sc-if value="{{ w.conSale }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="مبلغ معامله (تومان)" value="{{ pv.conTotal.disp }}" onChange="{{ h.conTotal }}" placeholder="۲۵٬۰۰۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.conTotal.words }}"><span style="font-size:12px;color:var(--color-primary);text-align:left;">{{ pv.conTotal.words }}</span></sc-if></div></sc-if>
+            <sc-if value="{{ w.conRent }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="پول پیش (تومان)" value="{{ pv.conDeposit.disp }}" onChange="{{ h.conDeposit }}" placeholder="۸۰۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.conDeposit.words }}"><span style="font-size:12px;color:var(--gold-700);text-align:left;">{{ pv.conDeposit.words }}</span></sc-if></div>
+              <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="اجاره ماهیانه (تومان)" value="{{ pv.conRent.disp }}" onChange="{{ h.conRent }}" placeholder="۷۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.conRent.words }}"><span style="font-size:12px;color:var(--gold-700);text-align:left;">{{ pv.conRent.words }}</span></sc-if></div>
+            </sc-if>
+            <sc-if value="{{ w.conMortgage }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="پول رهن (تومان)" value="{{ pv.conMortgage.disp }}" onChange="{{ h.conMortgage }}" placeholder="۴٬۵۰۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.conMortgage.words }}"><span style="font-size:12px;color:var(--text-secondary);text-align:left;">{{ pv.conMortgage.words }}</span></sc-if></div></sc-if>
+          </sc-if>
+
+          <!-- CONTRACT STEP 4 (docs + notes + warning) -->
+          <sc-if value="{{ w_con4 }}" hint-placeholder-val="{{ false }}">
+            <dc-import name="Uploader" label="تصویر قرارداد" kind="photo" hint-size="100%,140px"></dc-import>
+            <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">یادداشت</label><textarea value="{{ wv.notes }}" onChange="{{ h.notes }}" rows="3" placeholder="توضیحات تکمیلی قرارداد" style="width:100%;border:1px solid var(--border-default);border-radius:10px;padding:12px 14px;font-family:var(--font-sans);font-size:15px;color:var(--text-primary);background:var(--surface-card);resize:vertical;text-align:right;line-height:1.7;"></textarea></div>
+            <div style="display:flex;gap:10px;padding:13px 14px;border-radius:12px;background:var(--color-warning-soft);border:1px solid var(--amber-500);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px;"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+              <span style="font-size:13px;line-height:1.7;color:var(--gold-700);">با ثبت این قرارداد، اطلاعات مالک/مستأجر ملک به‌روزرسانی می‌شود.</span>
+            </div>
+          </sc-if>
+
+          <!-- REQUEST STEP 1 (customer) -->
+          <sc-if value="{{ w_req1 }}" hint-placeholder-val="{{ false }}">
+            <dc-import name="Picker" label="جستجوی مشتری" placeholder="جستجو با شماره تلفن یا نام..." addmsg="افزودن مشتری جدید" options="{{ customerOptions }}" hint-size="100%,120px"></dc-import>
+            <div style="display:flex;align-items:center;gap:10px;"><span style="flex:1;height:1px;background:var(--border-default);"></span><span style="font-size:12px;color:var(--text-muted);">یا افزودن سریع</span><span style="flex:1;height:1px;background:var(--border-default);"></span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="نام" value="{{ wv.custName }}" onChange="{{ h.custName }}" placeholder="نام" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="نام خانوادگی" value="{{ wv.custFamily }}" onChange="{{ h.custFamily }}" placeholder="نام خانوادگی" hint-size="100%,72px"></x-import>
+            </div>
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="شماره تلفن" value="{{ wv.custPhone }}" onChange="{{ h.custPhone }}" placeholder="۰۹۱۲ ۰۰۰ ۰۰۰۰" hint-size="100%,72px"></x-import>
+          </sc-if>
+
+          <!-- REQUEST STEP 2 (type) -->
+          <sc-if value="{{ w_req2 }}" hint-placeholder-val="{{ false }}">
+            <label style="font-size:13px;font-weight:500;color:var(--text-secondary);">نوع درخواست را انتخاب کنید</label>
+            <sc-for list="{{ reqTypeCards }}" as="t" hint-placeholder-count="3">
+              <button onClick="{{ t.onClick }}" style="{{ t.style }}">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:var(--color-primary-soft);color:var(--color-primary);flex:none;" dangerouslySetInnerHTML="{{ t.icon }}"></span>
+                <span style="flex:1;display:flex;flex-direction:column;gap:2px;"><strong style="font-size:16px;font-weight:700;">{{ t.title }}</strong><span style="font-size:13px;color:var(--text-secondary);">{{ t.desc }}</span></span>
+              </button>
+            </sc-for>
+          </sc-if>
+
+          <!-- REQUEST STEP 3a (rent/mortgage) -->
+          <sc-if value="{{ w_req3a }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end;">
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="تعداد نفرات" value="{{ persons }}" onChange="{{ h.persons }}" placeholder="۳" hint-size="100%,72px"></x-import>
+              <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">تعداد خواب</label><div style="display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border-default);border-radius:10px;overflow:hidden;height:46px;"><button onClick="{{ st.reqBeds.dec }}" style="width:46px;height:46px;border:none;background:var(--surface-sunken);color:var(--color-primary);font-size:22px;cursor:pointer;font-family:var(--font-sans);">−</button><span style="flex:1;text-align:center;font-size:16px;font-weight:700;">{{ reqBedsVal }}</span><button onClick="{{ st.reqBeds.inc }}" style="width:46px;height:46px;border:none;background:var(--surface-sunken);color:var(--color-primary);font-size:22px;cursor:pointer;font-family:var(--font-sans);">+</button></div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">نیازها</label><div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ needChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="طبقه ترجیحی" value="{{ wv.prefFloor }}" onChange="{{ h.prefFloor }}" placeholder="مثلاً طبقات میانی" hint-size="100%,72px"></x-import>
+            <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="حداکثر پول پیش (تومان)" value="{{ pv.maxDeposit.disp }}" onChange="{{ h.maxDeposit }}" placeholder="۸۰۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.maxDeposit.words }}"><span style="font-size:12px;color:var(--gold-700);text-align:left;">{{ pv.maxDeposit.words }}</span></sc-if></div>
+            <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="حداکثر اجاره ماهیانه (تومان)" value="{{ pv.maxRent.disp }}" onChange="{{ h.maxRent }}" placeholder="۶۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.maxRent.words }}"><span style="font-size:12px;color:var(--gold-700);text-align:left;">{{ pv.maxRent.words }}</span></sc-if></div>
+            <dc-import name="JDate" label="مهلت" hint-size="100%,110px"></dc-import>
+          </sc-if>
+
+          <!-- REQUEST STEP 3b (buy) -->
+          <sc-if value="{{ w_req3b }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">نوع ملک</label><div style="display:flex;gap:8px;flex-wrap:wrap;"><sc-for list="{{ reqPropChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end;">
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Select" label="سال ساخت" options="{{ yearOpts }}" value="{{ wv.reqYear }}" onChange="{{ h.reqYear }}" placeholder="هر سالی" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="متراژ (متر)" value="{{ wv.reqArea }}" onChange="{{ h.reqArea }}" placeholder="۱۲۰" hint-size="100%,72px"></x-import>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">تعداد خواب</label><div style="display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border-default);border-radius:10px;overflow:hidden;height:46px;max-width:180px;"><button onClick="{{ st.reqBeds.dec }}" style="width:46px;height:46px;border:none;background:var(--surface-sunken);color:var(--color-primary);font-size:22px;cursor:pointer;font-family:var(--font-sans);">−</button><span style="flex:1;text-align:center;font-size:16px;font-weight:700;">{{ reqBedsVal }}</span><button onClick="{{ st.reqBeds.inc }}" style="width:46px;height:46px;border:none;background:var(--surface-sunken);color:var(--color-primary);font-size:22px;cursor:pointer;font-family:var(--font-sans);">+</button></div></div>
+            <div style="display:flex;flex-direction:column;gap:8px;"><label style="font-size:13px;font-weight:500;color:var(--text-secondary);">نیازها</label><div style="display:flex;flex-wrap:wrap;gap:8px;"><sc-for list="{{ needChips }}" as="c"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px;"><x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="بودجه خریدار (تومان)" value="{{ pv.budget.disp }}" onChange="{{ h.budget }}" placeholder="۴۰٬۰۰۰٬۰۰۰٬۰۰۰" hint-size="100%,72px"></x-import><sc-if value="{{ pv.budget.words }}"><span style="font-size:12px;color:var(--color-primary);text-align:left;">{{ pv.budget.words }}</span></sc-if></div>
+          </sc-if>
+
+          <!-- REQUEST STEP 4 (summary) -->
+          <sc-if value="{{ w_req4 }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:9px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:var(--color-success-soft);color:var(--color-success);flex:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><strong style="font-size:16px;font-weight:700;">خلاصه درخواست</strong></div>
+            <div style="display:flex;flex-direction:column;gap:0;background:var(--surface-sunken);border-radius:12px;padding:4px 16px;">
+              <sc-for list="{{ reqSummary }}" as="line" hint-placeholder-count="2"><div style="padding:12px 0;border-bottom:1px solid var(--border-default);font-size:14px;color:var(--text-primary);">{{ line }}</div></sc-for>
+            </div>
+            <p style="margin:0;font-size:13px;color:var(--text-secondary);line-height:1.7;">با ثبت درخواست، فایل‌های منطبق به‌صورت خودکار به این مشتری پیشنهاد داده می‌شوند.</p>
+          </sc-if>
+
+        </div>
+
+        <!-- footer -->
+        <div style="display:flex;gap:10px;">
+          <button onClick="{{ prev }}" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:50px;border:1px solid var(--border-strong);background:var(--surface-card);color:var(--color-primary);border-radius:12px;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>قبلی
+          </button>
+          <button onClick="{{ next }}" style="flex:1.6;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:50px;border:none;background:var(--color-primary);color:#fff;border-radius:12px;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-xs);">
+            {{ nextLabel }}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </sc-if>
+
+  </main>
+
+  <sc-if value="{{ showFab }}" hint-placeholder-val="{{ true }}">
+    <button class="de-fab" onClick="{{ startAdd }}" aria-label="افزودن فایل" style="position:fixed;width:56px;height:56px;border-radius:18px;border:none;background:var(--color-primary);color:#fff;box-shadow:var(--shadow-lg);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:35;">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>
+    </button>
+  </sc-if>
+
+  <nav class="de-bottomnav" style="position:fixed;left:0;right:0;bottom:0;height:64px;background:var(--surface-card);border-top:1px solid var(--border-default);z-index:40;box-shadow:0 -2px 12px rgba(16,30,54,.05);">
+    <button onClick="{{ nav.dashboard }}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;color:{{ navCol.dashboard }};font-family:var(--font-sans);">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M9 21v-6h6v6"/></svg>
+      <span style="font-size:11px;font-weight:500;">داشبورد</span>
+    </button>
+    <button onClick="{{ nav.files }}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;color:{{ navCol.files }};font-family:var(--font-sans);">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>
+      <span style="font-size:11px;font-weight:500;">فایل‌ها</span>
+    </button>
+    <button onClick="{{ nav.customers }}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;color:{{ navCol.customers }};font-family:var(--font-sans);">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+      <span style="font-size:11px;font-weight:500;">مشتریان</span>
+    </button>
+    <button onClick="{{ nav.contracts }}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;color:{{ navCol.contracts }};font-family:var(--font-sans);">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>
+      <span style="font-size:11px;font-weight:500;">قراردادها</span>
+    </button>
+    <button onClick="{{ nav.requests }}" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;color:{{ navCol.requests }};font-family:var(--font-sans);">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg>
+      <span style="font-size:11px;font-weight:500;">درخواست‌ها</span>
+    </button>
+  </nav>
+
+  <!-- ========== ADVANCED FILE FILTER SHEET ========== -->
+  <sc-if value="{{ filterSheetOpen }}" hint-placeholder-val="{{ false }}">
+    <div dir="rtl" style="position:fixed;inset:0;z-index:91;background:rgba(11,30,44,.45);display:flex;align-items:flex-end;justify-content:center;" onClick="{{ closeFilterSheet }}">
+      <div style="width:100%;max-width:480px;background:var(--surface-card);border-radius:20px 20px 0 0;box-shadow:var(--shadow-xl);max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;gap:0;padding:20px 20px 28px;" onClick="{{ stopProp }}">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px;">
+          <strong style="font-size:18px;font-weight:700;">فیلتر پیشرفته فایل‌ها</strong>
+          <button onClick="{{ closeFilterSheet }}" aria-label="بستن" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:none;background:var(--surface-sunken);border-radius:10px;color:var(--text-secondary);cursor:pointer;flex:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;padding:16px 0;border-bottom:1px solid var(--border-default);">
+          <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">وضعیت</span>
+          <div style="display:flex;gap:8px;">
+            <sc-for list="{{ fs_statusChips }}" as="fsc" hint-placeholder-count="3"><button onClick="{{ fsc.onClick }}" style="{{ fsc.style }}">{{ fsc.label }}</button></sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;padding:16px 0;border-bottom:1px solid var(--border-default);">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">منطقه</span>
+            <sc-if value="{{ fs_hasRegions }}" hint-placeholder-val="{{ false }}"><button onClick="{{ fs_clearRegions }}" style="border:none;background:none;color:var(--color-primary);font-family:var(--font-sans);font-size:12px;font-weight:500;cursor:pointer;">پاک‌کردن</button></sc-if>
+          </div>
+          <div class="de-noscroll" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin:0 -20px;padding-inline:20px;">
+            <sc-for list="{{ fs_regionChips }}" as="frc" hint-placeholder-count="8"><button onClick="{{ frc.onClick }}" style="{{ frc.style }}">{{ frc.label }}</button></sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;padding:16px 0;border-bottom:1px solid var(--border-default);">
+          <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">متراژ (متر)</span>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="از" value="{{ fs_minArea }}" on-change="{{ fs_onMinArea }}" placeholder="مثلاً ۶۰" hint-size="100%,66px"></x-import>
+            <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="تا" value="{{ fs_maxArea }}" on-change="{{ fs_onMaxArea }}" placeholder="مثلاً ۲۵۰" hint-size="100%,66px"></x-import>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;padding:16px 0;border-bottom:1px solid var(--border-default);">
+          <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">حداقل تعداد خواب</span>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <sc-for list="{{ fs_bedsChips }}" as="fbc" hint-placeholder-count="5"><button onClick="{{ fbc.onClick }}" style="{{ fbc.style }}">{{ fbc.label }}</button></sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;padding:16px 0;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">امکانات</span>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <sc-for list="{{ fs_amenityChips }}" as="fac" hint-placeholder-count="4"><button onClick="{{ fac.onClick }}" style="{{ fac.style }}">{{ fac.label }}</button></sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;border-top:1px solid var(--border-default);padding-top:16px;">
+          <button onClick="{{ fs_reset }}" style="flex:1;height:48px;border:1px solid var(--border-strong);background:var(--surface-card);color:var(--text-secondary);border-radius:12px;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;">بازنشانی</button>
+          <button onClick="{{ closeFilterSheet }}" style="flex:1.4;display:inline-flex;align-items:center;justify-content:center;height:48px;border:none;background:var(--color-primary);color:#fff;border-radius:12px;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-xs);">اعمال فیلتر</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ========== ADD PERSON MODAL ========== -->
+  <sc-if value="{{ addOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:90;background:rgba(11,30,44,.45);display:flex;align-items:flex-end;justify-content:center;padding:0;">
+      <div dir="rtl" style="width:100%;max-width:480px;background:var(--surface-card);border-radius:20px 20px 0 0;box-shadow:var(--shadow-xl);max-height:92vh;overflow-y:auto;display:flex;flex-direction:column;gap:16px;padding:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <strong style="font-size:18px;font-weight:700;">افزودن {{ addKindLabel }} جدید</strong>
+          <button onClick="{{ addClose }}" aria-label="بستن" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:none;background:var(--surface-sunken);border-radius:10px;color:var(--text-secondary);cursor:pointer;flex:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="نام" value="{{ addForm.first }}" onChange="{{ af.first }}" placeholder="نام" hint-size="100%,72px"></x-import>
+          <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="نام خانوادگی" value="{{ addForm.last }}" onChange="{{ af.last }}" placeholder="نام خانوادگی" hint-size="100%,72px"></x-import>
+        </div>
+        <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="شماره تلفن (الزامی)" value="{{ addForm.phone }}" onChange="{{ af.phone }}" placeholder="۰۹۱۲ ۰۰۰ ۰۰۰۰" hint-size="100%,72px"></x-import>
+        <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="کد ملی" value="{{ addForm.nid }}" onChange="{{ af.nid }}" placeholder="اختیاری" hint-size="100%,72px"></x-import>
+        <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="تاریخ تولد" value="{{ addForm.birth }}" onChange="{{ af.birth }}" placeholder="۱۳۷۰/۰۱/۰۱" hint-size="100%,72px"></x-import>
+        <div style="display:flex;gap:10px;padding-top:4px;">
+          <button onClick="{{ addClose }}" style="flex:1;height:48px;border:1px solid var(--border-strong);background:var(--surface-card);color:var(--text-secondary);border-radius:12px;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;">انصراف</button>
+          <button onClick="{{ addSubmit }}" style="flex:1.4;display:inline-flex;align-items:center;justify-content:center;gap:7px;height:48px;border:none;background:var(--color-primary);color:#fff;border-radius:12px;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-xs);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>ثبت</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ========== LOGIN ========== -->
+  <sc-if value="{{ notAuthed }}" hint-placeholder-val="{{ true }}">
+    <div dir="rtl" style="position:fixed;inset:0;z-index:100;background:linear-gradient(160deg,var(--blue-600),var(--blue-800));display:flex;align-items:center;justify-content:center;padding:24px;font-family:var(--font-sans);">
+      <div style="width:100%;max-width:400px;display:flex;flex-direction:column;gap:22px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.14);color:#fff;"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/><path d="M9 9v.01M9 13v.01M9 17v.01"/></svg></span>
+          <div style="text-align:center;"><strong style="display:block;font-size:20px;font-weight:700;color:#fff;">املاک ایران زمین</strong><span style="font-size:12px;color:rgba(255,255,255,.6);letter-spacing:.06em;">DealEstate</span></div>
+        </div>
+        <div style="background:var(--surface-card);border-radius:20px;box-shadow:var(--shadow-xl);padding:24px;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;flex-direction:column;gap:3px;"><strong style="font-size:18px;font-weight:700;">ورود به حساب</strong><span style="font-size:13px;color:var(--text-secondary);">برای ورود شماره و رمز عبور خود را وارد کنید.</span></div>
+          <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="شماره موبایل" value="{{ loginPhone }}" onChange="{{ onLoginPhone }}" hint-size="100%,72px"></x-import>
+          <x-import component-from-global-scope="DealEstateDesignSystem_89799d.Input" label="رمز عبور" type="password" value="{{ loginPass }}" onChange="{{ onLoginPass }}" hint-size="100%,72px"></x-import>
+          <button onClick="{{ doLogin }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;border:none;background:var(--color-primary);color:#fff;border-radius:12px;font-family:var(--font-sans);font-size:16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-xs);margin-top:4px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg>ورود</button>
+        </div>
+        <p style="margin:0;text-align:center;font-size:12px;color:rgba(255,255,255,.55);">نسخه ۲٫۴ · پشتیبانی ۰۲۱-۸۸۸۸۸۸۸۸</p>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;transform:translateX(-50%);bottom:88px;z-index:60;display:flex;align-items:center;gap:9px;background:var(--gray-900);color:#fff;padding:12px 18px;border-radius:12px;box-shadow:var(--shadow-lg);font-size:14px;font-weight:500;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-500)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+      {{ toast }}
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    route: 'dashboard',
+    propId: null,
+    personKind: 'owners',
+    personId: null,
+    q: '',
+    filter: 'all',
+    personQ: '',
+    wizType: null,
+    step: 1,
+    wiz: {},
+    histOpen: false,
+    toast: null,
+    authed: false,
+    loginPhone: '۰۹۱۲ ۳۴۵ ۶۷۸۹',
+    loginPass: '••••••',
+    addOpen: false,
+    addForm: { first: '', last: '', phone: '', nid: '', birth: '' },
+    settings: { name: 'رضا کریمی', phone: '۰۹۱۲ ۳۴۵ ۶۷۸۹', notif: true, dark: false },
+    advFilter: { status: 'all', regions: [], minArea: '', maxArea: '', minBeds: 0, amenities: [] },
+    contractFilter: 'all',
+    contractSearch: '',
+    requestFilter: 'all',
+    requestSearch: '',
+    personFilter: 'all',
+    filterSheetOpen: false,
+  };
+
+  // ---------- Persian number helpers ----------
+  pd(v) { return String(v).replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]); }
+  grp(n) { return this.pd(Math.round(Number(n) || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '٬')); }
+  trimDec(v) { let s = (Math.round(v * 10) / 10).toString(); return s.replace('.', '٫'); }
+  scaleLabel(n) {
+    n = Number(n) || 0;
+    if (n >= 1e9) return this.pd(this.trimDec(n / 1e9)) + ' میلیارد';
+    if (n >= 1e6) return this.pd(this.trimDec(n / 1e6)) + ' میلیون';
+    if (n >= 1e3) return this.grp(n);
+    return this.pd(n);
+  }
+  words(n) {
+    n = Math.floor(Number(n) || 0);
+    if (n === 0) return 'صفر تومان';
+    const ONES = ['', 'یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه'];
+    const TEENS = ['ده', 'یازده', 'دوازده', 'سیزده', 'چهارده', 'پانزده', 'شانزده', 'هفده', 'هجده', 'نوزده'];
+    const TENS = ['', '', 'بیست', 'سی', 'چهل', 'پنجاه', 'شصت', 'هفتاد', 'هشتاد', 'نود'];
+    const HUND = ['', 'صد', 'دویست', 'سیصد', 'چهارصد', 'پانصد', 'ششصد', 'هفتصد', 'هشتصد', 'نهصد'];
+    const SCALE = ['', ' هزار', ' میلیون', ' میلیارد', ' هزار میلیارد'];
+    const three = (num) => {
+      let parts = []; const h = Math.floor(num / 100); const r = num % 100;
+      if (h) parts.push(HUND[h]);
+      if (r) { if (r < 10) parts.push(ONES[r]); else if (r < 20) parts.push(TEENS[r - 10]); else { const t = Math.floor(r / 10), o = r % 10; parts.push(TENS[t]); if (o) parts.push(ONES[o]); } }
+      return parts.join(' و ');
+    };
+    let groups = []; let m = n; while (m > 0) { groups.push(m % 1000); m = Math.floor(m / 1000); }
+    let out = [];
+    for (let g = groups.length - 1; g >= 0; g--) { if (!groups[g]) continue; out.push(three(groups[g]) + SCALE[g]); }
+    return out.join(' و ') + ' تومان';
+  }
+  initials(name) { const p = String(name || '').trim().split(/\s+/); return ((p[0] || '')[0] || '') + ((p[1] || '')[0] || ''); }
+
+  // ---------- Mock data ----------
+  regions = ['سعادت‌آباد', 'زعفرانیه', 'شهرک غرب', 'پونک', 'جنت‌آباد', 'نیاوران', 'الهیه', 'ولنجک', 'پاسداران', 'میرداماد'];
+
+  owners = [
+    { id: 'o1', name: 'محمد رضایی', phone: '۰۹۱۲ ۳۳۴ ۵۵۶۷', nid: '۰۰۷۸۹۲۳۴۵۶', birth: '۱۳۵۴/۰۳/۱۲', props: ['p1', 'p6'] },
+    { id: 'o2', name: 'فاطمه احمدی', phone: '۰۹۱۲ ۸۸۷ ۱۲۳۴', nid: '۰۰۱۲۳۴۵۶۷۸', birth: '۱۳۴۸/۰۹/۰۵', props: ['p2'] },
+    { id: 'o3', name: 'علی موسوی', phone: '۰۹۱۳ ۴۵۶ ۷۸۹۰', nid: '', birth: '', props: ['p3', 'p4'] },
+    { id: 'o4', name: 'زهرا کاظمی', phone: '۰۹۱۲ ۵۵۵ ۹۹۸۸', nid: '۰۰۹۹۸۸۷۷۶۶', birth: '۱۳۶۰/۱۲/۲۲', props: ['p5'] },
+  ];
+  renters = [
+    { id: 'r1', name: 'سعید نوری', phone: '۰۹۱۲ ۱۱۱ ۲۲۳۳', nid: '', birth: '', props: ['p2'] },
+    { id: 'r2', name: 'مریم حسینی', phone: '۰۹۳۵ ۷۷۷ ۴۴۵۵', nid: '۰۰۴۴۵۵۶۶۷۷', birth: '۱۳۶۵/۰۶/۱۸', props: ['p5'] },
+    { id: 'r3', name: 'حسین قاسمی', phone: '۰۹۱۲ ۹۸۷ ۶۵۴۳', nid: '', birth: '', props: [] },
+  ];
+  customers = [
+    { id: 'c1', name: 'نرگس صادقی', phone: '۰۹۱۲ ۴۴۴ ۸۸۹۹', nid: '', birth: '', props: [] },
+    { id: 'c2', name: 'بهرام جعفری', phone: '۰۹۳۶ ۲۲۲ ۱۱۰۰', nid: '', birth: '', props: [] },
+    { id: 'c3', name: 'لیلا مرادی', phone: '۰۹۱۲ ۶۶۶ ۳۳۲۲', nid: '۰۰۳۳۲۲۱۱۰۰', birth: '۱۳۵۸/۰۲/۰۸', props: [] },
+    { id: 'c4', name: 'امیر تهرانی', phone: '۰۹۱۰ ۵۵۵ ۷۷۸۸', nid: '', birth: '', props: [] },
+  ];
+
+  properties = [
+    { id: 'p1', type: 'apartment', region: 'سعادت‌آباد', address: 'بلوار دریا، خ مطهری، کوچه دوم، پلاک ۱۴', plak: '۱۴', floor: '۳', unit: '۷', area: 92, beds: 2, status: 'available', amenities: ['elevator', 'parking', 'balcony'], cabinet: ['mdf'], anbari: true, anbariSanadi: false, anbariArea: 6, year: '۱۳۹۸', tabdil: true, contracts: ['sale'], perMeter: 280000000, total: 25760000000, photos: 5, ownerId: 'o1' },
+    { id: 'p2', type: 'apartment', region: 'زعفرانیه', address: 'خ ولیعصر، نرسیده به پارک‌وی، کوچه شریفی، پلاک ۸', plak: '۸', floor: '۵', unit: '۱۲', area: 135, beds: 3, status: 'occupied', amenities: ['elevator', 'parking', 'balcony', 'backyard'], cabinet: ['open', 'mdf'], anbari: true, anbariSanadi: true, anbariArea: 9, year: '۱۴۰۱', tabdil: false, contracts: ['rent', 'mortgage'], deposit: 1200000000, rent: 95000000, mortgage: 4500000000, photos: 8, ownerId: 'o2', renterId: 'r1', occStart: '۱۴۰۳/۰۴/۰۱', occEnd: '۱۴۰۴/۰۴/۰۱' },
+    { id: 'p3', type: 'kalnagi', region: 'شهرک غرب', address: 'فاز ۲، خ ایران‌زمین، پلاک ۴۵', plak: '۴۵', area: 220, status: 'available', aqab: true, aqabDesc: 'حدود ۲ متر از بر شمالی', bar: '۱', gozar: 8, floors: '۲', hayat: true, hayatArea: 60, contracts: ['sale'], total: 41000000000, photos: 4, ownerId: 'o3' },
+    { id: 'p4', type: 'land', region: 'پونک', address: 'خ سردار جنگل، کوچه بهار، قطعه ۱۲', plak: '۱۲', area: 450, status: 'available', aqab: false, bar: '۱', gozar: 12, contracts: ['sale'], total: 67500000000, photos: 3, ownerId: 'o3' },
+    { id: 'p5', type: 'apartment', region: 'جنت‌آباد', address: 'جنت‌آباد جنوبی، خ لاله، پلاک ۲۲', plak: '۲۲', floor: '۲', unit: '۴', area: 78, beds: 2, status: 'occupied', amenities: ['parking', 'balcony'], cabinet: ['mdf'], anbari: false, year: '۱۳۹۵', tabdil: false, contracts: ['mortgage'], mortgage: 2300000000, photos: 6, ownerId: 'o4', renterId: 'r2', occStart: '۱۴۰۳/۰۲/۱۵', occEnd: '۱۴۰۴/۰۲/۱۵' },
+    { id: 'p6', type: 'apartment', region: 'نیاوران', address: 'خ شهید باهنر، کوچه یاس، پلاک ۳', plak: '۳', floor: '۴', unit: '۸', area: 110, beds: 3, status: 'available', amenities: ['elevator', 'parking', 'balcony', 'backyard'], cabinet: ['open'], anbari: true, anbariSanadi: true, anbariArea: 8, year: '۱۴۰۲', tabdil: true, contracts: ['sale', 'rent'], perMeter: 350000000, total: 38500000000, deposit: 800000000, rent: 70000000, photos: 7, ownerId: 'o1' },
+  ];
+
+  contractsData = [
+    { id: 'k1', propId: 'p2', type: 'rent', party: 'فاطمه احمدی ← سعید نوری', dates: '۱۴۰۳/۰۴/۰۱ تا ۱۴۰۴/۰۴/۰۱', amount: 95000000, daysLeft: 18 },
+    { id: 'k2', propId: 'p5', type: 'mortgage', party: 'زهرا کاظمی ← مریم حسینی', dates: '۱۴۰۳/۰۲/۱۵ تا ۱۴۰۴/۰۲/۱۵', amount: 2300000000, daysLeft: 9 },
+    { id: 'k3', propId: 'p1', type: 'sale', party: 'محمد رضایی ← خریدار', dates: '۱۴۰۳/۰۸/۱۰', amount: 25760000000, daysLeft: 27 },
+    { id: 'k4', propId: 'p6', type: 'rent', party: 'محمد رضایی ← مستأجر', dates: '۱۴۰۳/۰۵/۲۰ تا ۱۴۰۴/۰۵/۲۰', amount: 70000000, daysLeft: 64 },
+  ];
+
+  requestsData = [
+    { id: 'q1', name: 'نرگس صادقی', phone: '۰۹۱۲ ۴۴۴ ۸۸۹۹', type: 'rent', summary: 'آپارتمان ۲ خوابه با پارکینگ و آسانسور در سعادت‌آباد، حداکثر پول پیش ۸۰۰ میلیون.', deadline: '۱۴۰۳/۰۹/۳۰' },
+    { id: 'q2', name: 'بهرام جعفری', phone: '۰۹۳۶ ۲۲۲ ۱۱۰۰', type: 'buy', summary: 'خرید آپارتمان ۱۰۰ تا ۱۳۰ متر در زعفرانیه یا الهیه، بودجه تا ۴۰ میلیارد.', deadline: '۱۴۰۳/۱۰/۱۵' },
+    { id: 'q3', name: 'لیلا مرادی', phone: '۰۹۱۲ ۶۶۶ ۳۳۲۲', type: 'mortgage', summary: 'رهن کامل واحد ۳ خوابه در نیاوران، رهن تا ۵ میلیارد.', deadline: '۱۴۰۳/۰۹/۱۰' },
+    { id: 'q4', name: 'امیر تهرانی', phone: '۰۹۱۰ ۵۵۵ ۷۷۸۸', type: 'buy', summary: 'خرید زمین کلنگی برای ساخت، متراژ بالای ۲۰۰ متر در پونک.', deadline: '۱۴۰۳/۱۱/۰۱' },
+    { id: 'q5', name: 'حسین قاسمی', phone: '۰۹۱۲ ۹۸۷ ۶۵۴۳', type: 'rent', summary: 'اجاره آپارتمان ۲ خوابه، اجاره ماهیانه حداکثر ۶۰ میلیون.', deadline: '۱۴۰۳/۰۹/۲۵' },
+  ];
+
+  months = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+
+  // ---------- pill styling ----------
+  pill(tone) {
+    const map = {
+      success: ['var(--color-success-soft)', 'var(--color-success-text)'],
+      danger: ['var(--color-danger-soft)', 'var(--color-danger-text)'],
+      primary: ['var(--color-primary-soft)', 'var(--blue-700)'],
+      accent: ['var(--color-accent-soft)', 'var(--gold-700)'],
+      neutral: ['var(--surface-sunken)', 'var(--text-secondary)'],
+    };
+    const c = map[tone] || map.neutral;
+    return { display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 9px', borderRadius: 999, fontSize: 11, fontWeight: 500, lineHeight: 1.4, whiteSpace: 'nowrap', background: c[0], color: c[1] };
+  }
+  statusPill(status) {
+    const avail = status === 'available';
+    return { ...this.pill(avail ? 'success' : 'danger'), };
+  }
+  contractPills(arr) {
+    const L = { sale: ['فروش', 'primary'], rent: ['اجاره', 'accent'], mortgage: ['رهن کامل', 'neutral'] };
+    return (arr || []).map(k => ({ text: L[k][0], style: this.pill(L[k][1]) }));
+  }
+  typeLabel(t) { return t === 'apartment' ? 'آپارتمان' : t === 'kalnagi' ? 'کلنگی' : 'زمین'; }
+  ctypeLabel(t) { return t === 'sale' ? 'فروش' : t === 'rent' ? 'اجاره' : 'رهن کامل'; }
+  priceLabel(p) {
+    if (p.contracts.includes('sale')) return this.scaleLabel(p.total) + ' ت';
+    if (p.contracts.includes('rent') && p.rent) return this.scaleLabel(p.rent) + ' / ماه';
+    if (p.contracts.includes('mortgage') && p.mortgage) return this.scaleLabel(p.mortgage) + ' ت رهن';
+    return '—';
+  }
+
+  // ---------- navigation ----------
+  go(route, extra) { this.setState({ route, histOpen: false, ...(extra || {}) }); window.scrollTo(0, 0); }
+  openProperty(id) { this.go('detail', { propId: id }); }
+  openPerson(kind, id) { this.go('personDetail', { personKind: kind, personId: id }); }
+  flash(msg) { this.setState({ toast: msg }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: null }), 2600); }
+
+  back() {
+    const r = this.state.route;
+    if (r === 'detail') return this.go('properties');
+    if (r === 'personDetail') return this.go('persons');
+    if (r === 'addType') return this.go('properties');
+    if (r === 'wizard') { if (this.state.step > 1) return this.setState(s => ({ step: s.step - 1 })); return this.go(this.state.wizType === 'apartment' || this.state.wizType === 'kalnagi' || this.state.wizType === 'land' ? 'addType' : this.state.wizType === 'contract' ? 'contracts' : 'requests'); }
+    return this.go('dashboard');
+  }
+
+  // ---------- wizard ----------
+  startWiz(type) {
+    this.setState({ route: 'wizard', wizType: type, step: 1, wiz: { contracts: [], amenities: [], cabinet: [], needs: [], status: 'available', reqType: 'rent', reqPropType: 'apartment', ctype: 'rent', anbari: false, anbariSanadi: false, tabdil: false, aqab: false, hayat: false, beds: 2, reqBeds: 2 } });
+    window.scrollTo(0, 0);
+  }
+  wizMax() { return 4; }
+  next() { if (this.state.step < this.wizMax()) { this.setState(s => ({ step: s.step + 1 })); window.scrollTo(0, 0); } else this.submitWiz(); }
+  submitWiz() {
+    const t = this.state.wizType;
+    if (t === 'contract') { this.flash('قرارداد با موفقیت ثبت شد'); this.go('contracts'); }
+    else if (t === 'request') { this.flash('درخواست با موفقیت ثبت شد'); this.go('requests'); }
+    else { this.flash('فایل با موفقیت ثبت شد'); this.go('properties'); }
+  }
+  setWiz(key, val) { this.setState(s => ({ wiz: { ...s.wiz, [key]: val } })); }
+
+  // ---------- auth / profile / add-person ----------
+  doLogin() { this.setState({ authed: true, route: 'dashboard' }); }
+  doLogout() { this.setState({ authed: false, route: 'dashboard', addOpen: false }); }
+  openAddPerson() { this.setState({ addOpen: true, addForm: { first: '', last: '', phone: '', nid: '', birth: '' } }); }
+  setAddField(key, val) { this.setState(s => ({ addForm: { ...s.addForm, [key]: val } })); }
+  addSubmit() {
+    const f = this.state.addForm;
+    const name = ((f.first || '') + ' ' + (f.last || '')).trim();
+    if (!name || !(f.phone || '').trim()) { this.flash('نام و شماره تلفن الزامی است'); return; }
+    const obj = { id: 'n' + Date.now(), name, phone: (f.phone || '').trim(), nid: (f.nid || '').trim(), birth: (f.birth || '').trim(), props: [] };
+    const arr = this.state.personKind === 'owners' ? this.owners : this.state.personKind === 'renters' ? this.renters : this.customers;
+    arr.unshift(obj);
+    const kindWord = this.state.personKind === 'owners' ? 'مالک' : this.state.personKind === 'renters' ? 'مستأجر' : 'مشتری';
+    this.setState({ addOpen: false }); this.flash(kindWord + ' جدید با موفقیت اضافه شد');
+  }
+  setSetting(key, val) { this.setState(s => ({ settings: { ...s.settings, [key]: val } })); }
+  bindText(key) { return (e) => this.setWiz(key, e && e.target ? e.target.value : e); }
+  bindNum(key) { return (e) => { const raw = (e && e.target ? e.target.value : e) || ''; this.setWiz(key, String(raw).replace(/[^\d۰-۹]/g, '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))); }; }
+  toggle(key) { return () => this.setState(s => ({ wiz: { ...s.wiz, [key]: !s.wiz[key] } })); }
+  toggleChip(group, val) { return () => this.setState(s => { const arr = s.wiz[group] || []; const has = arr.includes(val); return { wiz: { ...s.wiz, [group]: has ? arr.filter(x => x !== val) : [...arr, val] } }; }); }
+  setOne(key, val) { return () => this.setWiz(key, val); }
+  step(key, delta) { return () => this.setState(s => ({ wiz: { ...s.wiz, [key]: Math.max(0, (s.wiz[key] || 0) + delta) } })); }
+
+  chipBtnStyle(active) {
+    const base = { flex: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, height: 40, padding: '0 16px', borderRadius: 999, fontFamily: 'var(--font-sans)', fontSize: 14, fontWeight: 500, cursor: 'pointer', transition: 'all 140ms', whiteSpace: 'nowrap' };
+    return active
+      ? { ...base, background: 'var(--color-primary)', color: '#fff', border: '1px solid var(--color-primary)' }
+      : { ...base, background: 'var(--surface-card)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)' };
+  }
+  chipChoices(group, defs) { const arr = this.state.wiz[group] || []; return defs.map(([v, l]) => ({ label: l, onClick: this.toggleChip(group, v), style: this.chipBtnStyle(arr.includes(v)) })); }
+  singleChips(key, defs) { const cur = this.state.wiz[key]; return defs.map(([v, l]) => ({ label: l, onClick: this.setOne(key, v), style: this.chipBtnStyle(cur === v) })); }
+  priceView(key) { const n = Number(this.state.wiz[key] || 0); return { disp: this.state.wiz[key] ? this.grp(n) : '', words: n > 0 ? this.words(n) : '' }; }
+  bigCardStyle(active) { return { display: 'flex', alignItems: 'center', gap: 14, textAlign: 'right', background: 'var(--surface-card)', border: '1px solid ' + (active ? 'var(--color-primary)' : 'var(--border-default)'), borderRadius: 16, padding: 18, cursor: 'pointer', fontFamily: 'var(--font-sans)', boxShadow: active ? 'var(--ring-focus)' : 'var(--shadow-sm)', transition: 'all 140ms' };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const route = s.route;
+    const activeNav = (route === 'dashboard') ? 'dashboard'
+      : (route === 'persons' || route === 'personDetail') ? 'customers'
+      : (route === 'contracts' || (route === 'wizard' && s.wizType === 'contract')) ? 'contracts'
+      : (route === 'requests' || (route === 'wizard' && s.wizType === 'request')) ? 'requests'
+      : route === 'settings' ? '' : 'files';
+    const navCol = {}, navBg = {};
+    ['dashboard', 'files', 'customers', 'contracts', 'requests'].forEach(k => {
+      navCol[k] = activeNav === k ? 'var(--color-primary)' : 'var(--text-muted)';
+      navBg[k] = activeNav === k ? 'var(--color-primary-soft)' : 'transparent';
+    });
+    const nav = {
+      dashboard: () => this.go('dashboard'),
+      files: () => this.go('properties'),
+      customers: () => this.go('persons', { personKind: 'customers', personQ: '' }),
+      contracts: () => this.go('contracts'),
+      requests: () => this.go('requests'),
+    };
+
+    const titles = { dashboard: 'داشبورد', properties: 'فایل‌ها', addType: 'افزودن فایل', persons: 'اشخاص', personDetail: 'پروفایل شخص', detail: 'جزئیات فایل', contracts: 'قراردادها', requests: 'درخواست‌ها', settings: 'پروفایل و تنظیمات' };
+    let headerTitle = titles[route] || 'املاک ایران زمین';
+    if (route === 'wizard') headerTitle = s.wizType === 'contract' ? 'ثبت قرارداد' : s.wizType === 'request' ? 'ثبت درخواست' : 'افزودن ' + this.typeLabel(s.wizType);
+    const showBack = ['detail', 'personDetail', 'addType', 'wizard', 'settings'].includes(route);
+    const showFab = route === 'properties';
+
+    // properties view
+    const matchesFilter = (p) => {
+      if (s.filter === 'all') return true;
+      if (['apartment', 'kalnagi', 'land'].includes(s.filter)) return p.type === s.filter;
+      return p.contracts.includes(s.filter);
+    };
+    const af = s.advFilter || { status: 'all', regions: [], minArea: '', maxArea: '', minBeds: 0, amenities: [] };
+    const toNum = v => Number(String(v || '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)));
+    const isFiltered = !!(
+      (af.status && af.status !== 'all') ||
+      (af.regions && af.regions.length > 0) ||
+      (af.minArea && af.minArea !== '') ||
+      (af.maxArea && af.maxArea !== '') ||
+      (af.minBeds && af.minBeds > 0) ||
+      (af.amenities && af.amenities.length > 0)
+    );
+    const qstr = (s.q || '').trim();
+    const propView = this.properties.filter(p => {
+      if (!matchesFilter(p)) return false;
+      if (qstr && !(p.address + p.region).includes(qstr)) return false;
+      if (af.status && af.status !== 'all' && p.status !== af.status) return false;
+      if (af.regions && af.regions.length > 0 && !af.regions.includes(p.region)) return false;
+      if (af.minArea && af.minArea !== '') { const mn = toNum(af.minArea); if (mn > 0 && p.area < mn) return false; }
+      if (af.maxArea && af.maxArea !== '') { const mx = toNum(af.maxArea); if (mx > 0 && p.area > mx) return false; }
+      if (af.minBeds && af.minBeds > 0 && (p.beds || 0) < af.minBeds) return false;
+      if (af.amenities && af.amenities.length > 0 && !af.amenities.every(a => (p.amenities || []).includes(a))) return false;
+      return true;
+    }).map(p => ({
+      ...p,
+      area: this.pd(p.area), beds: this.pd(p.beds || 0), hasBeds: !!p.beds, photos: this.pd(p.photos),
+      typePill: { text: this.typeLabel(p.type), style: this.pill('neutral') },
+      status: { text: p.status === 'available' ? 'خالی' : 'پر', style: this.statusPill(p.status) },
+      pills: this.contractPills(p.contracts),
+      priceLabel: this.priceLabel(p),
+      onOpen: () => this.openProperty(p.id),
+    }));
+
+    const filterDefs = [['all', 'همه'], ['apartment', 'آپارتمان'], ['kalnagi', 'کلنگی'], ['land', 'زمین'], ['sale', 'فروش'], ['rent', 'اجاره'], ['mortgage', 'رهن کامل']];
+    const chipBase = { flex: 'none', height: 36, padding: '0 15px', borderRadius: 999, fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 140ms' };
+    const filterChips = filterDefs.map(([k, label]) => ({
+      label, onClick: () => this.setState({ filter: k }),
+      style: s.filter === k
+        ? { ...chipBase, background: 'var(--color-primary)', color: '#fff', border: '1px solid var(--color-primary)' }
+        : { ...chipBase, background: 'var(--surface-card)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)' },
+    }));
+
+    // dashboard
+    const recentProps = this.properties.slice(0, 2).map(p => ({ ...p, title: this.typeLabel(p.type) + ' ' + p.region, area: this.pd(p.area), region: p.region, status: { text: p.status === 'available' ? 'خالی' : 'پر', style: this.statusPill(p.status) }, priceLabel: this.priceLabel(p), onOpen: () => this.openProperty(p.id) }));
+    const endingContracts = this.contractsData.slice().sort((a, b) => a.daysLeft - b.daysLeft).slice(0, 3).map(c => {
+      const p = this.properties.find(x => x.id === c.propId) || {};
+      return { title: p.region ? this.typeLabel(p.type) + ' ' + p.region : 'فایل', party: c.party.split(' ← ')[0], typeLabel: this.ctypeLabel(c.type), daysLeft: this.pd(c.daysLeft), onOpen: () => this.openProperty(c.propId) };
+    });
+
+    // persons
+    const list = s.personKind === 'owners' ? this.owners : s.personKind === 'renters' ? this.renters : this.customers;
+    const pq = (s.personQ || '').trim();
+    const pFilter = s.personFilter || 'all';
+    const persons = list.filter(x => {
+      if (pq && !(x.name + x.phone).includes(pq)) return false;
+      if (pFilter === 'hasProps' && !(x.props || []).length) return false;
+      if (pFilter === 'noProps' && (x.props || []).length > 0) return false;
+      return true;
+    }).map(x => ({ ...x, initials: this.initials(x.name), hasProps: (x.props || []).length > 0, propCount: this.pd((x.props || []).length), onOpen: () => this.openPerson(s.personKind, x.id) }));
+    const personTabs = [{ value: 'owners', label: 'مالکین', count: this.pd(this.owners.length) }, { value: 'renters', label: 'مستأجرین', count: this.pd(this.renters.length) }, { value: 'customers', label: 'مشتریان', count: this.pd(this.customers.length) }];
+
+    // contracts list
+    const cSearch = (s.contractSearch || '').trim();
+    const cFilter = s.contractFilter || 'all';
+    const contractList = this.contractsData.filter(c => {
+      if (cFilter !== 'all' && c.type !== cFilter) return false;
+      if (cSearch) {
+        const cp = this.properties.find(x => x.id === c.propId) || {};
+        if (!((c.party + (cp.region || '') + (cp.address || '')).includes(cSearch))) return false;
+      }
+      return true;
+    }).map(c => {
+      const p = this.properties.find(x => x.id === c.propId) || {};
+      return { title: (p.region ? this.typeLabel(p.type) + ' ' + p.region : 'فایل') + ' · ' + this.pd(p.area || 0) + ' متر', typePill: { text: this.ctypeLabel(c.type), style: this.pill(c.type === 'sale' ? 'primary' : c.type === 'rent' ? 'accent' : 'neutral') }, party: c.party, dates: c.dates, amount: this.scaleLabel(c.amount) + ' ت' };
+    });
+
+    // requests list
+    const rSearch = (s.requestSearch || '').trim();
+    const rFilter = s.requestFilter || 'all';
+    const requestList = this.requestsData.filter(r => {
+      if (rFilter !== 'all' && r.type !== rFilter) return false;
+      if (rSearch && !((r.name + r.phone + r.summary).includes(rSearch))) return false;
+      return true;
+    }).map(r => ({ initials: this.initials(r.name), name: r.name, phone: r.phone, summary: r.summary, deadline: r.deadline, typePill: { text: r.type === 'buy' ? 'خرید' : r.type === 'rent' ? 'اجاره' : 'رهن کامل', style: this.pill(r.type === 'buy' ? 'primary' : r.type === 'rent' ? 'accent' : 'neutral') } }));
+
+    // type cards
+    const ic = (svg) => ({ __html: svg });
+    const typeCards = [
+      { title: 'دستگاه آپارتمان', desc: 'واحد مسکونی در یک ساختمان', onClick: () => this.startWiz('apartment'), icon: ic('<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>') },
+      { title: 'کلنگی', desc: 'ملک قابل تخریب و نوسازی', onClick: () => this.startWiz('kalnagi'), icon: ic('<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/><path d="m2 9 10-7 10 7"/></svg>') },
+      { title: 'زمین', desc: 'قطعه زمین بدون بنا', onClick: () => this.startWiz('land'), icon: ic('<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v10H3z"/><path d="M3 7l4-4h10l4 4M8 7v10M16 7v10"/></svg>') },
+    ];
+
+    // ===== PROPERTY DETAIL =====
+    let detail = null;
+    if (route === 'detail') {
+      const p = this.properties.find(x => x.id === s.propId);
+      if (p) {
+        const owner = this.owners.find(o => o.id === p.ownerId) || {};
+        const renter = p.renterId ? this.renters.find(r => r.id === p.renterId) || {} : null;
+        const amenMap = { elevator: 'آسانسور', parking: 'پارکینگ', badParking: 'پارکینگ مزاحم', balcony: 'بالکن', backyard: 'حیاط خلوت' };
+        const cabMap = { open: 'اوپن', mdf: 'MDF' };
+        const specs = [];
+        specs.push({ label: 'متراژ', value: this.pd(p.area) + ' متر' });
+        if (p.type === 'apartment') {
+          specs.push({ label: 'تعداد خواب', value: this.pd(p.beds) + ' خواب' });
+          if (p.floor) specs.push({ label: 'طبقه', value: p.floor });
+          if (p.unit) specs.push({ label: 'واحد', value: p.unit });
+          if (p.year) specs.push({ label: 'سال ساخت', value: p.year });
+          if (p.cabinet && p.cabinet.length) specs.push({ label: 'جنس کابینت', value: p.cabinet.map(c => cabMap[c]).join('، ') });
+          if (p.anbari) specs.push({ label: 'انباری', value: (p.anbariSanadi ? 'سندی، ' : '') + this.pd(p.anbariArea || 0) + ' متر' });
+          specs.push({ label: 'تبدیل', value: p.tabdil ? 'دارد' : 'ندارد' });
+        } else {
+          if (p.bar) specs.push({ label: 'تعداد بر', value: p.bar });
+          if (p.gozar) specs.push({ label: 'گذر', value: this.pd(p.gozar) + ' متر' });
+          if (p.type === 'kalnagi' && p.floors) specs.push({ label: 'تعداد طبقات', value: p.floors });
+          specs.push({ label: 'عقب‌نشینی', value: p.aqab ? (p.aqabDesc || 'دارد') : 'ندارد' });
+          if (p.type === 'kalnagi') specs.push({ label: 'حیاط', value: p.hayat ? this.pd(p.hayatArea || 0) + ' متر' : 'ندارد' });
+        }
+        if (p.plak) specs.push({ label: 'پلاک', value: p.plak });
+        const priceRows = [];
+        if (p.contracts.includes('sale')) {
+          if (p.perMeter) priceRows.push({ label: 'قیمت هر متر', value: this.grp(p.perMeter) + ' تومان', words: this.words(p.perMeter), tone: 'primary' });
+          priceRows.push({ label: 'قیمت کل', value: this.grp(p.total) + ' تومان', words: this.words(p.total), tone: 'primary' });
+        }
+        if (p.contracts.includes('rent')) {
+          priceRows.push({ label: 'پول پیش', value: this.grp(p.deposit) + ' تومان', words: this.words(p.deposit), tone: 'accent' });
+          priceRows.push({ label: 'اجاره ماهیانه', value: this.grp(p.rent) + ' تومان', words: this.words(p.rent), tone: 'accent' });
+        }
+        if (p.contracts.includes('mortgage')) {
+          priceRows.push({ label: 'پول رهن', value: this.grp(p.mortgage) + ' تومان', words: this.words(p.mortgage), tone: 'neutral' });
+        }
+        detail = {
+          id: p.id, typeLabel: this.typeLabel(p.type), region: p.region, address: p.address, photos: this.pd(p.photos),
+          gallery: Array.from({ length: Math.min(p.photos, 6) }, (_, i) => ({ i })),
+          isAvail: p.status === 'available', statusText: p.status === 'available' ? 'خالی' : 'پر', statusStyle: this.statusPill(p.status),
+          pills: this.contractPills(p.contracts),
+          amenityChips: (p.amenities || []).map(a => amenMap[a]).filter(Boolean),
+          hasAmenities: !!(p.amenities && p.amenities.length),
+          specs, priceRows,
+          owner: { name: owner.name, phone: owner.phone, initials: this.initials(owner.name), onOpen: () => this.openPerson('owners', owner.id) },
+          occupied: p.status === 'occupied' && renter,
+          renter: renter ? { name: renter.name, initials: this.initials(renter.name), start: p.occStart, end: p.occEnd, amount: p.contracts.includes('mortgage') && !p.contracts.includes('rent') ? this.scaleLabel(p.mortgage) + ' ت رهن' : this.scaleLabel(p.rent) + ' ت / ماه' } : null,
+          onEdit: () => this.flash('فرم ویرایش فایل'), onContract: () => this.startWiz('contract'),
+        };
+      }
+    }
+
+    // ===== PERSON DETAIL =====
+    let personD = null;
+    if (route === 'personDetail') {
+      const arr = s.personKind === 'owners' ? this.owners : s.personKind === 'renters' ? this.renters : this.customers;
+      const x = arr.find(p => p.id === s.personId);
+      if (x) {
+        const nm = String(x.name).trim().split(/\s+/);
+        const linked = (x.props || []).map(pid => this.properties.find(p => p.id === pid)).filter(Boolean).map(p => ({
+          region: p.region, typeLabel: this.typeLabel(p.type), area: this.pd(p.area),
+          status: { text: p.status === 'available' ? 'خالی' : 'پر', style: this.statusPill(p.status) },
+          priceLabel: this.priceLabel(p), onOpen: () => this.openProperty(p.id),
+        }));
+        personD = {
+          name: x.name, initials: this.initials(x.name),
+          first: nm[0] || '', last: nm.slice(1).join(' ') || '—',
+          phone: x.phone, nid: x.nid || '—', birth: x.birth || '—',
+          kindLabel: s.personKind === 'owners' ? 'مالک' : s.personKind === 'renters' ? 'مستأجر' : 'مشتری',
+          isOwner: s.personKind === 'owners', linked, hasLinked: linked.length > 0, linkedCount: this.pd(linked.length),
+          histOpen: s.histOpen, histClosed: !s.histOpen, toggleHist: () => this.setState(st => ({ histOpen: !st.histOpen })),
+          history: [
+            { when: '۱۴۰۳/۰۸/۱۲', what: 'شماره تلفن به‌روزرسانی شد' },
+            { when: '۱۴۰۳/۰۶/۰۳', what: 'ملک جدید به پروفایل افزوده شد' },
+            { when: '۱۴۰۳/۰۲/۲۱', what: 'پروفایل ایجاد شد' },
+          ],
+          onEdit: () => this.flash('فرم ویرایش اطلاعات شخص'),
+        };
+      }
+    }
+
+    // ===== WIZARD =====
+    const wiz = s.wiz; const step = s.step; const wt = s.wizType;
+    const isApt = wt === 'apartment', isKal = wt === 'kalnagi', isLand = wt === 'land', isCon = wt === 'contract', isReq = wt === 'request';
+    const w = {
+      hasSale: (wiz.contracts || []).includes('sale'), hasRent: (wiz.contracts || []).includes('rent'), hasMortgage: (wiz.contracts || []).includes('mortgage'),
+      occupied: wiz.status === 'occupied',
+      anbari: !!wiz.anbari, anbariSanadi: !!wiz.anbariSanadi, tabdil: !!wiz.tabdil, aqab: !!wiz.aqab, hayat: !!wiz.hayat,
+      reqRent: wiz.reqType === 'rent' || wiz.reqType === 'mortgage', reqBuy: wiz.reqType === 'buy',
+      conSale: wiz.ctype === 'sale', conRent: wiz.ctype === 'rent', conMortgage: wiz.ctype === 'mortgage',
+    };
+    const stepTitlesMap = {
+      apartment: ['اطلاعات پایه', 'مشخصات فنی', 'قیمت و وضعیت', 'مالک و رسانه'],
+      kalnagi: ['اطلاعات پایه', 'مشخصات فنی', 'قیمت و وضعیت', 'مالک و رسانه'],
+      land: ['اطلاعات پایه', 'مشخصات فنی', 'قیمت', 'مالک و رسانه'],
+      contract: ['ملک و نوع', 'طرفین', 'تاریخ و مبلغ', 'مدارک'],
+      request: ['مشتری', 'نوع درخواست', 'مشخصات', 'تأیید'],
+    };
+    const titlesArr = stepTitlesMap[wt] || ['', '', '', ''];
+    const steps = titlesArr.map((t, i) => {
+      const n = i + 1; const done = n < step; const active = n === step;
+      return {
+        num: done ? '✓' : this.pd(n), label: t,
+        circleStyle: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: '50%', flex: 'none', fontSize: 13, fontWeight: 700, transition: 'all 160ms', background: (done || active) ? 'var(--color-primary)' : 'var(--surface-sunken)', color: (done || active) ? '#fff' : 'var(--text-muted)', border: active ? '3px solid var(--color-primary-soft)' : 'none' },
+        labelStyle: { fontSize: 11, fontWeight: active ? 600 : 400, color: active ? 'var(--color-primary)' : 'var(--text-muted)', whiteSpace: 'nowrap' },
+        lineStyle: { flex: 1, height: 2, background: done ? 'var(--color-primary)' : 'var(--border-default)', margin: '0 2px' },
+        showLine: n < 4,
+      };
+    });
+    const nextLabel = step < 4 ? 'ادامه' : (isCon ? 'ثبت قرارداد' : isReq ? 'ثبت درخواست' : 'ثبت فایل');
+
+    const pricedKeys = ['perMeter', 'total', 'deposit', 'rent', 'mortgage', 'budget', 'maxDeposit', 'maxRent', 'conTotal', 'conDeposit', 'conRent', 'conMortgage'];
+    const numericSmall = ['area', 'anbariArea', 'hayatArea', 'gozar', 'persons', 'reqArea'];
+    const textKeys = ['address', 'plak', 'floor', 'unit', 'aqabDesc', 'bar', 'floors', 'prefFloor', 'notes', 'custName', 'custFamily', 'custPhone', 'year', 'reqYear'];
+    const pv = {}; pricedKeys.forEach(k => pv[k] = this.priceView(k));
+    const wv = {}; numericSmall.forEach(k => wv[k] = this.pd(wiz[k] || '')); textKeys.forEach(k => wv[k] = wiz[k] || '');
+    const h = {}; pricedKeys.forEach(k => h[k] = this.bindNum(k)); numericSmall.forEach(k => h[k] = this.bindNum(k)); textKeys.forEach(k => h[k] = this.bindText(k));
+    const tg = { anbari: this.toggle('anbari'), anbariSanadi: this.toggle('anbariSanadi'), tabdil: this.toggle('tabdil'), aqab: this.toggle('aqab'), hayat: this.toggle('hayat') };
+    const st = { beds: { inc: this.step('beds', 1), dec: this.step('beds', -1) }, reqBeds: { inc: this.step('reqBeds', 1), dec: this.step('reqBeds', -1) } };
+    const yearOpts = []; for (let y = 1404; y >= 1370; y--) yearOpts.push({ value: this.pd(y), label: this.pd(y) });
+
+    const ic2 = (svg) => ({ __html: svg });
+    const reqTypeCards = [
+      { val: 'rent', title: 'اجاره', desc: 'پول پیش و اجاره ماهیانه', icon: ic2('<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>') },
+      { val: 'mortgage', title: 'رهن کامل', desc: 'فقط پول رهن', icon: ic2('<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>') },
+      { val: 'buy', title: 'خرید', desc: 'خرید قطعی ملک', icon: ic2('<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M10 6h4M10 10h4M10 14h4"/></svg>') },
+    ].map(c => ({ ...c, active: wiz.reqType === c.val, style: this.bigCardStyle(wiz.reqType === c.val), onClick: this.setOne('reqType', c.val) }));
+
+    const buyerLabel = w.conSale ? 'خریدار' : 'مستأجر';
+    const reqSummary = (isReq ? [
+      'نوع درخواست: ' + (w.reqBuy ? 'خرید' : wiz.reqType === 'mortgage' ? 'رهن کامل' : 'اجاره'),
+      w.reqBuy ? ('نوع ملک: ' + this.typeLabel(wiz.reqPropType)) : null,
+      (wiz.needs && wiz.needs.length) ? ('نیازها: ' + wiz.needs.map(n => ({ parking: 'پارکینگ', anbari: 'انباری', elevator: 'آسانسور' }[n])).join('، ')) : null,
+    ].filter(Boolean) : []);
+
+    const extra = {
+      r_detail: route === 'detail', detail,
+      r_personDetail: route === 'personDetail', personD,
+      r_wizard: route === 'wizard',
+      steps, stepLabel: 'گام ' + this.pd(step) + ' از ۴', currentTitle: titlesArr[step - 1] || '', nextLabel,
+      next: () => this.next(), prev: () => this.back(),
+      w, wt, isApt, isKal, isLand, isCon, isReq,
+      w_aptBasic: isApt && step === 1, w_klBasic: (isKal || isLand) && step === 1,
+      w_apt2: isApt && step === 2, w_kal2: isKal && step === 2, w_land2: isLand && step === 2,
+      w_prop3: (isApt || isKal) && step === 3, w_land3: isLand && step === 3,
+      w_prop4: (isApt || isKal || isLand) && step === 4,
+      w_con1: isCon && step === 1, w_con2: isCon && step === 2, w_con3: isCon && step === 3, w_con4: isCon && step === 4,
+      w_req1: isReq && step === 1, w_req2: isReq && step === 2, w_req3a: isReq && step === 3 && w.reqRent, w_req3b: isReq && step === 3 && w.reqBuy, w_req4: isReq && step === 4,
+      pv, wv, h, tg, st, yearOpts,
+      bedsVal: this.pd(wiz.beds || 0), reqBedsVal: this.pd(wiz.reqBeds || 0), persons: this.pd(wiz.persons || ''),
+      amenityChips: this.chipChoices('amenities', [['elevator', 'آسانسور'], ['parking', 'پارکینگ'], ['badParking', 'پارکینگ مزاحم'], ['balcony', 'بالکن'], ['backyard', 'حیاط خلوت']]),
+      cabinetChips: this.chipChoices('cabinet', [['open', 'اوپن'], ['mdf', 'MDF']]),
+      contractChips: this.chipChoices('contracts', [['sale', 'فروش'], ['rent', 'اجاره'], ['mortgage', 'رهن کامل']]),
+      needChips: this.chipChoices('needs', [['parking', 'پارکینگ'], ['anbari', 'انباری'], ['elevator', 'آسانسور']]),
+      statusChips: this.singleChips('status', [['available', 'خالی'], ['occupied', 'پر']]),
+      ctypeChips: this.singleChips('ctype', [['rent', 'اجاره'], ['mortgage', 'رهن کامل'], ['sale', 'فروش']]),
+      reqPropChips: this.singleChips('reqPropType', [['apartment', 'آپارتمان'], ['kalnagi', 'کلنگی'], ['land', 'زمین']]),
+      reqTypeCards, buyerLabel, reqSummary, hasReqSummary: reqSummary.length > 0,
+      regionOptions: this.regions.map(r => ({ label: r })),
+      ownerOptions: this.owners.map(o => ({ label: o.name, sub: o.phone })),
+      renterOptions: this.renters.map(r => ({ label: r.name, sub: r.phone })),
+      customerOptions: this.customers.map(c => ({ label: c.name, sub: c.phone })),
+      propertyOptions: this.properties.map(p => ({ label: this.typeLabel(p.type) + ' ' + p.region, sub: this.pd(p.area) + ' متر · ' + ((this.owners.find(o => o.id === p.ownerId) || {}).name || '') })),
+      partyOptions: [...this.customers, ...this.renters].map(c => ({ label: c.name, sub: c.phone })),
+    };
+
+    return {
+      ...extra,
+      // chrome
+      nav, navCol, navBg, headerTitle, showBack, showFab, back: () => this.back(), today: '۲۸ آبان ۱۴۰۳', startAdd: () => this.go('addType'),
+      toast: s.toast,
+      // auth
+      authed: s.authed, notAuthed: !s.authed,
+      loginPhone: s.loginPhone, loginPass: s.loginPass,
+      onLoginPhone: (e) => this.setState({ loginPhone: e.target.value }),
+      onLoginPass: (e) => this.setState({ loginPass: e.target.value }),
+      doLogin: () => this.doLogin(), doLogout: () => this.doLogout(),
+      openProfile: () => this.go('settings'),
+      // settings
+      r_settings: route === 'settings',
+      st_name: s.settings.name, st_phone: s.settings.phone, st_notif: s.settings.notif, st_dark: s.settings.dark,
+      onStName: (e) => this.setSetting('name', e.target.value), onStPhone: (e) => this.setSetting('phone', e.target.value),
+      toggleNotif: () => this.setSetting('notif', !s.settings.notif), toggleDark: () => this.setSetting('dark', !s.settings.dark),
+      onStEdit: () => this.flash('اطلاعات حساب ذخیره شد'),
+      // add-person modal
+      addOpen: s.addOpen, addForm: s.addForm,
+      addKindLabel: s.personKind === 'owners' ? 'مالک' : s.personKind === 'renters' ? 'مستأجر' : 'مشتری',
+      af: { first: (e) => this.setAddField('first', e.target.value), last: (e) => this.setAddField('last', e.target.value), phone: (e) => this.setAddField('phone', e.target.value), nid: (e) => this.setAddField('nid', e.target.value), birth: (e) => this.setAddField('birth', e.target.value) },
+      addSubmit: () => this.addSubmit(), addClose: () => this.setState({ addOpen: false }),
+      // route flags
+      r_dashboard: route === 'dashboard', r_properties: route === 'properties', r_addType: route === 'addType',
+      r_persons: route === 'persons', r_contracts: route === 'contracts', r_requests: route === 'requests',
+      // dashboard
+      recentProps, endingContracts,
+      // properties
+      q: s.q, onSearch: this.bindText ? (e) => this.setState({ q: e.target.value }) : null,
+      filterChips, properties: propView, propCount: this.pd(propView.length), propEmpty: propView.length === 0,
+      // type
+      typeCards,
+      // persons
+      personKind: s.personKind, personTabs, onPersonTab: (v) => this.setState({ personKind: v, personQ: '' }),
+      personQ: s.personQ, onPersonSearch: (e) => this.setState({ personQ: e.target.value }),
+      persons, addPerson: () => this.openAddPerson(),
+      // contracts
+      contractList, contractCount: this.pd(this.contractsData.length), startContract: () => this.startWiz('contract'),
+      contractSearch: s.contractSearch || '',
+      onContractSearch: (e) => this.setState({ contractSearch: e.target.value }),
+      contractFilterChips: [['all', 'همه'], ['sale', 'فروش'], ['rent', 'اجاره'], ['mortgage', 'رهن کامل']].map(([k, lbl]) => ({
+        label: lbl, onClick: () => this.setState({ contractFilter: k }),
+        style: (s.contractFilter || 'all') === k
+          ? { ...chipBase, background: 'var(--color-primary)', color: '#fff', border: '1px solid var(--color-primary)' }
+          : { ...chipBase, background: 'var(--surface-card)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)' },
+      })),
+      contractEmpty: contractList.length === 0,
+      // requests
+      requestList, requestCount: this.pd(this.requestsData.length), startRequest: () => this.startWiz('request'),
+      requestSearch: s.requestSearch || '',
+      onRequestSearch: (e) => this.setState({ requestSearch: e.target.value }),
+      requestFilterChips: [['all', 'همه'], ['rent', 'اجاره'], ['mortgage', 'رهن کامل'], ['buy', 'خرید']].map(([k, lbl]) => ({
+        label: lbl, onClick: () => this.setState({ requestFilter: k }),
+        style: (s.requestFilter || 'all') === k
+          ? { ...chipBase, background: 'var(--color-primary)', color: '#fff', border: '1px solid var(--color-primary)' }
+          : { ...chipBase, background: 'var(--surface-card)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)' },
+      })),
+      requestEmpty: requestList.length === 0,
+      // persons filter
+      personFilterChips: [['all', 'همه'], ['hasProps', 'دارای ملک'], ['noProps', 'بدون ملک']].map(([k, lbl]) => ({
+        label: lbl, onClick: () => this.setState({ personFilter: k }),
+        style: (s.personFilter || 'all') === k
+          ? { ...chipBase, background: 'var(--color-primary)', color: '#fff', border: '1px solid var(--color-primary)' }
+          : { ...chipBase, background: 'var(--surface-card)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)' },
+      })),
+      personEmpty: persons.length === 0,
+      // advanced file filter
+      hasAdvFilter: isFiltered,
+      openFileFilter: () => this.setState({ filterSheetOpen: true }),
+      clearAdvFilter: () => this.setState({ advFilter: { status: 'all', regions: [], minArea: '', maxArea: '', minBeds: 0, amenities: [] } }),
+      filterBtnBorder: isFiltered ? 'var(--color-primary)' : 'var(--border-default)',
+      filterBtnBg: isFiltered ? 'var(--color-primary-soft)' : 'var(--surface-card)',
+      filterBtnCol: isFiltered ? 'var(--color-primary)' : 'var(--text-secondary)',
+      filterSheetOpen: s.filterSheetOpen,
+      closeFilterSheet: () => this.setState({ filterSheetOpen: false }),
+      stopProp: (e) => e && e.stopPropagation(),
+      fs_statusChips: [['all', 'همه'], ['available', 'خالی'], ['occupied', 'پر']].map(([k, lbl]) => ({
+        label: lbl, onClick: () => this.setState(st => ({ advFilter: { ...(st.advFilter || {}), status: k } })),
+        style: (af.status || 'all') === k
+          ? { ...chipBase, background: 'var(--color-primary)', color: '#fff', border: '1px solid var(--color-primary)' }
+          : { ...chipBase, background: 'var(--surface-card)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)' },
+      })),
+      fs_regionChips: this.regions.map(r => ({
+        label: r,
+        onClick: () => this.setState(st => {
+          const regs = (st.advFilter || {}).regions || [];
+          return { advFilter: { ...(st.advFilter || {}), regions: regs.includes(r) ? regs.filter(x => x !== r) : [...regs, r] } };
+        }),
+        style: (af.regions || []).includes(r)
+          ? { ...chipBase, background: 'var(--color-primary)', color: '#fff', border: '1px solid var(--color-primary)' }
+          : { ...chipBase, background: 'var(--surface-card)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)' },
+      })),
+      fs_hasRegions: !!(af.regions && af.regions.length),
+      fs_clearRegions: () => this.setState(st => ({ advFilter: { ...(st.advFilter || {}), regions: [] } })),
+      fs_minArea: af.minArea || '',
+      fs_maxArea: af.maxArea || '',
+      fs_onMinArea: (e) => this.setState(st => ({ advFilter: { ...(st.advFilter || {}), minArea: e.target.value } })),
+      fs_onMaxArea: (e) => this.setState(st => ({ advFilter: { ...(st.advFilter || {}), maxArea: e.target.value } })),
+      fs_bedsChips: [[0, 'بی‌تفاوت'], [1, '۱+'], [2, '۲+'], [3, '۳+'], [4, '۴+']].map(([v, lbl]) => ({
+        label: lbl, onClick: () => this.setState(st => ({ advFilter: { ...(st.advFilter || {}), minBeds: v } })),
+        style: (af.minBeds || 0) === v
+          ? { ...chipBase, background: 'var(--color-primary)', color: '#fff', border: '1px solid var(--color-primary)' }
+          : { ...chipBase, background: 'var(--surface-card)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)' },
+      })),
+      fs_amenityChips: [['elevator', 'آسانسور'], ['parking', 'پارکینگ'], ['balcony', 'بالکن'], ['backyard', 'حیاط خلوت']].map(([v, lbl]) => ({
+        label: lbl, onClick: () => this.setState(st => {
+          const ams = (st.advFilter || {}).amenities || [];
+          return { advFilter: { ...(st.advFilter || {}), amenities: ams.includes(v) ? ams.filter(x => x !== v) : [...ams, v] } };
+        }),
+        style: (af.amenities || []).includes(v)
+          ? { ...chipBase, background: 'var(--color-primary)', color: '#fff', border: '1px solid var(--color-primary)' }
+          : { ...chipBase, background: 'var(--surface-card)', color: 'var(--text-secondary)', border: '1px solid var(--border-default)' },
+      })),
+      fs_reset: () => this.setState({ advFilter: { status: 'all', regions: [], minArea: '', maxArea: '', minBeds: 0, amenities: [] } }),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+/* DealEstate — Webfonts
+ * Vazirmatn (Persian/Arabic + Latin) by Saber Rastikerdar — SIL OFL 1.1
+ * NOTE: Loaded from jsDelivr CDN. For offline/self-hosted production, download
+ * the woff2 from https://github.com/rastikerdar/vazirmatn and re-point the src.
+ * Variable font: a single file carries weights 100–900.
+ */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn[wght].woff2') format('woff2 supports variations'),
+       url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn[wght].woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}

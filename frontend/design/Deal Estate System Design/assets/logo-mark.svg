@@ -1,0 +1,6 @@
+<svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DealEstate">
+  <rect width="56" height="56" rx="14" fill="#1F4A6B"></rect>
+  <path d="M28 13L41 23.5V42a1.5 1.5 0 0 1-1.5 1.5H33V32h-10v11.5h-6.5A1.5 1.5 0 0 1 15 42V23.5L28 13Z" fill="#fff"></path>
+  <path d="M28 13L41 23.5H15L28 13Z" fill="#A87F35"></path>
+  <rect x="25.5" y="34" width="5" height="9.5" rx="1" fill="#1F4A6B"></rect>
+</svg>

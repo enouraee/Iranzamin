@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/colors.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/typography.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/radius.css">
+<link rel="stylesheet" href="_ds/dealestate-design-system-89799de7-853d-44ca-8d2e-dcee99ac1dcc/tokens/base.css">
+</helmet>
+<div dir="rtl" style="display:flex;flex-direction:column;gap:6px;font-family:var(--font-sans);">
+  <label style="font-size:13px;font-weight:500;color:var(--text-secondary);">{{ label }}</label>
+  <div style="display:flex;gap:8px;">
+    <div style="position:relative;flex:1;">
+      <select value="{{ d }}" onChange="{{ onD }}" style="appearance:none;-webkit-appearance:none;width:100%;height:46px;padding:0 12px;border:1px solid var(--border-default);border-radius:10px;background:var(--surface-card);font-family:var(--font-sans);font-size:15px;color:var(--text-primary);text-align:right;cursor:pointer;">
+        <option value="">روز</option>
+        <sc-for list="{{ dayOpts }}" as="o"><option value="{{ o }}">{{ o }}</option></sc-for>
+      </select>
+      <span style="position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+    </div>
+    <div style="position:relative;flex:1.5;">
+      <select value="{{ m }}" onChange="{{ onM }}" style="appearance:none;-webkit-appearance:none;width:100%;height:46px;padding:0 12px;border:1px solid var(--border-default);border-radius:10px;background:var(--surface-card);font-family:var(--font-sans);font-size:15px;color:var(--text-primary);text-align:right;cursor:pointer;">
+        <option value="">ماه</option>
+        <sc-for list="{{ monthOpts }}" as="o"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+      </select>
+      <span style="position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+    </div>
+    <div style="position:relative;flex:1.3;">
+      <select value="{{ y }}" onChange="{{ onY }}" style="appearance:none;-webkit-appearance:none;width:100%;height:46px;padding:0 12px;border:1px solid var(--border-default);border-radius:10px;background:var(--surface-card);font-family:var(--font-sans);font-size:15px;color:var(--text-primary);text-align:right;cursor:pointer;">
+        <option value="">سال</option>
+        <sc-for list="{{ yearOpts }}" as="o"><option value="{{ o }}">{{ o }}</option></sc-for>
+      </select>
+      <span style="position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+    </div>
+  </div>
+  <sc-if value="{{ showPreview }}" hint-placeholder-val="{{ false }}">
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--color-primary);font-weight:500;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      {{ preview }}
+    </span>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:360,&quot;height&quot;:110},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;تاریخ&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { d: '', m: '', y: '' };
+  months = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+  pd(v) { return String(v).replace(/[0-9]/g, x => '۰۱۲۳۴۵۶۷۸۹'[x]); }
+  renderVals() {
+    const dayOpts = []; for (let i = 1; i <= 31; i++) dayOpts.push(this.pd(i));
+    const yearOpts = []; for (let y = 1404; y >= 1380; y--) yearOpts.push(this.pd(y));
+    const monthOpts = this.months.map((m, i) => ({ value: this.pd(i + 1), label: m }));
+    const { d, m, y } = this.state;
+    const monthName = m ? this.months[parseInt(m.replace(/[۰-۹]/g, x => '۰۱۲۳۴۵۶۷۸۹'.indexOf(x))) - 1] : '';
+    return {
+      label: this.props.label || 'تاریخ',
+      dayOpts, monthOpts, yearOpts, d, m, y,
+      onD: (e) => this.setState({ d: e.target.value }),
+      onM: (e) => this.setState({ m: e.target.value }),
+      onY: (e) => this.setState({ y: e.target.value }),
+      showPreview: !!(d && m && y),
+      preview: d && m && y ? `${d} ${monthName} ${y}` : '',
+    };
+  }
+}
+</script>
+</body>
+</html>

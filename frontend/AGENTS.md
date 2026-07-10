@@ -12,7 +12,10 @@ black box you call over HTTP — its contract is [`API.md`](API.md).
 
 - ✅ You own everything under `frontend/`.
 - ✅ Read-only references (do not edit):
-  - `../design/DealEstate/` — visual source of truth (layout, tokens, components, screens).
+  - `./design/DealEstate/` — visual source of truth (layout, tokens, components, screens),
+    a local copy inside `frontend/`. Screens: `DealEstate.dc.html`; wizard primitives:
+    `Picker.dc.html`, `JDate.dc.html`, `Uploader.dc.html`; design-system rules: `_ds/`.
+  - `./TASKS.md` — the frontend build checklist with per-task acceptance criteria.
   - `../docs/` — field-level flow specs written for coding agents: `domain-model.md`
     (every entity + field), `decisions.md` (locked ADRs, e.g. D2/D5/D6), and
     `flows/*.md` (per-screen steps, field rules, acceptance criteria, edge cases). Read
@@ -20,11 +23,11 @@ black box you call over HTTP — its contract is [`API.md`](API.md).
   - [`API.md`](API.md) — the exact HTTP wire contract (shapes, enums, errors, pagination).
 - ⛔ **Do not read, edit, or explore `../backend/`.** You don't need it and it wastes your
   context. The entire API surface you need is in [`API.md`](API.md).
-- ⛔ Never edit anything under `../design/` or `../docs/` — they are read-only.
+- ⛔ Never edit anything under `./design/` or `../docs/` — they are read-only.
 
 **Precedence when sources disagree:** for **data wire shape** (request/response fields,
 enums, status codes) → [`API.md`](API.md) wins (it's the running contract). For **flow,
-fields, and business rules** → `../docs/` wins, then `../design/` for pixel layout. If
+fields, and business rules** → `../docs/` wins, then `./design/` for pixel layout. If
 `API.md` and `../docs/` contradict on a field, trust `API.md` and note it in
 `BACKEND_ISSUES.md`.
 - **If the backend is missing something, wrong, or blocks you** (a field you need, an
@@ -46,10 +49,10 @@ React Router, `jalaali-js`, Lucide icons.
 
 ## 2. Golden rules (non-negotiable)
 
-1. **Design fidelity is mandatory.** Pixel-faithful to `../design/DealEstate/DealEstate.dc.html`.
+1. **Design fidelity is mandatory.** Pixel-faithful to `./design/DealEstate/DealEstate.dc.html`.
    Same layout, spacing, colors, radii, shadows, copy, icons, flow. Use the design tokens
    (CSS variables in `src/styles/`) — never hardcode a hex/px a token already defines. Read
-   the design-system rules under `../design/DealEstate/_ds/` before touching UI.
+   the design-system rules under `./design/DealEstate/_ds/` before touching UI.
 2. **After every UI change**: run the app, open it in the browser, **screenshot** at mobile
    (≤480px) **and** desktop (≥920px), compare to the design, fix diffs before committing.
    Check the browser console for errors. Use the preview tooling available to you.
@@ -142,7 +145,7 @@ this, keep it consistent with the tests.
 ## 7. Workflow for a typical screen
 
 1. Read the flow doc in `../docs/flows/` for this screen (fields + rules + acceptance +
-   edge cases), then the matching screen in `../design/DealEstate/DealEstate.dc.html` + the
+   edge cases), then the matching screen in `./design/DealEstate/DealEstate.dc.html` + the
    design-system rules; identify the tokens/components involved.
 2. Check [`API.md`](API.md) for the endpoint(s) that feed it; add/extend types + query hooks
    in `src/api/`.
@@ -163,9 +166,10 @@ this, keep it consistent with the tests.
 | Backend base URL | `http://127.0.0.1:8000/api/` |
 | Run backend | `cd ../backend && uv run python manage.py runserver` |
 | Dev login | mobile `09121112233` / password `Dev@12345` |
+| Build checklist | [`TASKS.md`](TASKS.md) (per-task acceptance criteria) |
 | API contract | [`API.md`](API.md) |
 | Flow specs (read-only) | `../docs/domain-model.md`, `../docs/decisions.md`, `../docs/flows/` |
 | Backend requests/gaps | [`BACKEND_ISSUES.md`](BACKEND_ISSUES.md) |
-| Design (read-only) | `../design/DealEstate/DealEstate.dc.html` + `_ds/` |
+| Design (read-only) | `./design/DealEstate/DealEstate.dc.html` + `_ds/` (local copy) |
 | UI language | Persian, RTL, Vazirmatn, Persian digits, no emoji |
 | Breakpoints | mobile ≤480px (bottom nav) · desktop ≥920px (right sidebar) |

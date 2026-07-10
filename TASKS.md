@@ -258,10 +258,10 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ create both types, quick-add customer, invalid budget/deadline, list/filter, 404, unauth.
   - **Done:** request CRUD works. `eee4637 / commit feat(requests): add Request model, CRUD services, apis, and tests`
 
-- [ ] **39. Request → property matching selector + api** ⚠️
+- [x] **39. Request → property matching selector + api** ⚠️
   - **Scope:** `selectors.request_matches(*, request)` — auto-suggest properties matching a request's constraints (type, area, beds, budget/deposit/rent, region, status خالی). Matching api.
   - **Tests:** ⚠️ matches respect every constraint, budget over-limit excluded, occupied excluded, no matches → empty, ordering by best fit.
-  - **Done:** matching api works. `_____ / commit _____`
+  - **Done:** matching api works. `2350130 / commit feat(requests): add property matching selector and api`
 
 ## Cross-cutting
 

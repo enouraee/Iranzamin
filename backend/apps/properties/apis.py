@@ -79,6 +79,9 @@ class PropertyDetailApi(APIView):
         tenant = serializers.SerializerMethodField()
         occupancy_start = serializers.DateField(allow_null=True)
         occupancy_end = serializers.DateField(allow_null=True)
+        occupancy_deposit = serializers.IntegerField(allow_null=True)
+        occupancy_monthly_rent = serializers.IntegerField(allow_null=True)
+        occupancy_rahn = serializers.IntegerField(allow_null=True)
 
         # Deal types
         is_for_sale = serializers.BooleanField()
@@ -210,6 +213,9 @@ class PropertyCreateApi(APIView):
         tenant_id = serializers.IntegerField(required=False, allow_null=True)
         occupancy_start = serializers.DateField(required=False, allow_null=True)
         occupancy_end = serializers.DateField(required=False, allow_null=True)
+        occupancy_deposit = serializers.IntegerField(required=False, allow_null=True)
+        occupancy_monthly_rent = serializers.IntegerField(required=False, allow_null=True)
+        occupancy_rahn = serializers.IntegerField(required=False, allow_null=True)
         # Deal types
         is_for_sale = serializers.BooleanField(default=False)
         price_per_meter = serializers.IntegerField(required=False, allow_null=True)
@@ -300,6 +306,9 @@ class PropertyCreateApi(APIView):
             tenant=tenant,
             occupancy_start=data.get("occupancy_start"),
             occupancy_end=data.get("occupancy_end"),
+            occupancy_deposit=data.get("occupancy_deposit"),
+            occupancy_monthly_rent=data.get("occupancy_monthly_rent"),
+            occupancy_rahn=data.get("occupancy_rahn"),
             is_for_sale=data["is_for_sale"],
             price_per_meter=data.get("price_per_meter"),
             total_price=data.get("total_price"),
@@ -423,6 +432,9 @@ class PropertySetStatusApi(APIView):
         tenant_id = serializers.IntegerField(required=False, allow_null=True)
         occupancy_start = serializers.DateField(required=False, allow_null=True)
         occupancy_end = serializers.DateField(required=False, allow_null=True)
+        occupancy_deposit = serializers.IntegerField(required=False, allow_null=True)
+        occupancy_monthly_rent = serializers.IntegerField(required=False, allow_null=True)
+        occupancy_rahn = serializers.IntegerField(required=False, allow_null=True)
 
     def patch(self, request: Request, property_id: int) -> Response:
         serializer = self.InputSerializer(data=request.data)
@@ -443,6 +455,9 @@ class PropertySetStatusApi(APIView):
             tenant=tenant,
             occupancy_start=data.get("occupancy_start"),
             occupancy_end=data.get("occupancy_end"),
+            occupancy_deposit=data.get("occupancy_deposit"),
+            occupancy_monthly_rent=data.get("occupancy_monthly_rent"),
+            occupancy_rahn=data.get("occupancy_rahn"),
         )
         return Response({"id": prop.pk, "status": prop.status})
 

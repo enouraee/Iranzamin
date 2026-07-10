@@ -103,6 +103,8 @@ class TestPropertySetStatusApi:
             "tenant_id": tenant.pk,
             "occupancy_start": "2025-01-01",
             "occupancy_end": "2025-12-31",
+            "occupancy_deposit": 1_000_000,
+            "occupancy_monthly_rent": 200_000,
         }
         response = auth_client.patch(self._url(prop.pk), payload, format="json")
         assert response.status_code == status.HTTP_200_OK

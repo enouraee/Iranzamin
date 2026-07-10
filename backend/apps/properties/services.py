@@ -111,6 +111,9 @@ def property_create(
     tenant: Person | None = None,
     occupancy_start=None,
     occupancy_end=None,
+    occupancy_deposit: int | None = None,
+    occupancy_monthly_rent: int | None = None,
+    occupancy_rahn: int | None = None,
     # Deal type flags
     is_for_sale: bool = False,
     price_per_meter: int | None = None,
@@ -162,6 +165,9 @@ def property_create(
             tenant=tenant,
             occupancy_start=occupancy_start,
             occupancy_end=occupancy_end,
+            occupancy_deposit=occupancy_deposit,
+            occupancy_monthly_rent=occupancy_monthly_rent,
+            occupancy_rahn=occupancy_rahn,
             is_for_sale=is_for_sale,
             price_per_meter=price_per_meter,
             total_price=total_price,
@@ -254,6 +260,9 @@ def property_set_status(
     tenant: Person | None = None,
     occupancy_start=None,
     occupancy_end=None,
+    occupancy_deposit: int | None = None,
+    occupancy_monthly_rent: int | None = None,
+    occupancy_rahn: int | None = None,
 ) -> Property:
     from .selectors import property_get
 
@@ -270,10 +279,16 @@ def property_set_status(
         prop.tenant = None
         prop.occupancy_start = None
         prop.occupancy_end = None
+        prop.occupancy_deposit = None
+        prop.occupancy_monthly_rent = None
+        prop.occupancy_rahn = None
     else:
         prop.tenant = tenant
         prop.occupancy_start = occupancy_start
         prop.occupancy_end = occupancy_end
+        prop.occupancy_deposit = occupancy_deposit
+        prop.occupancy_monthly_rent = occupancy_monthly_rent
+        prop.occupancy_rahn = occupancy_rahn
 
     with transaction.atomic():
         prop.full_clean()

@@ -75,6 +75,14 @@ def contract_create(
             prop.tenant = party_b
             prop.occupancy_start = start_date
             prop.occupancy_end = end_date
+            if contract_type == CONTRACT_TYPE_RENT:
+                prop.occupancy_deposit = deposit_amount
+                prop.occupancy_monthly_rent = monthly_rent
+                prop.occupancy_rahn = None
+            else:  # RAHN
+                prop.occupancy_rahn = rahn_amount
+                prop.occupancy_deposit = None
+                prop.occupancy_monthly_rent = None
             prop.full_clean()
             prop.save()
             if old_status != prop.status:
@@ -97,6 +105,9 @@ def contract_create(
             prop.tenant = None
             prop.occupancy_start = None
             prop.occupancy_end = None
+            prop.occupancy_deposit = None
+            prop.occupancy_monthly_rent = None
+            prop.occupancy_rahn = None
             prop.full_clean()
             prop.save()
             if old_owner != prop.owner:
@@ -139,6 +150,14 @@ def contract_update(*, contract_id: int, data: dict) -> Contract:
             prop.tenant = contract.party_b
             prop.occupancy_start = contract.start_date
             prop.occupancy_end = contract.end_date
+            if contract.contract_type == CONTRACT_TYPE_RENT:
+                prop.occupancy_deposit = contract.deposit_amount
+                prop.occupancy_monthly_rent = contract.monthly_rent
+                prop.occupancy_rahn = None
+            else:  # RAHN
+                prop.occupancy_rahn = contract.rahn_amount
+                prop.occupancy_deposit = None
+                prop.occupancy_monthly_rent = None
             prop.full_clean()
             prop.save()
         elif contract.contract_type == CONTRACT_TYPE_SALE:
@@ -163,6 +182,9 @@ def contract_delete(*, contract_id: int) -> None:
             prop.tenant = None
             prop.occupancy_start = None
             prop.occupancy_end = None
+            prop.occupancy_deposit = None
+            prop.occupancy_monthly_rent = None
+            prop.occupancy_rahn = None
             prop.full_clean()
             prop.save()
         elif contract_type == CONTRACT_TYPE_SALE:

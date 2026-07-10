@@ -281,6 +281,7 @@ class TestPropertySetStatusHistory:
         property_set_status(
             agent=self.agent, property_id=self.prop.pk, status=STATUS_OCCUPIED,
             tenant=tenant, occupancy_start="2024-01-01", occupancy_end="2025-01-01",
+            occupancy_deposit=1_000_000, occupancy_monthly_rent=200_000,
         )
         entry = PropertyHistory.objects.get(property=self.prop, field="status")
         assert entry.change_type == CHANGE_TYPE_STATUS
@@ -293,6 +294,7 @@ class TestPropertySetStatusHistory:
         property_set_status(
             agent=self.agent, property_id=self.prop.pk, status=STATUS_OCCUPIED,
             tenant=tenant, occupancy_start="2024-01-01", occupancy_end="2025-01-01",
+            occupancy_deposit=1_000_000, occupancy_monthly_rent=200_000,
         )
         entry = PropertyHistory.objects.get(property=self.prop, field="tenant")
         assert entry.change_type == CHANGE_TYPE_TENANT

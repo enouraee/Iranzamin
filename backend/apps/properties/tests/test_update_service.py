@@ -84,6 +84,8 @@ class TestPropertySetStatusService:
             tenant=tenant,
             occupancy_start=start,
             occupancy_end=end,
+            occupancy_deposit=1_000_000,
+            occupancy_monthly_rent=200_000,
         )
         assert updated.status == STATUS_OCCUPIED
         assert updated.tenant_id == tenant.pk

@@ -92,6 +92,10 @@ class Property(BaseModel):
     )
     occupancy_start = models.DateField(null=True, blank=True)
     occupancy_end = models.DateField(null=True, blank=True)
+    # Actual amounts paid by the sitting tenant (separate from listing asking prices)
+    occupancy_deposit = models.PositiveBigIntegerField(null=True, blank=True)
+    occupancy_monthly_rent = models.PositiveBigIntegerField(null=True, blank=True)
+    occupancy_rahn = models.PositiveBigIntegerField(null=True, blank=True)
 
     # Deal types — multi-select as boolean flags + amounts
     is_for_sale = models.BooleanField(default=False)
@@ -154,7 +158,7 @@ class Property(BaseModel):
         if self.type == TYPE_LAND and (self.is_for_rent or self.is_for_rahn):
             raise ValidationError("زمین فقط قابل فروش است و نمی‌تواند اجاره یا رهن داشته باشد.")
 
-        # Occupied status requires tenant and dates
+        # Occupied status requires tenant, dates, and actual occupancy amounts
         if self.status == STATUS_OCCUPIED:
             missing = []
             if not self.tenant_id:
@@ -166,6 +170,18 @@ class Property(BaseModel):
             if missing:
                 raise ValidationError(
                     f"هنگامی که وضعیت «پر» است، فیلدهای زیر الزامی هستند: {', '.join(missing)}."
+                )
+            # Require amounts for the occupancy kind:
+            # rent  → occupancy_deposit + occupancy_monthly_rent
+            # rahn  → occupancy_rahn
+            has_rent_amounts = (
+                self.occupancy_deposit is not None and self.occupancy_monthly_rent is not None
+            )
+            has_rahn_amount = self.occupancy_rahn is not None
+            if not has_rent_amounts and not has_rahn_amount:
+                raise ValidationError(
+                    "هنگامی که وضعیت «پر» است، مبالغ اجاره (پول پیش و اجاره ماهانه) یا "
+                    "مبلغ رهن باید وارد شود."
                 )
 
 

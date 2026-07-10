@@ -221,10 +221,10 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** delete removes + cascades correctly, 404 on missing, unauth 401.
   - **Done:** full property CRUD routed. `2026-07-10 / commit fa4e299`
 
-- [ ] **32. Dashboard stats selector + api**
+- [x] **32. Dashboard stats selector + api**
   - **Scope:** `selectors.dashboard_stats` (counts: total files, خالی/پر, contracts, open requests, recent files). Thin api.
   - **Tests:** counts correct on seeded data, empty DB → zeros, unauth 401.
-  - **Done:** dashboard api works. `_____ / commit _____`
+  - **Done:** dashboard api works. `2026-07-10 / commit 988d2ef`
 
 ## Domain: People, Contracts, Requests
 

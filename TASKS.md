@@ -40,11 +40,11 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ `1248` → `۱٬۲۴۸`; `8500000000` → `۸٫۵ میلیارد`; empty/NaN/negative; round-trip Jalali↔Gregorian; huge numbers.
   - **Done:** 2026-07-10 / commit 76778b3
 
-- [ ] **4. UI primitives (design-system components)** 🎨
+- [x] **4. UI primitives (design-system components)** 🎨
   - **Scope:** Build reusable primitives matching the DS: `Button`, `IconButton`, `Input`, `Select`, `Switch`, `Badge`, `Card`, `Avatar`, `StatCard`, `PropertyCard`, `Tabs`. Lucide outline icons (stroke 2, `currentColor`). Hover/focus/disabled states per DS "States".
   - **Design:** DS `components/` + specimen cards.
   - **Tests:** render each; Badge خالی=green / پر=red; Button disabled has `opacity .5`, no hover; RTL layout.
-  - **Done:** primitives match design at both widths. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit ca80949
 
 - [ ] **5. App shell: routing + bottom nav + desktop sidebar** 🎨
   - **Scope:** React Router routes for every screen. Chrome: 56px top app bar, **64px bottom nav** on mobile; at ≥920px switch to fixed **right-side sidebar** (RTL) and hide bottom nav — exactly as the design. Nav items: داشبورد · فایل‌ها · (+) · قراردادها/درخواست‌ها · پروفایل. Active item bumps icon stroke.

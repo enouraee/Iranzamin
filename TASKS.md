@@ -179,20 +179,20 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** unauth 401, get shape, patch persists, invalid field rejected.
   - **Done:** 2026-07-09 / commit 250a431
 
-- [ ] **24. Core: BaseModel, ApplicationError, exception handler, pagination**
+- [x] **24. Core: BaseModel, ApplicationError, exception handler, pagination**
   - **Scope:** `apps/common/`: `BaseModel` (`created_at`/`updated_at`), `ApplicationError`, DRF custom exception handler → structured errors, shared pagination + base serializers. Wire in settings.
   - **Tests:** ⚠️ ApplicationError → structured JSON; pagination boundaries; validation error shape.
-  - **Done:** shared infra in place. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit 3a56735
 
-- [ ] **25. Region (منطقه) — model + CRUD** ⚠️
+- [x] **25. Region (منطقه) — model + CRUD** ⚠️
   - **Scope:** `apps/regions/`: thin model, `region_create`/`region_list`, list + create apis (inline-add from the property wizard).
   - **Tests:** ⚠️ create, duplicate name, list ordering, unauth 401.
-  - **Done:** region api works. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit 0cdfff7
 
-- [ ] **26. Person (شخص) — model** ⚠️
+- [x] **26. Person (شخص) — model** ⚠️
   - **Scope:** `apps/people/`: model (first/last name, phone, کد ملی, birth date Jalali, role مالک/مشتری), `clean()` invariants (valid کد ملی, phone). Migration. No apis yet (task 33/34).
   - **Tests:** ⚠️ valid create, invalid کد ملی rejected in `full_clean`, duplicate phone rule, birth date parse.
-  - **Done:** model + migration + validation tested. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit d6c3b1a
 
 ## Domain: Properties
 

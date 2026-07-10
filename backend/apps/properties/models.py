@@ -36,6 +36,18 @@ STATUS_CHOICES = [
     (STATUS_OCCUPIED, "پر"),
 ]
 
+# ---------------------------------------------------------------------------
+# Cabinet material choices (O1)
+# ---------------------------------------------------------------------------
+
+CABINET_OPEN = "open"
+CABINET_MDF = "mdf"
+
+CABINET_CHOICES = [
+    (CABINET_OPEN, "اوپن"),
+    (CABINET_MDF, "MDF"),
+]
+
 
 # ---------------------------------------------------------------------------
 # Models
@@ -100,8 +112,12 @@ class Property(BaseModel):
     floor = models.IntegerField(null=True, blank=True)
     unit = models.CharField(max_length=16, blank=True, default="")
     beds = models.PositiveSmallIntegerField(null=True, blank=True)
-    amenities = models.JSONField(default=list, blank=True)
-    cabinet_material = models.CharField(max_length=64, blank=True, default="")
+    has_parking = models.BooleanField(default=False)
+    has_obstructive_parking = models.BooleanField(default=False)
+    has_balcony = models.BooleanField(default=False)
+    has_backyard = models.BooleanField(default=False)
+    has_elevator = models.BooleanField(default=False)
+    cabinet_material = models.CharField(max_length=8, choices=CABINET_CHOICES, blank=True, default="")
     build_year = models.PositiveSmallIntegerField(null=True, blank=True)
     has_storage = models.BooleanField(default=False)
     storage_deed = models.BooleanField(default=False)
@@ -112,7 +128,7 @@ class Property(BaseModel):
     has_aqab_neshini = models.BooleanField(default=False)
     aqab_neshini_desc = models.TextField(blank=True, default="")
     taadad_bar = models.PositiveSmallIntegerField(null=True, blank=True)
-    gozar_kooche = models.CharField(max_length=64, blank=True, default="")
+    gozar_kooche = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
 
     # Kalnagi-specific
     taadad_tabaghat = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -164,4 +180,17 @@ class PropertyPhoto(BaseModel):
 
     class Meta:
         verbose_name = "عکس ملک"
+        ordering = ["id"]
+
+
+class PropertyVideo(BaseModel):
+    property = models.ForeignKey(
+        Property,
+        on_delete=models.CASCADE,
+        related_name="videos",
+    )
+    file = models.CharField(max_length=512)
+
+    class Meta:
+        verbose_name = "ویدیو ملک"
         ordering = ["id"]

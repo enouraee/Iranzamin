@@ -9,6 +9,8 @@ from .apis import (
     PropertyMediaRemoveApi,
     PropertySetStatusApi,
     PropertyUpdateApi,
+    PropertyVideoAddApi,
+    PropertyVideoRemoveApi,
 )
 
 urlpatterns = [
@@ -23,5 +25,11 @@ urlpatterns = [
         "properties/<int:property_id>/photos/<int:photo_id>/",
         PropertyMediaRemoveApi.as_view(),
         name="property-photos-remove",
+    ),
+    path("properties/<int:property_id>/videos/", PropertyVideoAddApi.as_view(), name="property-videos-add"),
+    path(
+        "properties/<int:property_id>/videos/<int:video_id>/",
+        PropertyVideoRemoveApi.as_view(),
+        name="property-videos-remove",
     ),
 ]

@@ -9,6 +9,7 @@ from .models import (
     TYPE_LAND,
     Property,
     PropertyPhoto,
+    PropertyVideo,
 )
 
 _UPDATABLE_FIELDS = frozenset(
@@ -29,7 +30,11 @@ _UPDATABLE_FIELDS = frozenset(
         "floor",
         "unit",
         "beds",
-        "amenities",
+        "has_parking",
+        "has_obstructive_parking",
+        "has_balcony",
+        "has_backyard",
+        "has_elevator",
         "cabinet_material",
         "build_year",
         "has_storage",
@@ -75,7 +80,11 @@ def property_create(
     floor: int | None = None,
     unit: str = "",
     beds: int | None = None,
-    amenities: list | None = None,
+    has_parking: bool = False,
+    has_obstructive_parking: bool = False,
+    has_balcony: bool = False,
+    has_backyard: bool = False,
+    has_elevator: bool = False,
     cabinet_material: str = "",
     build_year: int | None = None,
     has_storage: bool = False,
@@ -86,13 +95,14 @@ def property_create(
     has_aqab_neshini: bool = False,
     aqab_neshini_desc: str = "",
     taadad_bar: int | None = None,
-    gozar_kooche: str = "",
+    gozar_kooche=None,
     # Kalnagi-specific
     taadad_tabaghat: int | None = None,
     has_hayat: bool = False,
     hayat_area=None,
     # Media
     photo_files: list[str] | None = None,
+    video_files: list[str] | None = None,
 ) -> Property:
     with transaction.atomic():
         prop = Property(
@@ -118,7 +128,11 @@ def property_create(
             floor=floor,
             unit=unit,
             beds=beds,
-            amenities=amenities or [],
+            has_parking=has_parking,
+            has_obstructive_parking=has_obstructive_parking,
+            has_balcony=has_balcony,
+            has_backyard=has_backyard,
+            has_elevator=has_elevator,
             cabinet_material=cabinet_material,
             build_year=build_year,
             has_storage=has_storage,
@@ -143,6 +157,10 @@ def property_create(
                     file=file_path,
                     is_cover=(i == 0),
                 )
+
+        if video_files:
+            for file_path in video_files:
+                PropertyVideo.objects.create(property=prop, file=file_path)
 
         return prop
 
@@ -245,3 +263,23 @@ def property_media_remove(*, photo_id: int) -> None:
             if next_photo:
                 next_photo.is_cover = True
                 next_photo.save(update_fields=["is_cover"])
+
+
+def property_video_add(*, property_id: int, video_files: list[str]) -> list[PropertyVideo]:
+    from .selectors import property_get
+
+    prop = property_get(property_id=property_id)
+    created: list[PropertyVideo] = []
+    with transaction.atomic():
+        for file_path in video_files:
+            video = PropertyVideo.objects.create(property=prop, file=file_path)
+            created.append(video)
+    return created
+
+
+def property_video_remove(*, video_id: int) -> None:
+    try:
+        video = PropertyVideo.objects.get(pk=video_id)
+    except PropertyVideo.DoesNotExist:
+        raise ApplicationError(message="ویدیو مورد نظر یافت نشد.")
+    video.delete()

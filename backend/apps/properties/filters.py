@@ -9,6 +9,11 @@ class PropertyFilter(django_filters.FilterSet):
     status = django_filters.CharFilter(field_name="status")
     deal_type = django_filters.CharFilter(method="filter_deal_type")
     search = django_filters.CharFilter(method="filter_search")
+    has_parking = django_filters.BooleanFilter(field_name="has_parking")
+    has_obstructive_parking = django_filters.BooleanFilter(field_name="has_obstructive_parking")
+    has_balcony = django_filters.BooleanFilter(field_name="has_balcony")
+    has_backyard = django_filters.BooleanFilter(field_name="has_backyard")
+    has_elevator = django_filters.BooleanFilter(field_name="has_elevator")
 
     def filter_deal_type(self, queryset, name, value):
         mapping = {
@@ -30,4 +35,5 @@ class PropertyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Property
-        fields = ["type", "region", "status"]
+        fields = ["type", "region", "status", "has_parking", "has_obstructive_parking",
+                  "has_balcony", "has_backyard", "has_elevator"]

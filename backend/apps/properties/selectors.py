@@ -8,7 +8,7 @@ from .models import Property
 def property_list(*, filters: dict | None = None) -> QuerySet[Property]:
     from .filters import PropertyFilter
 
-    qs = Property.objects.select_related("region", "owner", "agent", "tenant").prefetch_related("photos")
+    qs = Property.objects.select_related("region", "owner", "agent", "tenant").prefetch_related("photos", "videos")
     if filters:
         qs = PropertyFilter(data=filters, queryset=qs).qs
     return qs
@@ -19,7 +19,7 @@ def property_get(*, property_id: int) -> Property:
         return (
             Property.objects
             .select_related("region", "owner", "agent", "tenant")
-            .prefetch_related("photos")
+            .prefetch_related("photos", "videos")
             .get(pk=property_id)
         )
     except Property.DoesNotExist:

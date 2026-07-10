@@ -4,6 +4,7 @@ from apps.people.tests.factories import PersonFactory
 from apps.properties.models import (
     Property,
     PropertyPhoto,
+    PropertyVideo,
     STATUS_VACANT,
     TYPE_APARTMENT,
 )
@@ -23,6 +24,11 @@ class PropertyFactory(factory.django.DjangoModelFactory):
     total_price = 5_000_000_000
     price_per_meter = 50_000_000
     area = "100.00"
+    has_parking = False
+    has_obstructive_parking = False
+    has_balcony = False
+    has_backyard = False
+    has_elevator = False
 
     class Meta:
         model = Property
@@ -35,3 +41,11 @@ class PropertyPhotoFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = PropertyPhoto
+
+
+class PropertyVideoFactory(factory.django.DjangoModelFactory):
+    property = factory.SubFactory(PropertyFactory)
+    file = "videos/test.mp4"
+
+    class Meta:
+        model = PropertyVideo

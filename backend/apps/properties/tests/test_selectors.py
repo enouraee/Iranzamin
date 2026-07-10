@@ -114,7 +114,7 @@ class TestPropertyList:
     def test_select_related_avoids_extra_queries(self, django_assert_num_queries):
         PropertyFactory.create_batch(5)
         # All data fetched in a fixed number of queries regardless of count
-        with django_assert_num_queries(2):  # 1 main query + 1 prefetch for photos
+        with django_assert_num_queries(3):  # 1 main query + 1 prefetch photos + 1 prefetch videos
             result = list(property_list())
             for p in result:
                 _ = p.region.name

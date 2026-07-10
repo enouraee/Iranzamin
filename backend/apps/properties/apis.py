@@ -9,9 +9,18 @@ from apps.common.pagination import StandardResultsPagination
 from apps.people.models import Person
 from apps.regions.models import Region
 
-from .models import STATUS_CHOICES, STATUS_OCCUPIED, STATUS_VACANT, TYPE_CHOICES
+from .models import CABINET_CHOICES, STATUS_CHOICES, STATUS_OCCUPIED, STATUS_VACANT, TYPE_CHOICES
 from .selectors import property_get, property_list
-from .services import property_create, property_delete, property_media_add, property_media_remove, property_set_status, property_update
+from .services import (
+    property_create,
+    property_delete,
+    property_media_add,
+    property_media_remove,
+    property_set_status,
+    property_update,
+    property_video_add,
+    property_video_remove,
+)
 
 
 class PropertyListApi(APIView):
@@ -88,7 +97,11 @@ class PropertyDetailApi(APIView):
         floor = serializers.IntegerField(allow_null=True)
         unit = serializers.CharField()
         beds = serializers.IntegerField(allow_null=True)
-        amenities = serializers.ListField(child=serializers.CharField(), allow_empty=True)
+        has_parking = serializers.BooleanField()
+        has_obstructive_parking = serializers.BooleanField()
+        has_balcony = serializers.BooleanField()
+        has_backyard = serializers.BooleanField()
+        has_elevator = serializers.BooleanField()
         cabinet_material = serializers.CharField()
         build_year = serializers.IntegerField(allow_null=True)
         has_storage = serializers.BooleanField()
@@ -100,7 +113,7 @@ class PropertyDetailApi(APIView):
         has_aqab_neshini = serializers.BooleanField()
         aqab_neshini_desc = serializers.CharField()
         taadad_bar = serializers.IntegerField(allow_null=True)
-        gozar_kooche = serializers.CharField()
+        gozar_kooche = serializers.DecimalField(max_digits=6, decimal_places=2, allow_null=True)
 
         # Kalnagi-specific
         taadad_tabaghat = serializers.IntegerField(allow_null=True)
@@ -109,6 +122,7 @@ class PropertyDetailApi(APIView):
 
         # Media
         photos = serializers.SerializerMethodField()
+        videos = serializers.SerializerMethodField()
 
         created_at = serializers.DateTimeField()
         updated_at = serializers.DateTimeField()
@@ -145,6 +159,9 @@ class PropertyDetailApi(APIView):
 
         def get_photos(self, obj):
             return [{"id": p.id, "file": p.file, "is_cover": p.is_cover} for p in obj.photos.all()]
+
+        def get_videos(self, obj):
+            return [{"id": v.id, "file": v.file} for v in obj.videos.all()]
 
     def get(self, request: Request, property_id: int) -> Response:
         prop = property_get(property_id=property_id)
@@ -185,10 +202,14 @@ class PropertyCreateApi(APIView):
         floor = serializers.IntegerField(required=False, allow_null=True)
         unit = serializers.CharField(default="", allow_blank=True)
         beds = serializers.IntegerField(required=False, allow_null=True)
-        amenities = serializers.ListField(
-            child=serializers.CharField(), default=list, allow_empty=True
+        has_parking = serializers.BooleanField(default=False)
+        has_obstructive_parking = serializers.BooleanField(default=False)
+        has_balcony = serializers.BooleanField(default=False)
+        has_backyard = serializers.BooleanField(default=False)
+        has_elevator = serializers.BooleanField(default=False)
+        cabinet_material = serializers.ChoiceField(
+            choices=[c[0] for c in CABINET_CHOICES], default="", allow_blank=True
         )
-        cabinet_material = serializers.CharField(default="", allow_blank=True)
         build_year = serializers.IntegerField(required=False, allow_null=True)
         has_storage = serializers.BooleanField(default=False)
         storage_deed = serializers.BooleanField(default=False)
@@ -199,13 +220,18 @@ class PropertyCreateApi(APIView):
         has_aqab_neshini = serializers.BooleanField(default=False)
         aqab_neshini_desc = serializers.CharField(default="", allow_blank=True)
         taadad_bar = serializers.IntegerField(required=False, allow_null=True)
-        gozar_kooche = serializers.CharField(default="", allow_blank=True)
+        gozar_kooche = serializers.DecimalField(
+            max_digits=6, decimal_places=2, required=False, allow_null=True
+        )
         taadad_tabaghat = serializers.IntegerField(required=False, allow_null=True)
         has_hayat = serializers.BooleanField(default=False)
         hayat_area = serializers.DecimalField(
             max_digits=8, decimal_places=2, required=False, allow_null=True
         )
         photo_files = serializers.ListField(
+            child=serializers.CharField(), default=list, allow_empty=True
+        )
+        video_files = serializers.ListField(
             child=serializers.CharField(), default=list, allow_empty=True
         )
 
@@ -262,7 +288,11 @@ class PropertyCreateApi(APIView):
             floor=data.get("floor"),
             unit=data.get("unit", ""),
             beds=data.get("beds"),
-            amenities=data.get("amenities", []),
+            has_parking=data["has_parking"],
+            has_obstructive_parking=data["has_obstructive_parking"],
+            has_balcony=data["has_balcony"],
+            has_backyard=data["has_backyard"],
+            has_elevator=data["has_elevator"],
             cabinet_material=data.get("cabinet_material", ""),
             build_year=data.get("build_year"),
             has_storage=data["has_storage"],
@@ -272,11 +302,12 @@ class PropertyCreateApi(APIView):
             has_aqab_neshini=data["has_aqab_neshini"],
             aqab_neshini_desc=data.get("aqab_neshini_desc", ""),
             taadad_bar=data.get("taadad_bar"),
-            gozar_kooche=data.get("gozar_kooche", ""),
+            gozar_kooche=data.get("gozar_kooche"),
             taadad_tabaghat=data.get("taadad_tabaghat"),
             has_hayat=data["has_hayat"],
             hayat_area=data.get("hayat_area"),
             photo_files=data.get("photo_files", []),
+            video_files=data.get("video_files", []),
         )
 
         output = self.OutputSerializer(prop)
@@ -303,8 +334,14 @@ class PropertyUpdateApi(APIView):
         floor = serializers.IntegerField(required=False, allow_null=True)
         unit = serializers.CharField(required=False, allow_blank=True)
         beds = serializers.IntegerField(required=False, allow_null=True)
-        amenities = serializers.ListField(child=serializers.CharField(), required=False, allow_empty=True)
-        cabinet_material = serializers.CharField(required=False, allow_blank=True)
+        has_parking = serializers.BooleanField(required=False)
+        has_obstructive_parking = serializers.BooleanField(required=False)
+        has_balcony = serializers.BooleanField(required=False)
+        has_backyard = serializers.BooleanField(required=False)
+        has_elevator = serializers.BooleanField(required=False)
+        cabinet_material = serializers.ChoiceField(
+            choices=[c[0] for c in CABINET_CHOICES], required=False, allow_blank=True
+        )
         build_year = serializers.IntegerField(required=False, allow_null=True)
         has_storage = serializers.BooleanField(required=False)
         storage_deed = serializers.BooleanField(required=False)
@@ -313,7 +350,7 @@ class PropertyUpdateApi(APIView):
         has_aqab_neshini = serializers.BooleanField(required=False)
         aqab_neshini_desc = serializers.CharField(required=False, allow_blank=True)
         taadad_bar = serializers.IntegerField(required=False, allow_null=True)
-        gozar_kooche = serializers.CharField(required=False, allow_blank=True)
+        gozar_kooche = serializers.DecimalField(max_digits=6, decimal_places=2, required=False, allow_null=True)
         taadad_tabaghat = serializers.IntegerField(required=False, allow_null=True)
         has_hayat = serializers.BooleanField(required=False)
         hayat_area = serializers.DecimalField(max_digits=8, decimal_places=2, required=False, allow_null=True)
@@ -417,4 +454,30 @@ class PropertyMediaRemoveApi(APIView):
     def delete(self, request: Request, property_id: int, photo_id: int) -> Response:
         property_get(property_id=property_id)
         property_media_remove(photo_id=photo_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PropertyVideoAddApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class InputSerializer(serializers.Serializer):
+        video_files = serializers.ListField(child=serializers.CharField(), min_length=1)
+
+    def post(self, request: Request, property_id: int) -> Response:
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        videos = property_video_add(
+            property_id=property_id,
+            video_files=serializer.validated_data["video_files"],
+        )
+        output = [{"id": v.id, "file": v.file} for v in videos]
+        return Response(output, status=status.HTTP_201_CREATED)
+
+
+class PropertyVideoRemoveApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request: Request, property_id: int, video_id: int) -> Response:
+        property_get(property_id=property_id)
+        property_video_remove(video_id=video_id)
         return Response(status=status.HTTP_204_NO_CONTENT)

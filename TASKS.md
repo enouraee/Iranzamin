@@ -298,11 +298,11 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ owner/tenant/status/price change each logs a row with correct old→new + source; contract-driven change links the contract; manual edit logs source=manual; no history on no-op update.
   - **Done:** `2026-07-10 / commit 3831f75`
 
-- [ ] **44. Request — 3 types, wants_*, target/units, status + mark-done** ⚠️
+- [x] **44. Request — 3 types, wants_*, target/units, status + mark-done** ⚠️
   - **Scope:** `request_type` → `{rent, rahn, sale}` (D2). Add `target_property_type`, `units_count`, `wants_parking`, `wants_elevator`, `wants_storage`, `status {open, done}`, `matched_property` FK. Service `request_mark_done(*, request, property)`. Update `request_create`, filters, matching (`request_matches` honors type→deal flag + `wants_*`→amenity columns), apis, factories.
   - **Docs:** domain-model.md (Request), flows/request.md.
   - **Tests:** ⚠️ 3 types create; rent vs rahn money semantics; sale target/units; wants_* narrow matches; mark-done sets status+matched_property; done excluded from open list.
-  - **Done:** `_____ / commit _____`
+  - **Done:** `2026-07-10 / commit 4222977`
 
 - [ ] **45. Property occupancy actual amounts** ⚠️
   - **Scope:** Add `occupancy_deposit`, `occupancy_monthly_rent`, `occupancy_rahn` (D4). `clean()`/service: when `occupied`, require the amount(s) for the chosen occupancy kind. `contract_create` sets them from the contract (rent → deposit+rent, rahn → rahn). Update detail serializer.

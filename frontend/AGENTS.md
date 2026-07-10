@@ -11,10 +11,22 @@ black box you call over HTTP — its contract is [`API.md`](API.md).
 ## 0. Scope & boundaries (read first)
 
 - ✅ You own everything under `frontend/`.
-- ✅ Read-only reference: the design at `../design/DealEstate/` (source of truth for UI).
+- ✅ Read-only references (do not edit):
+  - `../design/DealEstate/` — visual source of truth (layout, tokens, components, screens).
+  - `../docs/` — field-level flow specs written for coding agents: `domain-model.md`
+    (every entity + field), `decisions.md` (locked ADRs, e.g. D2/D5/D6), and
+    `flows/*.md` (per-screen steps, field rules, acceptance criteria, edge cases). Read
+    the relevant flow doc **before** building a screen.
+  - [`API.md`](API.md) — the exact HTTP wire contract (shapes, enums, errors, pagination).
 - ⛔ **Do not read, edit, or explore `../backend/`.** You don't need it and it wastes your
   context. The entire API surface you need is in [`API.md`](API.md).
-- ⛔ Never edit anything under `../design/` — it is read-only.
+- ⛔ Never edit anything under `../design/` or `../docs/` — they are read-only.
+
+**Precedence when sources disagree:** for **data wire shape** (request/response fields,
+enums, status codes) → [`API.md`](API.md) wins (it's the running contract). For **flow,
+fields, and business rules** → `../docs/` wins, then `../design/` for pixel layout. If
+`API.md` and `../docs/` contradict on a field, trust `API.md` and note it in
+`BACKEND_ISSUES.md`.
 - **If the backend is missing something, wrong, or blocks you** (a field you need, an
   endpoint that doesn't exist, a bad response, a missing file-upload endpoint, etc.):
   **do not fix it in the backend and do not read backend source.** Write it in
@@ -129,8 +141,9 @@ this, keep it consistent with the tests.
 
 ## 7. Workflow for a typical screen
 
-1. Read the matching screen in `../design/DealEstate/DealEstate.dc.html` + the design-system
-   rules; identify the tokens/components involved.
+1. Read the flow doc in `../docs/flows/` for this screen (fields + rules + acceptance +
+   edge cases), then the matching screen in `../design/DealEstate/DealEstate.dc.html` + the
+   design-system rules; identify the tokens/components involved.
 2. Check [`API.md`](API.md) for the endpoint(s) that feed it; add/extend types + query hooks
    in `src/api/`.
 3. Build the component(s) with design tokens; wire to the API via TanStack Query.
@@ -151,6 +164,7 @@ this, keep it consistent with the tests.
 | Run backend | `cd ../backend && uv run python manage.py runserver` |
 | Dev login | mobile `09121112233` / password `Dev@12345` |
 | API contract | [`API.md`](API.md) |
+| Flow specs (read-only) | `../docs/domain-model.md`, `../docs/decisions.md`, `../docs/flows/` |
 | Backend requests/gaps | [`BACKEND_ISSUES.md`](BACKEND_ISSUES.md) |
 | Design (read-only) | `../design/DealEstate/DealEstate.dc.html` + `_ds/` |
 | UI language | Persian, RTL, Vazirmatn, Persian digits, no emoji |

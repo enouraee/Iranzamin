@@ -9,10 +9,15 @@ from apps.users.tests.factories import UserFactory
 from .factories import PersonFactory
 
 LIST_URL = "/api/people/"
+CREATE_URL = "/api/people/create/"
 
 
 def detail_url(person_id):
     return f"/api/people/{person_id}/"
+
+
+def update_url(person_id):
+    return f"/api/people/{person_id}/update/"
 
 
 @pytest.fixture
@@ -193,3 +198,162 @@ class TestPersonDetailApi:
         PropertyFactory.create_batch(3, owner=person)
         response = auth_client.get(detail_url(person.id))
         assert len(response.data["owned_properties"]) == 3
+
+
+@pytest.mark.django_db
+class TestPersonCreateApi:
+    def test_unauthenticated_returns_401(self, client):
+        payload = {
+            "first_name": "علی",
+            "last_name": "رضایی",
+            "phone": "09120001001",
+            "role": ROLE_OWNER,
+        }
+        response = client.post(CREATE_URL, payload, format="json")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_create_with_minimal_fields_returns_201(self, auth_client):
+        payload = {
+            "first_name": "سارا",
+            "last_name": "کریمی",
+            "phone": "09120001002",
+            "role": ROLE_CUSTOMER,
+        }
+        response = auth_client.post(CREATE_URL, payload, format="json")
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.data["phone"] == "09120001002"
+        assert response.data["role"] == ROLE_CUSTOMER
+        assert "id" in response.data
+        assert "full_name" in response.data
+
+    def test_create_with_all_fields_returns_201(self, auth_client):
+        payload = {
+            "first_name": "مهدی",
+            "last_name": "احمدی",
+            "phone": "09120001003",
+            "role": ROLE_OWNER,
+            "national_id": "0012345679",
+            "birth_date": "1985-06-20",
+        }
+        response = auth_client.post(CREATE_URL, payload, format="json")
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.data["national_id"] == "0012345679"
+
+    def test_duplicate_phone_returns_error(self, auth_client):
+        PersonFactory(phone="09120001004")
+        payload = {
+            "first_name": "حسن",
+            "last_name": "موسوی",
+            "phone": "09120001004",
+            "role": ROLE_OWNER,
+        }
+        response = auth_client.post(CREATE_URL, payload, format="json")
+        assert response.status_code in (
+            status.HTTP_400_BAD_REQUEST,
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+        )
+
+    def test_invalid_national_id_returns_error(self, auth_client):
+        payload = {
+            "first_name": "زهرا",
+            "last_name": "حسینی",
+            "phone": "09120001005",
+            "role": ROLE_CUSTOMER,
+            "national_id": "1234567890",
+        }
+        response = auth_client.post(CREATE_URL, payload, format="json")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_invalid_phone_format_returns_error(self, auth_client):
+        payload = {
+            "first_name": "رضا",
+            "last_name": "نظری",
+            "phone": "07120001006",
+            "role": ROLE_OWNER,
+        }
+        response = auth_client.post(CREATE_URL, payload, format="json")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_missing_required_field_returns_400(self, auth_client):
+        payload = {
+            "first_name": "آرش",
+            "phone": "09120001007",
+            "role": ROLE_OWNER,
+            # last_name missing
+        }
+        response = auth_client.post(CREATE_URL, payload, format="json")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_response_contains_expected_fields(self, auth_client):
+        payload = {
+            "first_name": "فرید",
+            "last_name": "قاسمی",
+            "phone": "09120001008",
+            "role": ROLE_OWNER,
+        }
+        response = auth_client.post(CREATE_URL, payload, format="json")
+        assert response.status_code == status.HTTP_201_CREATED
+        for field in ("id", "first_name", "last_name", "full_name", "phone", "national_id", "role", "created_at"):
+            assert field in response.data
+
+    def test_multiple_persons_without_national_id_allowed(self, auth_client):
+        payload1 = {"first_name": "الف", "last_name": "ب", "phone": "09120001009", "role": ROLE_OWNER}
+        payload2 = {"first_name": "ج", "last_name": "د", "phone": "09120001010", "role": ROLE_OWNER}
+        r1 = auth_client.post(CREATE_URL, payload1, format="json")
+        r2 = auth_client.post(CREATE_URL, payload2, format="json")
+        assert r1.status_code == status.HTTP_201_CREATED
+        assert r2.status_code == status.HTTP_201_CREATED
+
+
+@pytest.mark.django_db
+class TestPersonUpdateApi:
+    def test_unauthenticated_returns_401(self, client):
+        person = PersonFactory(phone="09130001001")
+        response = client.patch(update_url(person.id), {"first_name": "جدید"}, format="json")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_update_first_name_returns_200(self, auth_client):
+        person = PersonFactory(phone="09130001002", first_name="قدیمی")
+        response = auth_client.patch(update_url(person.id), {"first_name": "جدید"}, format="json")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["first_name"] == "جدید"
+
+    def test_update_phone_returns_200(self, auth_client):
+        person = PersonFactory(phone="09130001003")
+        response = auth_client.patch(update_url(person.id), {"phone": "09130001099"}, format="json")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["phone"] == "09130001099"
+
+    def test_update_national_id_returns_200(self, auth_client):
+        person = PersonFactory(phone="09130001004")
+        response = auth_client.patch(update_url(person.id), {"national_id": "0012345679"}, format="json")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["national_id"] == "0012345679"
+
+    def test_update_nonexistent_person_returns_400(self, auth_client):
+        response = auth_client.patch(update_url(99999), {"first_name": "هیچ"}, format="json")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_update_with_invalid_phone_returns_400(self, auth_client):
+        person = PersonFactory(phone="09130001005")
+        response = auth_client.patch(update_url(person.id), {"phone": "bad-phone"}, format="json")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_update_with_invalid_national_id_returns_400(self, auth_client):
+        person = PersonFactory(phone="09130001006")
+        response = auth_client.patch(update_url(person.id), {"national_id": "1234567890"}, format="json")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_partial_update_leaves_other_fields_unchanged(self, auth_client):
+        person = PersonFactory(phone="09130001007", first_name="اصلی", last_name="نام", role=ROLE_OWNER)
+        response = auth_client.patch(update_url(person.id), {"first_name": "تغییر"}, format="json")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["last_name"] == "نام"
+        assert response.data["role"] == ROLE_OWNER
+
+    def test_response_contains_expected_fields(self, auth_client):
+        person = PersonFactory(phone="09130001008")
+        response = auth_client.patch(update_url(person.id), {"first_name": "تست"}, format="json")
+        assert response.status_code == status.HTTP_200_OK
+        for field in ("id", "first_name", "last_name", "full_name", "phone", "national_id", "role", "updated_at"):
+            assert field in response.data

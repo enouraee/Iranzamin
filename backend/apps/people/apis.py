@@ -6,7 +6,9 @@ from rest_framework.views import APIView
 
 from apps.common.pagination import StandardResultsPagination
 
+from .models import ROLE_CHOICES
 from .selectors import person_get, person_list
+from .services import person_create, person_update
 
 
 class PersonListApi(APIView):
@@ -63,3 +65,67 @@ class PersonDetailApi(APIView):
         person = person_get(person_id=person_id)
         output = self.OutputSerializer(person)
         return Response(output.data, status=status.HTTP_200_OK)
+
+
+class PersonCreateApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class InputSerializer(serializers.Serializer):
+        first_name = serializers.CharField()
+        last_name = serializers.CharField()
+        phone = serializers.CharField()
+        role = serializers.ChoiceField(choices=[c[0] for c in ROLE_CHOICES])
+        national_id = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+        birth_date = serializers.DateField(required=False, allow_null=True)
+
+    class OutputSerializer(serializers.Serializer):
+        id = serializers.IntegerField()
+        first_name = serializers.CharField()
+        last_name = serializers.CharField()
+        full_name = serializers.CharField()
+        phone = serializers.CharField()
+        national_id = serializers.CharField(allow_null=True)
+        role = serializers.CharField()
+        created_at = serializers.DateTimeField()
+
+    def post(self, request: Request) -> Response:
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        person = person_create(
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+            phone=data["phone"],
+            role=data["role"],
+            national_id=data.get("national_id"),
+            birth_date=data.get("birth_date"),
+        )
+        return Response(self.OutputSerializer(person).data, status=status.HTTP_201_CREATED)
+
+
+class PersonUpdateApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class InputSerializer(serializers.Serializer):
+        first_name = serializers.CharField(required=False)
+        last_name = serializers.CharField(required=False)
+        phone = serializers.CharField(required=False)
+        role = serializers.ChoiceField(choices=[c[0] for c in ROLE_CHOICES], required=False)
+        national_id = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+        birth_date = serializers.DateField(required=False, allow_null=True)
+
+    class OutputSerializer(serializers.Serializer):
+        id = serializers.IntegerField()
+        first_name = serializers.CharField()
+        last_name = serializers.CharField()
+        full_name = serializers.CharField()
+        phone = serializers.CharField()
+        national_id = serializers.CharField(allow_null=True)
+        role = serializers.CharField()
+        updated_at = serializers.DateTimeField()
+
+    def patch(self, request: Request, person_id: int) -> Response:
+        serializer = self.InputSerializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        person = person_update(person_id=person_id, data=serializer.validated_data)
+        return Response(self.OutputSerializer(person).data)

@@ -48,6 +48,8 @@ Keep backend and frontend fully separate. They talk only over the REST API.
 
 ## 4. Domain model (from the design)
 
+> **Field-level source of truth is [docs/domain-model.md](docs/domain-model.md)** (with locked decisions in [docs/decisions.md](docs/decisions.md) and per-flow specs in `docs/flows/`). This section is the high-level overview; where it and the docs disagree, **the docs win**.
+
 Entities and their key fields, derived from the wizard and screens in `DealEstate.dc.html`. Model these in Django; names below are the Persian labels the UI uses.
 
 - **User / Agent (مشاور املاک)** — auth by mobile number + password. Profile: name, phone, notification + dark-mode settings.
@@ -61,7 +63,7 @@ Entities and their key fields, derived from the wizard and screens in `DealEstat
   - **Status**: `خالی` (available) / `پر` (occupied). Occupied → start/end dates (Jalali) + tenant (مستأجر).
   - Owner (مالک), photos, video, gallery.
 - **Contract (قرارداد)** — links a property + parties (seller/owner + buyer/renter), type (فروش/اجاره/رهن), start/end dates (Jalali), amount(s), contract image, notes. Registering a contract updates the property's owner/tenant status.
-- **Request (درخواست)** — a customer looking for a property. Customer (existing or quick-add), type (rent/mortgage vs buy), constraints: persons count, beds, needs (نیازها), preferred floor, area, build year, max deposit / max rent / budget, deadline (مهلت). Matching files are auto-suggested.
+- **Request (درخواست)** — a customer looking for a property. Customer (existing or quick-add), type **`اجاره`/`رهن`/`فروش` (3 types — see decision D2)**, constraints: persons count, beds, needs (نیازها), preferred floor, area, build year, `wants_parking`/`wants_elevator`/`wants_storage`, max deposit / max rent / budget, target property type + units (for sale), deadline (مهلت), plus `status` (open/done) + matched property. Matching files are auto-suggested. Full field list in [docs/domain-model.md](docs/domain-model.md#request-درخواست--appsrequests).
 
 Prices are in **Toman**, stored as integers (no decimals); format for display on the frontend.
 

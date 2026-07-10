@@ -209,7 +209,7 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 - [x] **29. Property create service + api** ⚠️
   - **Scope:** `services.property_create(*, agent, type, region, ...)` — `full_clean()` + `transaction.atomic()`, type-specific field handling, owner link, media. `PropertyCreateApi`.
   - **Tests:** ⚠️ happy path per type, **land + rent/rahn rejected**, occupied-without-dates rejected, missing owner rejected, huge price stored as int, atomic rollback on failure.
-  - **Done:** 2026-07-10 / commit TBD
+  - **Done:** 2026-07-10 / commit 47ba4cc
 
 - [ ] **30. Property update + status/media services** ⚠️
   - **Scope:** `property_update`, `property_set_status` (خالی/پر + tenant/dates), media add/remove. Update apis.

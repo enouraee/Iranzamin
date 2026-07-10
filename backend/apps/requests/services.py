@@ -4,11 +4,13 @@ from django.db import transaction
 from apps.people.models import ROLE_CUSTOMER
 from apps.people.services import person_quick_add
 
-from .models import Request
+from .models import REQUEST_STATUS_DONE, Request
 from .selectors import request_get
 
 _UPDATABLE_FIELDS = frozenset([
     "request_type",
+    "target_property_type",
+    "units_count",
     "persons_count",
     "beds",
     "needs",
@@ -17,6 +19,9 @@ _UPDATABLE_FIELDS = frozenset([
     "max_area",
     "min_build_year",
     "max_build_year",
+    "wants_parking",
+    "wants_elevator",
+    "wants_storage",
     "max_deposit",
     "max_rent",
     "budget",
@@ -33,6 +38,8 @@ def request_create(
     customer_phone: str | None = None,
     region_id: int | None = None,
     request_type: str,
+    target_property_type: str | None = None,
+    units_count: int | None = None,
     persons_count: int | None = None,
     beds: int | None = None,
     needs: str = "",
@@ -41,6 +48,9 @@ def request_create(
     max_area: int | None = None,
     min_build_year: int | None = None,
     max_build_year: int | None = None,
+    wants_parking: bool = False,
+    wants_elevator: bool = False,
+    wants_storage: bool = False,
     max_deposit: int | None = None,
     max_rent: int | None = None,
     budget: int | None = None,
@@ -74,6 +84,8 @@ def request_create(
             customer=customer,
             region=region,
             request_type=request_type,
+            target_property_type=target_property_type,
+            units_count=units_count,
             persons_count=persons_count,
             beds=beds,
             needs=needs,
@@ -82,6 +94,9 @@ def request_create(
             max_area=max_area,
             min_build_year=min_build_year,
             max_build_year=max_build_year,
+            wants_parking=wants_parking,
+            wants_elevator=wants_elevator,
+            wants_storage=wants_storage,
             max_deposit=max_deposit,
             max_rent=max_rent,
             budget=budget,
@@ -111,6 +126,19 @@ def request_update(*, request_id: int, data: dict) -> Request:
             except Region.DoesNotExist:
                 raise ValidationError({"region": "منطقه مورد نظر یافت نشد."})
 
+    req.full_clean()
+    req.save()
+    return req
+
+
+def request_mark_done(*, request_id: int, property_id: int) -> Request:
+    from apps.properties.selectors import property_get
+
+    req = request_get(request_id=request_id)
+    prop = property_get(property_id=property_id)
+
+    req.status = REQUEST_STATUS_DONE
+    req.matched_property = prop
     req.full_clean()
     req.save()
     return req

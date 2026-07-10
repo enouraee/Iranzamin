@@ -3,12 +3,22 @@ from django.db import models
 
 from apps.common.models import BaseModel
 
-REQUEST_TYPE_RENT_MORTGAGE = "rent_mortgage"
-REQUEST_TYPE_BUY = "buy"
+REQUEST_TYPE_RENT = "rent"
+REQUEST_TYPE_RAHN = "rahn"
+REQUEST_TYPE_SALE = "sale"
 
 REQUEST_TYPE_CHOICES = [
-    (REQUEST_TYPE_RENT_MORTGAGE, "اجاره/رهن"),
-    (REQUEST_TYPE_BUY, "خرید"),
+    (REQUEST_TYPE_RENT, "اجاره"),
+    (REQUEST_TYPE_RAHN, "رهن"),
+    (REQUEST_TYPE_SALE, "فروش"),
+]
+
+REQUEST_STATUS_OPEN = "open"
+REQUEST_STATUS_DONE = "done"
+
+REQUEST_STATUS_CHOICES = [
+    (REQUEST_STATUS_OPEN, "باز"),
+    (REQUEST_STATUS_DONE, "انجام‌شده"),
 ]
 
 
@@ -25,7 +35,23 @@ class Request(BaseModel):
         on_delete=models.SET_NULL,
         related_name="requests",
     )
-    request_type = models.CharField(max_length=16, choices=REQUEST_TYPE_CHOICES)
+    request_type = models.CharField(max_length=8, choices=REQUEST_TYPE_CHOICES)
+    status = models.CharField(
+        max_length=8,
+        choices=REQUEST_STATUS_CHOICES,
+        default=REQUEST_STATUS_OPEN,
+    )
+    matched_property = models.ForeignKey(
+        "properties.Property",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="matched_requests",
+    )
+
+    # Sale: target property type and units
+    target_property_type = models.CharField(max_length=16, null=True, blank=True)
+    units_count = models.PositiveSmallIntegerField(null=True, blank=True)
 
     persons_count = models.PositiveSmallIntegerField(null=True, blank=True)
     beds = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -36,11 +62,16 @@ class Request(BaseModel):
     min_build_year = models.PositiveSmallIntegerField(null=True, blank=True)
     max_build_year = models.PositiveSmallIntegerField(null=True, blank=True)
 
-    # Rent/mortgage constraints
+    wants_parking = models.BooleanField(default=False)
+    wants_elevator = models.BooleanField(default=False)
+    wants_storage = models.BooleanField(default=False)
+
+    # Rent: deposit (پول پیش) + monthly rent (اجاره ماهانه)
+    # Rahn: max_deposit doubles as max rahn amount (پول رهن)
     max_deposit = models.PositiveBigIntegerField(null=True, blank=True)
     max_rent = models.PositiveBigIntegerField(null=True, blank=True)
 
-    # Buy constraint
+    # Sale budget
     budget = models.PositiveBigIntegerField(null=True, blank=True)
 
     deadline = models.DateField(null=True, blank=True)

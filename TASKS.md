@@ -66,7 +66,7 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Design:** login screen (`DealEstate.dc.html`, ~line 889).
   - **Depends on backend:** task 22.
   - **Tests:** ⚠️ empty fields, wrong creds error, invalid phone format, successful login redirect (mock).
-  - **Done:** 2026-07-10 / commit TBD
+  - **Done:** 2026-07-10 / commit 0821a90
 
 - [ ] **8. Dashboard screen** 🎨
   - **Scope:** greeting header (`سلام، رضا 👋` — the one allowed emoji), StatCards, quick actions, recent files. Persian digits throughout.

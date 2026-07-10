@@ -32,8 +32,16 @@ def contract_create(
     rahn_amount: int | None = None,
     contract_image: str = "",
     notes: str = "",
+    changed_by=None,
 ) -> Contract:
     from apps.people.selectors import person_get
+    from apps.properties.models import (
+        CHANGE_TYPE_OWNER,
+        CHANGE_TYPE_STATUS,
+        CHANGE_TYPE_TENANT,
+        SOURCE_CONTRACT,
+    )
+    from apps.properties.services import record_property_history
 
     with transaction.atomic():
         prop = property_get(property_id=property_id)
@@ -61,13 +69,29 @@ def contract_create(
         # Rent / rahn: property becomes occupied, tenant is set to party_b.
         # Sale: ownership transfers to party_b (buyer), property reverts to vacant.
         if contract_type in (CONTRACT_TYPE_RENT, CONTRACT_TYPE_RAHN):
+            old_status = prop.status
+            old_tenant = prop.tenant
             prop.status = STATUS_OCCUPIED
             prop.tenant = party_b
             prop.occupancy_start = start_date
             prop.occupancy_end = end_date
             prop.full_clean()
             prop.save()
+            if old_status != prop.status:
+                record_property_history(
+                    prop=prop, changed_by=changed_by,
+                    field="status", old_val=old_status, new_val=prop.status,
+                    change_type=CHANGE_TYPE_STATUS, source=SOURCE_CONTRACT, contract=contract,
+                )
+            if old_tenant != prop.tenant:
+                record_property_history(
+                    prop=prop, changed_by=changed_by,
+                    field="tenant", old_val=old_tenant, new_val=prop.tenant,
+                    change_type=CHANGE_TYPE_TENANT, source=SOURCE_CONTRACT, contract=contract,
+                )
         elif contract_type == CONTRACT_TYPE_SALE:
+            old_owner = prop.owner
+            old_status = prop.status
             prop.owner = party_b
             prop.status = STATUS_VACANT
             prop.tenant = None
@@ -75,6 +99,18 @@ def contract_create(
             prop.occupancy_end = None
             prop.full_clean()
             prop.save()
+            if old_owner != prop.owner:
+                record_property_history(
+                    prop=prop, changed_by=changed_by,
+                    field="owner", old_val=old_owner, new_val=prop.owner,
+                    change_type=CHANGE_TYPE_OWNER, source=SOURCE_CONTRACT, contract=contract,
+                )
+            if old_status != prop.status:
+                record_property_history(
+                    prop=prop, changed_by=changed_by,
+                    field="status", old_val=old_status, new_val=prop.status,
+                    change_type=CHANGE_TYPE_STATUS, source=SOURCE_CONTRACT, contract=contract,
+                )
 
         return contract
 

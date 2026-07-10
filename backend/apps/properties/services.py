@@ -5,12 +5,58 @@ from apps.people.models import Person
 from apps.regions.models import Region
 
 from .models import (
+    CHANGE_TYPE_OTHER,
+    CHANGE_TYPE_OWNER,
+    CHANGE_TYPE_PRICE,
+    CHANGE_TYPE_STATUS,
+    CHANGE_TYPE_TENANT,
+    SOURCE_CONTRACT,
+    SOURCE_MANUAL,
     STATUS_VACANT,
     TYPE_LAND,
     Property,
+    PropertyHistory,
     PropertyPhoto,
     PropertyVideo,
 )
+
+_PRICE_FIELDS = frozenset({"price_per_meter", "total_price", "deposit", "monthly_rent", "rahn_amount"})
+
+
+def _val(v) -> str:
+    return "" if v is None else str(v)
+
+
+def _change_type_for_field(field: str) -> str:
+    if field == "owner":
+        return CHANGE_TYPE_OWNER
+    if field in _PRICE_FIELDS:
+        return CHANGE_TYPE_PRICE
+    return CHANGE_TYPE_OTHER
+
+
+def record_property_history(
+    *,
+    prop: Property,
+    changed_by,
+    field: str,
+    old_val,
+    new_val,
+    change_type: str,
+    source: str,
+    contract=None,
+) -> None:
+    PropertyHistory.objects.create(
+        property=prop,
+        changed_by=changed_by,
+        change_type=change_type,
+        field=field,
+        old_value=_val(old_val),
+        new_value=_val(new_val),
+        source=source,
+        contract=contract,
+    )
+
 
 _UPDATABLE_FIELDS = frozenset(
     {
@@ -173,6 +219,8 @@ def property_update(*, agent, property_id: int, data: dict) -> Property:
     if prop.agent_id != agent.pk:
         raise ApplicationError(message="شما مجاز به ویرایش این ملک نیستید.")
 
+    old = {f: getattr(prop, f) for f in data if f in _UPDATABLE_FIELDS}
+
     for field, value in data.items():
         if field in _UPDATABLE_FIELDS:
             setattr(prop, field, value)
@@ -180,6 +228,20 @@ def property_update(*, agent, property_id: int, data: dict) -> Property:
     with transaction.atomic():
         prop.full_clean()
         prop.save()
+        for field, new_val in data.items():
+            if field not in _UPDATABLE_FIELDS:
+                continue
+            old_val = old[field]
+            if old_val != new_val:
+                record_property_history(
+                    prop=prop,
+                    changed_by=agent,
+                    field=field,
+                    old_val=old_val,
+                    new_val=new_val,
+                    change_type=_change_type_for_field(field),
+                    source=SOURCE_MANUAL,
+                )
 
     return prop
 
@@ -200,6 +262,9 @@ def property_set_status(
     if prop.agent_id != agent.pk:
         raise ApplicationError(message="شما مجاز به ویرایش این ملک نیستید.")
 
+    old_status = prop.status
+    old_tenant = prop.tenant
+
     prop.status = status
     if status == STATUS_VACANT:
         prop.tenant = None
@@ -213,6 +278,18 @@ def property_set_status(
     with transaction.atomic():
         prop.full_clean()
         prop.save()
+        if old_status != prop.status:
+            record_property_history(
+                prop=prop, changed_by=agent,
+                field="status", old_val=old_status, new_val=prop.status,
+                change_type=CHANGE_TYPE_STATUS, source=SOURCE_MANUAL,
+            )
+        if old_tenant != prop.tenant:
+            record_property_history(
+                prop=prop, changed_by=agent,
+                field="tenant", old_val=old_tenant, new_val=prop.tenant,
+                change_type=CHANGE_TYPE_TENANT, source=SOURCE_MANUAL,
+            )
 
     return prop
 

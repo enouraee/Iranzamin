@@ -2,7 +2,7 @@ from django.db.models import QuerySet
 
 from apps.common.exceptions import ApplicationError
 
-from .models import Property
+from .models import Property, PropertyHistory
 
 
 def property_list(*, filters: dict | None = None) -> QuerySet[Property]:
@@ -24,3 +24,12 @@ def property_get(*, property_id: int) -> Property:
         )
     except Property.DoesNotExist:
         raise ApplicationError(message="ملک مورد نظر یافت نشد.")
+
+
+def property_history(*, property: Property) -> QuerySet[PropertyHistory]:
+    return (
+        PropertyHistory.objects
+        .filter(property=property)
+        .select_related("changed_by", "contract")
+        .order_by("-created_at")
+    )

@@ -387,3 +387,132 @@ class TestContractDelete:
     def test_delete_nonexistent_contract_raises_error(self):
         with pytest.raises(ApplicationError):
             contract_delete(contract_id=99999)
+
+
+@pytest.mark.django_db
+class TestContractCreateHistory:
+    """contract_create writes PropertyHistory rows with source=contract."""
+
+    def test_rent_contract_logs_status_change(self):
+        from apps.properties.models import (
+            CHANGE_TYPE_STATUS, SOURCE_CONTRACT, STATUS_OCCUPIED, PropertyHistory,
+        )
+        prop = PropertyFactory(
+            is_for_rent=True, deposit=1_000_000, monthly_rent=500_000,
+            is_for_sale=False, status="vacant",
+        )
+        owner = PersonFactory()
+        tenant = PersonFactory()
+        agent = prop.agent
+
+        contract = contract_create(
+            property_id=prop.pk,
+            contract_type=CONTRACT_TYPE_RENT,
+            party_a_id=owner.pk,
+            party_b_id=tenant.pk,
+            start_date="2024-01-01",
+            end_date="2025-01-01",
+            deposit_amount=1_000_000,
+            monthly_rent=500_000,
+            changed_by=agent,
+        )
+
+        entry = PropertyHistory.objects.get(property=prop, field="status")
+        assert entry.change_type == CHANGE_TYPE_STATUS
+        assert entry.source == SOURCE_CONTRACT
+        assert entry.new_value == STATUS_OCCUPIED
+        assert entry.contract_id == contract.pk
+        assert entry.changed_by_id == agent.pk
+
+    def test_rent_contract_logs_tenant_change(self):
+        from apps.properties.models import CHANGE_TYPE_TENANT, SOURCE_CONTRACT, PropertyHistory
+        prop = PropertyFactory(
+            is_for_rent=True, deposit=1_000_000, monthly_rent=500_000, is_for_sale=False,
+        )
+        owner = PersonFactory()
+        tenant = PersonFactory()
+
+        contract = contract_create(
+            property_id=prop.pk,
+            contract_type=CONTRACT_TYPE_RENT,
+            party_a_id=owner.pk,
+            party_b_id=tenant.pk,
+            start_date="2024-01-01",
+            end_date="2025-01-01",
+            deposit_amount=1_000_000,
+            monthly_rent=500_000,
+        )
+
+        entry = PropertyHistory.objects.get(property=prop, field="tenant")
+        assert entry.change_type == CHANGE_TYPE_TENANT
+        assert entry.source == SOURCE_CONTRACT
+        assert entry.contract_id == contract.pk
+        assert str(tenant) in entry.new_value
+
+    def test_sale_contract_logs_owner_change(self):
+        from apps.properties.models import CHANGE_TYPE_OWNER, SOURCE_CONTRACT, PropertyHistory
+        seller = PersonFactory()
+        buyer = PersonFactory()
+        prop = PropertyFactory(owner=seller, is_for_sale=True)
+
+        contract = contract_create(
+            property_id=prop.pk,
+            contract_type=CONTRACT_TYPE_SALE,
+            party_a_id=seller.pk,
+            party_b_id=buyer.pk,
+            start_date="2024-06-01",
+            sale_price=3_000_000_000,
+        )
+
+        entry = PropertyHistory.objects.get(property=prop, field="owner")
+        assert entry.change_type == CHANGE_TYPE_OWNER
+        assert entry.source == SOURCE_CONTRACT
+        assert entry.contract_id == contract.pk
+        assert str(buyer) in entry.new_value
+        assert str(seller) in entry.old_value
+
+    def test_sale_contract_logs_status_change_when_occupied(self):
+        from apps.properties.models import SOURCE_CONTRACT, STATUS_VACANT, PropertyHistory
+        tenant = PersonFactory()
+        seller = PersonFactory()
+        buyer = PersonFactory()
+        prop = PropertyFactory(
+            owner=seller, is_for_sale=True, is_for_rent=True,
+            deposit=500_000, monthly_rent=200_000,
+            status="occupied", tenant=tenant,
+            occupancy_start="2023-01-01", occupancy_end="2024-01-01",
+        )
+
+        contract = contract_create(
+            property_id=prop.pk,
+            contract_type=CONTRACT_TYPE_SALE,
+            party_a_id=seller.pk,
+            party_b_id=buyer.pk,
+            start_date="2024-06-01",
+            sale_price=3_000_000_000,
+        )
+
+        entry = PropertyHistory.objects.get(property=prop, field="status")
+        assert entry.source == SOURCE_CONTRACT
+        assert entry.new_value == STATUS_VACANT
+        assert entry.contract_id == contract.pk
+
+    def test_contract_without_changed_by_still_logs(self):
+        from apps.properties.models import PropertyHistory
+        prop = PropertyFactory(is_for_rent=True, deposit=1_000_000, monthly_rent=500_000, is_for_sale=False)
+        tenant = PersonFactory()
+
+        contract_create(
+            property_id=prop.pk,
+            contract_type=CONTRACT_TYPE_RENT,
+            party_b_id=tenant.pk,
+            start_date="2024-01-01",
+            end_date="2025-01-01",
+            deposit_amount=1_000_000,
+            monthly_rent=500_000,
+            changed_by=None,
+        )
+
+        assert PropertyHistory.objects.filter(property=prop).count() >= 1
+        # changed_by is nullable
+        assert PropertyHistory.objects.filter(property=prop, changed_by__isnull=True).exists()

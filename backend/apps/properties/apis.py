@@ -10,7 +10,7 @@ from apps.people.models import Person
 from apps.regions.models import Region
 
 from .models import CABINET_CHOICES, STATUS_CHOICES, STATUS_OCCUPIED, STATUS_VACANT, TYPE_CHOICES
-from .selectors import property_get, property_list
+from .selectors import property_get, property_history, property_list
 from .services import (
     property_create,
     property_delete,
@@ -124,6 +124,8 @@ class PropertyDetailApi(APIView):
         photos = serializers.SerializerMethodField()
         videos = serializers.SerializerMethodField()
 
+        history = serializers.SerializerMethodField()
+
         created_at = serializers.DateTimeField()
         updated_at = serializers.DateTimeField()
 
@@ -162,6 +164,28 @@ class PropertyDetailApi(APIView):
 
         def get_videos(self, obj):
             return [{"id": v.id, "file": v.file} for v in obj.videos.all()]
+
+        def get_history(self, obj):
+            from .selectors import property_history as _history
+            entries = _history(property=obj)
+            result = []
+            for entry in entries:
+                changed_by = None
+                if entry.changed_by_id:
+                    u = entry.changed_by
+                    changed_by = {"id": u.pk, "first_name": u.first_name, "last_name": u.last_name}
+                result.append({
+                    "id": entry.pk,
+                    "change_type": entry.change_type,
+                    "field": entry.field,
+                    "old_value": entry.old_value,
+                    "new_value": entry.new_value,
+                    "source": entry.source,
+                    "contract_id": entry.contract_id,
+                    "changed_by": changed_by,
+                    "created_at": entry.created_at,
+                })
+            return result
 
     def get(self, request: Request, property_id: int) -> Response:
         prop = property_get(property_id=property_id)

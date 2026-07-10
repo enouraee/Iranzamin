@@ -169,6 +169,64 @@ class Property(BaseModel):
                 )
 
 
+# ---------------------------------------------------------------------------
+# History constants
+# ---------------------------------------------------------------------------
+
+CHANGE_TYPE_OWNER = "owner"
+CHANGE_TYPE_TENANT = "tenant"
+CHANGE_TYPE_STATUS = "status"
+CHANGE_TYPE_PRICE = "price"
+CHANGE_TYPE_OTHER = "other"
+
+CHANGE_TYPE_CHOICES = [
+    (CHANGE_TYPE_OWNER, "مالک"),
+    (CHANGE_TYPE_TENANT, "مستأجر"),
+    (CHANGE_TYPE_STATUS, "وضعیت"),
+    (CHANGE_TYPE_PRICE, "قیمت"),
+    (CHANGE_TYPE_OTHER, "سایر"),
+]
+
+SOURCE_MANUAL = "manual"
+SOURCE_CONTRACT = "contract"
+
+SOURCE_CHOICES = [
+    (SOURCE_MANUAL, "دستی"),
+    (SOURCE_CONTRACT, "قرارداد"),
+]
+
+
+class PropertyHistory(BaseModel):
+    property = models.ForeignKey(
+        Property,
+        on_delete=models.CASCADE,
+        related_name="history",
+    )
+    changed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+    change_type = models.CharField(max_length=16, choices=CHANGE_TYPE_CHOICES)
+    field = models.CharField(max_length=64)
+    old_value = models.TextField(blank=True, default="")
+    new_value = models.TextField(blank=True, default="")
+    source = models.CharField(max_length=16, choices=SOURCE_CHOICES)
+    contract = models.ForeignKey(
+        "contracts.Contract",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="property_history_entries",
+    )
+
+    class Meta:
+        verbose_name = "تاریخچه ملک"
+        ordering = ["-created_at"]
+
+
 class PropertyPhoto(BaseModel):
     property = models.ForeignKey(
         Property,

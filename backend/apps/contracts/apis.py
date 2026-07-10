@@ -166,6 +166,7 @@ class ContractCreateApi(APIView):
             rahn_amount=data.get("rahn_amount"),
             contract_image=data.get("contract_image", ""),
             notes=data.get("notes", ""),
+            changed_by=request.user,
         )
         output = self.OutputSerializer(contract)
         return Response(output.data, status=status.HTTP_201_CREATED)

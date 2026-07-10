@@ -253,10 +253,10 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ delete reverts status if appropriate, update validation, 404, unauth.
   - **Done:** contract CRUD routed. `2026-07-10 / commit 905bb8c`
 
-- [ ] **38. Request model + create service + apis** ⚠️
+- [x] **38. Request model + create service + apis** ⚠️
   - **Scope:** `apps/requests/`: model (customer, type rent/mortgage vs buy, constraints: persons/beds/needs/floor/area/build-year/max deposit/max rent/budget/مهلت), migration. `request_create` (+ quick-add customer), list/detail/create apis, filters, urls.
   - **Tests:** ⚠️ create both types, quick-add customer, invalid budget/deadline, list/filter, 404, unauth.
-  - **Done:** request CRUD works. `_____ / commit _____`
+  - **Done:** request CRUD works. `eee4637 / commit feat(requests): add Request model, CRUD services, apis, and tests`
 
 - [ ] **39. Request → property matching selector + api** ⚠️
   - **Scope:** `selectors.request_matches(*, request)` — auto-suggest properties matching a request's constraints (type, area, beds, budget/deposit/rent, region, status خالی). Matching api.

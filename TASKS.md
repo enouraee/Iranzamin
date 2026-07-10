@@ -22,23 +22,23 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 
 ## Foundation
 
-- [ ] **1. Scaffold frontend project** 🎨
+- [x] **1. Scaffold frontend project** 🎨
   - **Scope:** Vite + React + TypeScript app in `frontend/`. Add deps: `react-router-dom`, `@tanstack/react-query`, `axios`, `vitest` + `@testing-library/react`, `@playwright/test`. Set `dir="rtl"`, `lang="fa"` on root. Base folder structure: `src/{components,screens,lib,styles,api}`.
   - **Design:** none yet — just the shell.
   - **Tests:** app boots, root renders, one smoke test green.
-  - **Done:** `npm run dev` serves a blank RTL page; `npm run test` passes. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit a77ba63
 
-- [ ] **2. Import design tokens + global styles** 🎨
+- [x] **2. Import design tokens + global styles** 🎨
   - **Scope:** Copy the token CSS from `Design/DealEstate/_ds/.../tokens/*.css` + `styles.css` into `frontend/src/styles/`. Load Vazirmatn. Expose CSS vars (`--color-primary`, `--radius-lg`, `--space-4`, status colors خالی/پر…). Set app background `#F5F7FA`, surfaces white.
   - **Design:** DS readme "Visual foundations".
   - **Tests:** a probe component reads `--color-primary` = `#1F4A6B`; snapshot of `:root` vars.
-  - **Done:** vars resolve in browser; font renders. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit 3ef0963
 
-- [ ] **3. Persian/format helpers** ⚠️
+- [x] **3. Persian/format helpers** ⚠️
   - **Scope:** `src/lib/fmt.ts`: Latin→Persian digits, Toman formatting with `٬` thousands / `٫` decimal, scale words (`میلیون`/`میلیارد`), rent `۴۵ میلیون / ماه`, Jalali date format+parse (use `jalaali-js`). Phone formatting.
   - **Design:** DS readme "Numerals"/"Money".
   - **Tests:** ⚠️ `1248` → `۱٬۲۴۸`; `8500000000` → `۸٫۵ میلیارد`; empty/NaN/negative; round-trip Jalali↔Gregorian; huge numbers.
-  - **Done:** all fmt tests green. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit 76778b3
 
 - [ ] **4. UI primitives (design-system components)** 🎨
   - **Scope:** Build reusable primitives matching the DS: `Button`, `IconButton`, `Input`, `Select`, `Switch`, `Badge`, `Card`, `Avatar`, `StatCard`, `PropertyCard`, `Tabs`. Lucide outline icons (stroke 2, `currentColor`). Hover/focus/disabled states per DS "States".

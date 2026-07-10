@@ -14,3 +14,9 @@ export { Switch }       from './forms/Switch'
 
 // Navigation components
 export { Tabs }         from './navigation/Tabs'
+export { BottomNav }    from './navigation/BottomNav'
+
+// Layout components
+export { TopBar }       from './layout/TopBar'
+export { Sidebar }      from './layout/Sidebar'
+export { AppShell }     from './layout/AppShell'

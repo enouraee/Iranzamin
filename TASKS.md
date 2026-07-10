@@ -286,11 +286,11 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 
 > These close the gap between the shipped backend and the full project spec. Each is HackSoft-style (model → migration → selectors/services/apis → tests) and must update the relevant `docs/` file if a field/shape changes. Decisions D1–D7 in [docs/decisions.md](docs/decisions.md) are binding. **No production data exists**, so destructive migrations (dropping `amenities`, changing `gozar_kooche`) are fine.
 
-- [ ] **42. Property model — amenity columns, media, field-type fixes** ⚠️
+- [x] **42. Property model — amenity columns, media, field-type fixes** ⚠️
   - **Scope:** Replace `amenities` JSONField with boolean columns `has_parking`, `has_obstructive_parking`, `has_balcony`, `has_backyard`, `has_elevator` (D1). Add `PropertyVideo` model (D6). Change `gozar_kooche` → `DecimalField(6,2)` meters (D7). Make `cabinet_material` a choice `{open: اوپن, mdf: MDF}` (O1). Migration + update `property_create`/`property_update`, filters, serializers, factories.
   - **Docs:** domain-model.md (apartment/kalnagi/land + media).
   - **Tests:** ⚠️ amenity booleans persist + filter; video optional; `gozar_kooche` accepts float/rejects text; cabinet choice validated; migration applies clean.
-  - **Done:** `_____ / commit _____`
+  - **Done:** `2026-07-10 / commit 5e98c2a`
 
 - [ ] **43. PropertyHistory audit trail** ⚠️
   - **Scope:** `PropertyHistory` model (D3): property, changed_by, change_type, field, old→new, source(manual/contract), optional contract FK. Write rows inside the atomic blocks of `property_update`, `property_set_status`, and `contract_create`. Selector `property_history(*, property)` + include in detail api.

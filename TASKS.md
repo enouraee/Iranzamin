@@ -204,7 +204,7 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 - [x] **28. Property detail selector + api**
   - **Scope:** `selectors.property_get`, `PropertyDetailApi` with full nested output (specs, owner, media, status/tenant/dates).
   - **Tests:** existing id 200 shape, missing id 404 via ApplicationError, occupied includes tenant+dates.
-  - **Done:** 2026-07-10 / commit <hash_after_commit>
+  - **Done:** 2026-07-10 / commit ca80949
 
 - [ ] **29. Property create service + api** ⚠️
   - **Scope:** `services.property_create(*, agent, type, region, ...)` — `full_clean()` + `transaction.atomic()`, type-specific field handling, owner link, media. `PropertyCreateApi`.

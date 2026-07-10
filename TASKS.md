@@ -228,25 +228,25 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 
 ## Domain: People, Contracts, Requests
 
-- [ ] **33. Person selectors + list/detail apis** ⚠️
+- [x] **33. Person selectors + list/detail apis** ⚠️
   - **Scope:** `people/selectors` (list+search+filter role, get with linked properties/contracts/requests), `filters.py`, list+detail apis.
   - **Tests:** ⚠️ search, filter role, linked objects present, pagination, empty state.
   - **Done:** person read apis work. `_____ / commit _____`
 
-- [ ] **34. Person create/update service + apis** ⚠️
+- [x] **34. Person create/update service + apis** ⚠️
   - **Scope:** `person_create`/`person_update` (validation, quick-add path), apis + urls.
   - **Tests:** ⚠️ duplicate phone, invalid کد ملی, quick-add minimal fields, update, unauth.
-  - **Done:** person write apis work. `_____ / commit _____`
+  - **Done:** person write apis work. `2026-07-10 / commit ec8b6b5`
 
-- [ ] **35. Contract model + selectors**
+- [x] **35. Contract model + selectors**
   - **Scope:** `apps/contracts/`: model (property + parties + type فروش/اجاره/رهن + Jalali start/end + amounts + image + notes), migration. `selectors.contract_list`/`contract_get`, filters, list+detail apis.
   - **Tests:** list/filter by type & property, detail shape, date range filter, 404.
-  - **Done:** contract read apis work. `_____ / commit _____`
+  - **Done:** contract read apis work. `2026-07-10 / commit d6c6fe5`
 
-- [ ] **36. Contract create service — registers + flips property status** ⚠️
+- [x] **36. Contract create service — registers + flips property status** ⚠️
   - **Scope:** `services.contract_create(*, property, parties, type, dates, amounts, ...)` — `transaction.atomic()`: create contract **and** update the property's owner/tenant + status (خالی→پر for rent/rahn; ownership transfer for sale). `ContractCreateApi`.
   - **Tests:** ⚠️ **registration flips property status + updates owner/tenant**, end<start rejected, amount required per type, atomic rollback (contract not saved if status update fails), unauth.
-  - **Done:** contract registration side-effects proven by tests. `_____ / commit _____`
+  - **Done:** contract registration side-effects proven by tests. `2026-07-10 / commit d6c6fe5`
 
 - [ ] **37. Contract update/delete + urls**
   - **Scope:** update/delete services (reverse status side-effects on delete where sensible), apis, `contracts/urls.py`.

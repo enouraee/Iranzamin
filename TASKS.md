@@ -52,12 +52,12 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** active route highlights; bottom nav hidden ≥920px, sidebar shown; nav navigates.
   - **Done:** chrome pixel-matches at both breakpoints. `_____ / commit _____`
 
-- [ ] **6. Typed API client + React Query setup** ⚠️
+- [x] **6. Typed API client + React Query setup** ⚠️
   - **Scope:** `src/api/client.ts` axios instance (base `/api/`, JWT header from storage, 401 → login redirect). React Query provider. Typed request helpers + shared TS domain types (`Property`, `Person`, `Contract`, `Request`, `Region`). Error-toast on network failure.
   - **Design:** n/a (infra).
   - **Depends on backend:** task 22 (JWT), 24 (error shape). Build against a mock adapter until then.
   - **Tests:** ⚠️ attaches token; 401 clears token + redirects; network error surfaces toast.
-  - **Done:** client typed, tested with mock server. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit e08a60e
 
 ## Screens
 
@@ -201,10 +201,10 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ filter by status خالی/پر, region, deal type, search, pagination boundary, empty result.
   - **Done:** 2026-07-10 / commit 2964944
 
-- [ ] **28. Property detail selector + api**
+- [x] **28. Property detail selector + api**
   - **Scope:** `selectors.property_get`, `PropertyDetailApi` with full nested output (specs, owner, media, status/tenant/dates).
   - **Tests:** existing id 200 shape, missing id 404 via ApplicationError, occupied includes tenant+dates.
-  - **Done:** detail api works. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit <hash_after_commit>
 
 - [ ] **29. Property create service + api** ⚠️
   - **Scope:** `services.property_create(*, agent, type, region, ...)` — `full_clean()` + `transaction.atomic()`, type-specific field handling, owner link, media. `PropertyCreateApi`.

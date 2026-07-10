@@ -4,6 +4,18 @@ from apps.properties.models import STATUS_OCCUPIED, STATUS_VACANT
 from apps.properties.selectors import property_get
 
 from .models import CONTRACT_TYPE_RENT, CONTRACT_TYPE_RAHN, CONTRACT_TYPE_SALE, Contract
+from .selectors import contract_get
+
+_UPDATABLE_FIELDS = frozenset([
+    "start_date",
+    "end_date",
+    "sale_price",
+    "deposit_amount",
+    "monthly_rent",
+    "rahn_amount",
+    "contract_image",
+    "notes",
+])
 
 
 def contract_create(
@@ -65,3 +77,59 @@ def contract_create(
             prop.save()
 
         return contract
+
+
+def contract_update(*, contract_id: int, data: dict) -> Contract:
+    from apps.people.selectors import person_get
+
+    contract = contract_get(contract_id=contract_id)
+
+    for field, value in data.items():
+        if field in _UPDATABLE_FIELDS:
+            setattr(contract, field, value)
+
+    if "party_a_id" in data:
+        contract.party_a = person_get(person_id=data["party_a_id"]) if data["party_a_id"] else None
+    if "party_b_id" in data:
+        contract.party_b = person_get(person_id=data["party_b_id"]) if data["party_b_id"] else None
+
+    prop = contract.property
+
+    with transaction.atomic():
+        contract.full_clean()
+        contract.save()
+
+        if contract.contract_type in (CONTRACT_TYPE_RENT, CONTRACT_TYPE_RAHN):
+            prop.tenant = contract.party_b
+            prop.occupancy_start = contract.start_date
+            prop.occupancy_end = contract.end_date
+            prop.full_clean()
+            prop.save()
+        elif contract.contract_type == CONTRACT_TYPE_SALE:
+            prop.owner = contract.party_b
+            prop.full_clean()
+            prop.save()
+
+    return contract
+
+
+def contract_delete(*, contract_id: int) -> None:
+    contract = contract_get(contract_id=contract_id)
+    prop = contract.property
+    contract_type = contract.contract_type
+    party_a = contract.party_a
+
+    with transaction.atomic():
+        contract.delete()
+
+        if contract_type in (CONTRACT_TYPE_RENT, CONTRACT_TYPE_RAHN):
+            prop.status = STATUS_VACANT
+            prop.tenant = None
+            prop.occupancy_start = None
+            prop.occupancy_end = None
+            prop.full_clean()
+            prop.save()
+        elif contract_type == CONTRACT_TYPE_SALE:
+            prop.owner = party_a
+            prop.full_clean()
+            prop.save()

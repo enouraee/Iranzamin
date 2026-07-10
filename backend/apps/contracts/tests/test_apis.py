@@ -24,6 +24,14 @@ def detail_url(contract_id):
     return f"/api/contracts/{contract_id}/"
 
 
+def update_url(contract_id):
+    return f"/api/contracts/{contract_id}/update/"
+
+
+def delete_url(contract_id):
+    return f"/api/contracts/{contract_id}/delete/"
+
+
 @pytest.fixture
 def client():
     return APIClient()
@@ -255,3 +263,123 @@ class TestContractCreateApi:
 
         prop.refresh_from_db()
         assert prop.status == STATUS_OCCUPIED
+
+
+# ---------------------------------------------------------------------------
+# Update
+# ---------------------------------------------------------------------------
+
+@pytest.mark.django_db
+class TestContractUpdateApi:
+    def test_unauthenticated_returns_401(self, client):
+        contract = ContractFactory()
+        response = client.patch(update_url(contract.pk), {}, format="json")
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_update_notes_returns_200(self, auth_client):
+        contract = ContractFactory(notes="قدیمی")
+        response = auth_client.patch(update_url(contract.pk), {"notes": "جدید"}, format="json")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["notes"] == "جدید"
+
+    def test_update_sale_price(self, auth_client):
+        contract = ContractFactory(contract_type=CONTRACT_TYPE_SALE, sale_price=1_000_000)
+        response = auth_client.patch(update_url(contract.pk), {"sale_price": 8_000_000}, format="json")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["sale_price"] == 8_000_000
+
+    def test_update_nonexistent_contract_returns_400(self, auth_client):
+        response = auth_client.patch(update_url(99999), {"notes": "x"}, format="json")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_update_invalid_end_date_returns_400(self, auth_client):
+        contract = ContractFactory(start_date="2024-06-01", end_date=None)
+        response = auth_client.patch(update_url(contract.pk), {"end_date": "2024-05-01"}, format="json")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_update_response_fields(self, auth_client):
+        contract = ContractFactory()
+        response = auth_client.patch(update_url(contract.pk), {"notes": "test"}, format="json")
+        assert response.status_code == status.HTTP_200_OK
+        for field in [
+            "id", "contract_type", "party_a", "party_b", "start_date", "end_date",
+            "sale_price", "deposit_amount", "monthly_rent", "rahn_amount",
+            "contract_image", "notes", "updated_at",
+        ]:
+            assert field in response.data
+
+    def test_update_party_b_for_rent_updates_property_tenant(self, auth_client):
+        owner = PersonFactory()
+        old_tenant = PersonFactory()
+        new_tenant = PersonFactory()
+        prop = PropertyFactory(is_for_rent=True, deposit=1_000_000, monthly_rent=300_000, is_for_sale=False)
+        contract = ContractFactory(
+            property=prop,
+            contract_type=CONTRACT_TYPE_RENT,
+            party_a=owner,
+            party_b=old_tenant,
+            sale_price=None,
+            deposit_amount=1_000_000,
+            monthly_rent=300_000,
+            start_date="2024-01-01",
+            end_date="2025-01-01",
+        )
+        prop.status = STATUS_OCCUPIED
+        prop.tenant = old_tenant
+        prop.occupancy_start = "2024-01-01"
+        prop.occupancy_end = "2025-01-01"
+        prop.save()
+
+        response = auth_client.patch(update_url(contract.pk), {"party_b_id": new_tenant.pk}, format="json")
+        assert response.status_code == status.HTTP_200_OK
+        prop.refresh_from_db()
+        assert prop.tenant_id == new_tenant.pk
+
+
+# ---------------------------------------------------------------------------
+# Delete
+# ---------------------------------------------------------------------------
+
+@pytest.mark.django_db
+class TestContractDeleteApi:
+    def test_unauthenticated_returns_401(self, client):
+        contract = ContractFactory()
+        response = client.delete(delete_url(contract.pk))
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_delete_returns_204(self, auth_client):
+        contract = ContractFactory()
+        response = auth_client.delete(delete_url(contract.pk))
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert not Contract.objects.filter(pk=contract.pk).exists()
+
+    def test_delete_nonexistent_contract_returns_400(self, auth_client):
+        response = auth_client.delete(delete_url(99999))
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_delete_rent_contract_reverts_property_status(self, auth_client):
+        owner = PersonFactory()
+        tenant = PersonFactory()
+        prop = PropertyFactory(is_for_rent=True, deposit=1_000_000, monthly_rent=300_000, is_for_sale=False)
+        contract = ContractFactory(
+            property=prop,
+            contract_type=CONTRACT_TYPE_RENT,
+            party_a=owner,
+            party_b=tenant,
+            sale_price=None,
+            deposit_amount=1_000_000,
+            monthly_rent=300_000,
+            start_date="2024-01-01",
+            end_date="2025-01-01",
+        )
+        prop.status = STATUS_OCCUPIED
+        prop.tenant = tenant
+        prop.occupancy_start = "2024-01-01"
+        prop.occupancy_end = "2025-01-01"
+        prop.save()
+
+        response = auth_client.delete(delete_url(contract.pk))
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        prop.refresh_from_db()
+        assert prop.status == "vacant"
+        assert prop.tenant_id is None

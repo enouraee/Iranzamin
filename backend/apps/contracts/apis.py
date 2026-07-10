@@ -8,7 +8,7 @@ from apps.common.pagination import StandardResultsPagination
 
 from .models import CONTRACT_TYPE_CHOICES
 from .selectors import contract_get, contract_list
-from .services import contract_create
+from .services import contract_create, contract_delete, contract_update
 
 
 def _person_data(person):
@@ -169,3 +169,55 @@ class ContractCreateApi(APIView):
         )
         output = self.OutputSerializer(contract)
         return Response(output.data, status=status.HTTP_201_CREATED)
+
+
+class ContractUpdateApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class InputSerializer(serializers.Serializer):
+        party_a_id = serializers.IntegerField(required=False, allow_null=True)
+        party_b_id = serializers.IntegerField(required=False, allow_null=True)
+        start_date = serializers.DateField(required=False)
+        end_date = serializers.DateField(required=False, allow_null=True)
+        sale_price = serializers.IntegerField(required=False, allow_null=True, min_value=1)
+        deposit_amount = serializers.IntegerField(required=False, allow_null=True, min_value=1)
+        monthly_rent = serializers.IntegerField(required=False, allow_null=True, min_value=1)
+        rahn_amount = serializers.IntegerField(required=False, allow_null=True, min_value=1)
+        contract_image = serializers.CharField(required=False, allow_blank=True)
+        notes = serializers.CharField(required=False, allow_blank=True)
+
+    class OutputSerializer(serializers.Serializer):
+        id = serializers.IntegerField()
+        contract_type = serializers.CharField()
+        party_a = serializers.SerializerMethodField()
+        party_b = serializers.SerializerMethodField()
+        start_date = serializers.DateField()
+        end_date = serializers.DateField(allow_null=True)
+        sale_price = serializers.IntegerField(allow_null=True)
+        deposit_amount = serializers.IntegerField(allow_null=True)
+        monthly_rent = serializers.IntegerField(allow_null=True)
+        rahn_amount = serializers.IntegerField(allow_null=True)
+        contract_image = serializers.CharField()
+        notes = serializers.CharField()
+        updated_at = serializers.DateTimeField()
+
+        def get_party_a(self, obj):
+            return _person_data(obj.party_a)
+
+        def get_party_b(self, obj):
+            return _person_data(obj.party_b)
+
+    def patch(self, request: Request, contract_id: int) -> Response:
+        serializer = self.InputSerializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        contract = contract_update(contract_id=contract_id, data=serializer.validated_data)
+        output = self.OutputSerializer(contract)
+        return Response(output.data)
+
+
+class ContractDeleteApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request: Request, contract_id: int) -> Response:
+        contract_delete(contract_id=contract_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)

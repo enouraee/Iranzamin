@@ -292,11 +292,11 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ amenity booleans persist + filter; video optional; `gozar_kooche` accepts float/rejects text; cabinet choice validated; migration applies clean.
   - **Done:** `2026-07-10 / commit 5e98c2a`
 
-- [ ] **43. PropertyHistory audit trail** ⚠️
+- [x] **43. PropertyHistory audit trail** ⚠️
   - **Scope:** `PropertyHistory` model (D3): property, changed_by, change_type, field, old→new, source(manual/contract), optional contract FK. Write rows inside the atomic blocks of `property_update`, `property_set_status`, and `contract_create`. Selector `property_history(*, property)` + include in detail api.
   - **Docs:** domain-model.md (PropertyHistory), flows/contract.md.
   - **Tests:** ⚠️ owner/tenant/status/price change each logs a row with correct old→new + source; contract-driven change links the contract; manual edit logs source=manual; no history on no-op update.
-  - **Done:** `_____ / commit _____`
+  - **Done:** `2026-07-10 / commit 3831f75`
 
 - [ ] **44. Request — 3 types, wants_*, target/units, status + mark-done** ⚠️
   - **Scope:** `request_type` → `{rent, rahn, sale}` (D2). Add `target_property_type`, `units_count`, `wants_parking`, `wants_elevator`, `wants_storage`, `status {open, done}`, `matched_property` FK. Service `request_mark_done(*, request, property)`. Update `request_create`, filters, matching (`request_matches` honors type→deal flag + `wants_*`→amenity columns), apis, factories.

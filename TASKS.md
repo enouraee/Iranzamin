@@ -211,10 +211,10 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ happy path per type, **land + rent/rahn rejected**, occupied-without-dates rejected, missing owner rejected, huge price stored as int, atomic rollback on failure.
   - **Done:** 2026-07-10 / commit 47ba4cc
 
-- [ ] **30. Property update + status/media services** ⚠️
+- [x] **30. Property update + status/media services** ⚠️
   - **Scope:** `property_update`, `property_set_status` (خالی/پر + tenant/dates), media add/remove. Update apis.
   - **Tests:** ⚠️ status flip validation, tenant required when پر, partial update, unauthorized agent rejected.
-  - **Done:** update/status apis work. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit a524f44
 
 - [ ] **31. Property delete + urls wiring**
   - **Scope:** `property_delete` service, delete api, `apps/properties/urls.py` explicit named patterns under `/api/`.

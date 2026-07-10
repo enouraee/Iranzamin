@@ -7,6 +7,7 @@ Build checklist for coding agents. **Single source of truth for "what's left".**
 - Say **"implement task N"** (e.g. *"implement task 3"*). The agent does only that task.
 - When a task is done, the agent flips `- [ ]` → `- [x]` **and** fills the `Done:` date + commit hash.
 - Read **[AGENTS.md](AGENTS.md)** fully before any task. Every golden rule there applies here.
+- **Read the flow doc in [docs/](docs/README.md) for whatever you touch** — [domain-model.md](docs/domain-model.md) is the field-level source of truth, [decisions.md](docs/decisions.md) holds the locked model decisions (D1–D7), and `docs/flows/*` carries the per-flow acceptance criteria. When a spec detail is missing from the design HTML, the docs win.
 - Tasks are numbered **1..N, continuous**, so a number is never ambiguous.
 - **Frontend tasks come first (1–20), Backend tasks second (21–41)** per request. But note the **dependency**: a frontend task that needs live data depends on its backend task — build against mock data first, then wire up when the backend task lands. Each frontend data-task lists its backend dependency.
 - Do tasks **in order within a section** unless a task says otherwise. Later tasks assume earlier ones exist.
@@ -19,6 +20,8 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 # FRONTEND (React + TS + Vite) — tasks 1–20
 
 > All frontend work is **RTL, mobile-first, Vazirmatn, Persian digits, no emoji**, pixel-faithful to `Design/DealEstate/DealEstate.dc.html`. After **every** frontend task: run dev server, screenshot mobile (≤480px) + desktop (≥920px), compare to design, check console. See AGENTS.md §6.
+>
+> **⚠️ Spec reconciliation (2026-07-10):** the field lists in tasks 8–17 are now governed by [docs/domain-model.md](docs/domain-model.md) and the matching `docs/flows/*` doc — build against those, not just the design. New data (amenity columns, occupancy actual amounts, property `title`, property history timeline, video, multi-photo contracts, 3 request types + `wants_*`/`target_property_type`, request mark-done) arrives via **backend gap tasks 42–49**; each frontend data-task depends on its gap task. Where a field here and the doc disagree, the doc wins.
 
 ## Foundation
 
@@ -76,17 +79,17 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Done:** pixel-match both widths. `_____ / commit _____`
 
 - [ ] **9. Files / Properties list screen** 🎨⚠️
-  - **Scope:** searchable/filterable list of `PropertyCard`s. Filters: type, region, deal type, status خالی/پر. Empty state `ملکی با این مشخصات یافت نشد.` Pagination/infinite scroll.
+  - **Scope:** searchable/filterable list of `PropertyCard`s. Search matches `title`/address/owner. Filters: type, region, deal type, status خالی/پر. Empty state `ملکی با این مشخصات یافت نشد.` Pagination/infinite scroll.
   - **Design:** files list (~line 60).
-  - **Depends on backend:** task 27 (list+filter api).
+  - **Depends on backend:** task 27 (list+filter api) + gap task 46 (`title` searchable).
   - **Tests:** ⚠️ filter by status, search, empty state, pagination boundary.
   - **Done:** matches design; filters work. `_____ / commit _____`
 
 - [ ] **10. Property detail screen** 🎨
-  - **Scope:** gallery placeholder (blue-500→700 gradient), title `{{typeLabel}} {{region}}`, specs (area/beds/floor/amenities…), price block, owner, status pill, contact action, photo-count chip.
-  - **Design:** detail (~line 1132).
-  - **Depends on backend:** task 28 (detail api).
-  - **Tests:** renders all spec types, occupied shows tenant+dates, missing photos shows placeholder.
+  - **Scope:** gallery placeholder (blue-500→700 gradient), title (uses `title`, fallback `{{typeLabel}} {{region}}`), specs (area/beds/floor/amenity columns…), price block (asking) + occupancy actual amounts when پر, owner, status pill, contact action, photo-count chip, **video** if present, **history timeline** (`PropertyHistory`). See [docs/flows/add-property.md](docs/flows/add-property.md) + [docs/domain-model.md](docs/domain-model.md).
+  - **Design:** detail (~line 1132). (History timeline + video not in design — build per docs.)
+  - **Depends on backend:** task 28 (detail api) + gap tasks 42/43/45 for amenity columns, history, occupancy amounts.
+  - **Tests:** renders all spec types incl. amenity booleans, occupied shows tenant+dates+actual amounts, missing photos/video shows placeholder, history timeline renders + empty state.
   - **Done:** pixel-match. `_____ / commit _____`
 
 - [ ] **11. Add-property wizard — shared frame + Step 1** 🎨⚠️
@@ -97,43 +100,45 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Done:** step 1 matches all branches. `_____ / commit _____`
 
 - [ ] **12. Add-property wizard — Step 2 (type-specific specs)** 🎨⚠️
-  - **Scope:** Apartment: floor/unit/area/beds/amenities/cabinet/build-year/انباری(+سندی+area)/تبدیل. Kalnagi: area/عقب‌نشینی(+desc)/تعداد بر/گذر کوچه/تعداد طبقات/حیاط(+area). Land: area/عقب‌نشینی(+desc)/تعداد بر/گذر کوچه.
+  - **Scope:** Apartment: floor/unit/area/beds/**amenity toggles** (`has_parking`/`has_obstructive_parking`/`has_balcony`/`has_backyard`/`has_elevator`, D1)/`cabinet_material` (اوپن/MDF)/build-year/انباری(+سندی+area)/تبدیل. Kalnagi: area/عقب‌نشینی(+desc)/تعداد بر/گذر کوچه (float m)/تعداد طبقات/حیاط(+area). Land: area/عقب‌نشینی(+desc)/تعداد بر/گذر کوچه (float m). See [docs/domain-model.md](docs/domain-model.md#apartment-specific-آپارتمان).
   - **Design:** `APARTMENT STEP 2` / `KALNAGI STEP 2` / `LAND STEP 2`.
-  - **Tests:** ⚠️ each branch's fields render + validate; conditional sub-fields (سندی, حیاط) toggle.
+  - **Depends on backend:** gap task 42 (amenity columns, gozar_kooche→decimal, cabinet choices, video).
+  - **Tests:** ⚠️ each branch's fields render + validate; amenity toggles persist to their columns; conditional sub-fields (سندی, حیاط, عقب‌نشینی desc) toggle + become required.
   - **Done:** all three branches match. `_____ / commit _____`
 
 - [ ] **13. Add-property wizard — Step 3 (deal types + status)** 🎨⚠️
-  - **Scope:** multi-select deal types: `فروش` (price/m² + total), `اجاره` (پول پیش + monthly), `رهن کامل` (پول رهن). **Land = sale only.** Status خالی/پر; پر → start/end Jalali dates + مستأجر.
+  - **Scope:** multi-select deal types: `فروش` (price/m² + total), `اجاره` (پول پیش + monthly), `رهن کامل` (پول رهن). **Land = sale only.** Status خالی/پر; پر → start/end Jalali dates + مستأجر + **occupancy kind (اجاره/رهن) + actual amounts** (`occupancy_deposit`+`occupancy_monthly_rent` or `occupancy_rahn`, D4). Price inputs show spelled-out helper («یک میلیون تومان»). See [docs/flows/add-property.md](docs/flows/add-property.md).
   - **Design:** `APARTMENT / KALNAGI STEP 3` + `LAND STEP 3 (sale only)`.
-  - **Tests:** ⚠️ land hides rent/rahn; occupied requires dates+tenant; price Persian formatting; multi-select combos.
+  - **Depends on backend:** gap task 45 (occupancy amount fields).
+  - **Tests:** ⚠️ land hides rent/rahn; occupied requires dates+tenant+actual amount for the chosen kind; end>start; price Persian formatting + spelled-out helper; multi-select combos.
   - **Done:** matches; land constraint enforced client-side. `_____ / commit _____`
 
 - [ ] **14. Add-property wizard — Step 4 (owner + media) + submit** 🎨⚠️
-  - **Scope:** owner (مالک) picker/quick-add, photos/video/gallery uploader, review + submit → create property.
+  - **Scope:** owner (مالک) picker/quick-add, optional `title`, photos + **video** + gallery uploader (all optional), review + submit → create property. See [docs/flows/add-property.md](docs/flows/add-property.md).
   - **Design:** `PROPERTY STEP 4 (owner + media)`.
-  - **Depends on backend:** task 29.
-  - **Tests:** ⚠️ owner required, upload validation (type/size), successful create redirects to detail, server error toast.
+  - **Depends on backend:** task 29 + gap task 42 (video, title auto-fill).
+  - **Tests:** ⚠️ owner required, upload validation (type/size), blank title auto-fills, video optional, successful create redirects to detail, server error toast.
   - **Done:** full wizard creates a property end-to-end (mock then real). `_____ / commit _____`
 
 - [ ] **15. Persons screen (list + detail + quick-add)** 🎨⚠️
-  - **Scope:** list of اشخاص (مالک/مشتری), search, detail with linked properties/contracts/requests, add/edit person (name/phone/کد ملی/birth Jalali).
+  - **Scope:** list of اشخاص (مالک/مشتری), search (name/phone/کد ملی), detail with linked properties/contracts/requests, add/edit person (name/phone/کد ملی/birth Jalali). Duplicate-phone error offers to open the existing person. See [docs/flows/persons.md](docs/flows/persons.md).
   - **Design:** persons (~line 1132 area / اشخاص).
   - **Depends on backend:** tasks 33–34.
-  - **Tests:** ⚠️ duplicate phone, invalid کد ملی, empty state, links resolve.
+  - **Tests:** ⚠️ duplicate phone (points to existing), invalid کد ملی, empty state, links resolve.
   - **Done:** matches design. `_____ / commit _____`
 
 - [ ] **16. Contract wizard (4 steps)** 🎨⚠️
-  - **Scope:** Step 1 pick property; Step 2 parties (seller/owner + buyer/renter, quick-add); Step 3 type فروش/اجاره/رهن + Jalali dates + amounts; Step 4 docs + notes + the warning banner. On submit, register contract.
+  - **Scope:** Step 1 pick property (search by title/owner/region); Step 2 parties (seller/owner + buyer/renter, quick-add); Step 3 type فروش/اجاره/رهن + Jalali dates + amounts; Step 4 **multiple** contract photos + notes + warning banner. On submit, register contract → flips owner/tenant/status + writes history. See [docs/flows/contract.md](docs/flows/contract.md).
   - **Design:** `CONTRACT STEP 1..4`.
-  - **Depends on backend:** task 36 (contract create — flips property status).
-  - **Tests:** ⚠️ missing party, end<start dates, amount validation per type, submit updates property status (assert on returned data).
+  - **Depends on backend:** task 36 + gap tasks 43 (history), 47 (multi-photo), 45 (occupancy amounts set from contract).
+  - **Tests:** ⚠️ missing party, end<start dates, amount validation per type, submit updates property status+owner/tenant+occupancy amounts (assert on returned data), history rows created, ≥1 photo enforced.
   - **Done:** wizard matches; registration reflected. `_____ / commit _____`
 
 - [ ] **17. Request wizard (4 steps) + matching** 🎨⚠️
-  - **Scope:** Step 1 customer (existing/quick-add); Step 2 type (rent/mortgage vs buy); Step 3a rent/mortgage constraints, 3b buy constraints (persons/beds/needs/floor/area/build-year/max deposit/max rent/budget/مهلت); Step 4 summary + **auto-suggested matching files**.
+  - **Scope:** Step 1 customer (existing/quick-add); Step 2 **type (اجاره/رهن/فروش — 3 types, D2)**; Step 3 branch by type — rent/rahn constraints (persons/beds/floor/area/`wants_parking`/`wants_elevator`/`wants_storage`/max deposit(=پیش or رهن)/max rent/region/مهلت) vs sale constraints (`target_property_type`/build-year/`units_count`/floor/area/beds/budget/wants_*); Step 4 summary + **auto-suggested matching files** + **mark-done** (pick satisfying property). See [docs/flows/request.md](docs/flows/request.md).
   - **Design:** `REQUEST STEP 1..4`.
-  - **Depends on backend:** tasks 38–39 (request create + matching selector).
-  - **Tests:** ⚠️ branch 3a vs 3b, budget/deadline validation, matching list renders + empty state.
+  - **Depends on backend:** gap task 44 (3 types, wants_*, target type, units, status, matched_property, mark-done) + tasks 38–39.
+  - **Tests:** ⚠️ 3 type branches, rent-vs-rahn money fields differ, sale target-type/units, wants_* narrow matches, budget/deadline validation, matching list + empty state, mark-done removes from open list.
   - **Done:** wizard matches; matches shown. `_____ / commit _____`
 
 - [ ] **18. Profile screen** 🎨
@@ -277,6 +282,62 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 
 ---
 
+# BACKEND GAP TASKS (spec reconciliation 2026-07-10) — tasks 42–49
+
+> These close the gap between the shipped backend and the full project spec. Each is HackSoft-style (model → migration → selectors/services/apis → tests) and must update the relevant `docs/` file if a field/shape changes. Decisions D1–D7 in [docs/decisions.md](docs/decisions.md) are binding. **No production data exists**, so destructive migrations (dropping `amenities`, changing `gozar_kooche`) are fine.
+
+- [ ] **42. Property model — amenity columns, media, field-type fixes** ⚠️
+  - **Scope:** Replace `amenities` JSONField with boolean columns `has_parking`, `has_obstructive_parking`, `has_balcony`, `has_backyard`, `has_elevator` (D1). Add `PropertyVideo` model (D6). Change `gozar_kooche` → `DecimalField(6,2)` meters (D7). Make `cabinet_material` a choice `{open: اوپن, mdf: MDF}` (O1). Migration + update `property_create`/`property_update`, filters, serializers, factories.
+  - **Docs:** domain-model.md (apartment/kalnagi/land + media).
+  - **Tests:** ⚠️ amenity booleans persist + filter; video optional; `gozar_kooche` accepts float/rejects text; cabinet choice validated; migration applies clean.
+  - **Done:** `_____ / commit _____`
+
+- [ ] **43. PropertyHistory audit trail** ⚠️
+  - **Scope:** `PropertyHistory` model (D3): property, changed_by, change_type, field, old→new, source(manual/contract), optional contract FK. Write rows inside the atomic blocks of `property_update`, `property_set_status`, and `contract_create`. Selector `property_history(*, property)` + include in detail api.
+  - **Docs:** domain-model.md (PropertyHistory), flows/contract.md.
+  - **Tests:** ⚠️ owner/tenant/status/price change each logs a row with correct old→new + source; contract-driven change links the contract; manual edit logs source=manual; no history on no-op update.
+  - **Done:** `_____ / commit _____`
+
+- [ ] **44. Request — 3 types, wants_*, target/units, status + mark-done** ⚠️
+  - **Scope:** `request_type` → `{rent, rahn, sale}` (D2). Add `target_property_type`, `units_count`, `wants_parking`, `wants_elevator`, `wants_storage`, `status {open, done}`, `matched_property` FK. Service `request_mark_done(*, request, property)`. Update `request_create`, filters, matching (`request_matches` honors type→deal flag + `wants_*`→amenity columns), apis, factories.
+  - **Docs:** domain-model.md (Request), flows/request.md.
+  - **Tests:** ⚠️ 3 types create; rent vs rahn money semantics; sale target/units; wants_* narrow matches; mark-done sets status+matched_property; done excluded from open list.
+  - **Done:** `_____ / commit _____`
+
+- [ ] **45. Property occupancy actual amounts** ⚠️
+  - **Scope:** Add `occupancy_deposit`, `occupancy_monthly_rent`, `occupancy_rahn` (D4). `clean()`/service: when `occupied`, require the amount(s) for the chosen occupancy kind. `contract_create` sets them from the contract (rent → deposit+rent, rahn → rahn). Update detail serializer.
+  - **Docs:** domain-model.md (Occupancy), flows/add-property.md + contract.md.
+  - **Tests:** ⚠️ occupied-without-amount rejected; contract populates occupancy amounts; asking amounts left independent.
+  - **Done:** `_____ / commit _____`
+
+- [ ] **46. Property `title` (searchable name)** ⚠️
+  - **Scope:** Add indexed `title`; `property_create` auto-fills from `{type_label} {region} پلاک {plak}` when blank (D5). Add `title` to search in `property_list` filters and to the contract/request property-picker selectors.
+  - **Docs:** domain-model.md (Property core), flows/contract.md + request.md.
+  - **Tests:** ⚠️ blank → auto-fill; provided title kept; search matches title; picker finds by title/owner/region.
+  - **Done:** `_____ / commit _____`
+
+- [ ] **47. Contract multiple photos** ⚠️
+  - **Scope:** Add `ContractPhoto` related model (D6); deprecate single `contract_image`. `contract_create`/`contract_update` accept a list; detail serializer returns all. Flow enforces ≥1 (service-level optional/configurable).
+  - **Docs:** domain-model.md (Contract), flows/contract.md.
+  - **Tests:** ⚠️ multiple photos stored + returned; zero rejected at flow level; delete cascades.
+  - **Done:** `_____ / commit _____`
+
+- [ ] **48. Contract-ending + request-deadline selectors (notifications read model)** ⚠️
+  - **Scope:** Selector `contracts_ending_soon(*, within_days=30)` (rent/rahn, sorted by soonest `end_date`) and `requests_due_soon(*, within_days)` for follow-ups. Expose on the dashboard api. Windows configurable (setting/const), Asia/Tehran timezone. Delivery channels are **future (O3)** — read model only.
+  - **Docs:** flows/dashboard-notifications.md.
+  - **Tests:** ⚠️ within-window inclusion boundary (today/ended); no-deadline requests excluded; empty → empty; ordering by soonest.
+  - **Done:** `_____ / commit _____`
+
+- [ ] **49. Update admin, factories, seed for new fields**
+  - **Scope:** Extend task-40 factories + seed command + `admin.py` to cover amenity columns, video, PropertyHistory, occupancy amounts, title, ContractPhoto, and the reworked Request. Keep seed idempotent and realistically Persian.
+  - **Note:** if task 40 isn't done yet, fold this into it instead of duplicating.
+  - **Tests:** factories build valid objects with new fields; seed runs idempotently.
+  - **Done:** `_____ / commit _____`
+
+---
+
 ## Suggested order if building for real
 
 Backend foundation **21→22→24→25→26** first (so frontend can authenticate + read tokens), then interleave: frontend **1→6** foundation, then pair each screen with its backend dependency (e.g. **27** before wiring **9**, **29** before **14**, **36** before **16**, **39** before **17**). Finish with **20** (E2E) and **41** (backend gate).
+
+**Land the gap tasks (42–49) before the frontend data-task that needs them:** 42 before 12; 45 before 13; 42+46 before 14; 43+45+47 before 10 & 16; 44 before 17; 46 before 9; 48 before the dashboard notifications work. Re-run 40/49 (factories+seed) after the model changes so demo data stays valid. Then 41 (lint/types/coverage) closes it out.

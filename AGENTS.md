@@ -203,7 +203,7 @@ test: cover contract registration updating property status
 3. **Frontend**: types/client → component(s) using design tokens → wire to API → tests.
 4. **Verify visually** in the browser + screenshot (mobile + desktop). Fix diffs.
 5. Run backend + frontend tests. All green.
-6. **Commit** with a proper prefixed message (no AI mention).
+6. **Commit** with a proper prefixed message (no AI mention) and push it.
 
 ---
 

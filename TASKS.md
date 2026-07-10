@@ -310,11 +310,11 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ occupied-without-amount rejected; contract populates occupancy amounts; asking amounts left independent.
   - **Done:** `_____ / commit _____`
 
-- [ ] **46. Property `title` (searchable name)** ⚠️
+- [x] **46. Property `title` (searchable name)** ⚠️
   - **Scope:** Add indexed `title`; `property_create` auto-fills from `{type_label} {region} پلاک {plak}` when blank (D5). Add `title` to search in `property_list` filters and to the contract/request property-picker selectors.
   - **Docs:** domain-model.md (Property core), flows/contract.md + request.md.
   - **Tests:** ⚠️ blank → auto-fill; provided title kept; search matches title; picker finds by title/owner/region.
-  - **Done:** `_____ / commit _____`
+  - **Done:** `b1dcea9 / feat: add searchable title field to Property (task 46)`
 
 - [ ] **47. Contract multiple photos** ⚠️
   - **Scope:** Add `ContractPhoto` related model (D6); deprecate single `contract_image`. `contract_create`/`contract_update` accept a list; detail serializer returns all. Flow enforces ≥1 (service-level optional/configurable).

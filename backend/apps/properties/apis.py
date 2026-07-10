@@ -11,7 +11,7 @@ from apps.regions.models import Region
 
 from .models import STATUS_CHOICES, STATUS_OCCUPIED, STATUS_VACANT, TYPE_CHOICES
 from .selectors import property_get, property_list
-from .services import property_create
+from .services import property_create, property_media_add, property_media_remove, property_set_status, property_update
 
 
 class PropertyListApi(APIView):
@@ -281,3 +281,132 @@ class PropertyCreateApi(APIView):
 
         output = self.OutputSerializer(prop)
         return Response(output.data, status=status.HTTP_201_CREATED)
+
+
+class PropertyUpdateApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class InputSerializer(serializers.Serializer):
+        region_id = serializers.IntegerField(required=False)
+        address = serializers.CharField(required=False)
+        plak = serializers.CharField(required=False, allow_blank=True)
+        owner_id = serializers.IntegerField(required=False, allow_null=True)
+        is_for_sale = serializers.BooleanField(required=False)
+        price_per_meter = serializers.IntegerField(required=False, allow_null=True)
+        total_price = serializers.IntegerField(required=False, allow_null=True)
+        is_for_rent = serializers.BooleanField(required=False)
+        deposit = serializers.IntegerField(required=False, allow_null=True)
+        monthly_rent = serializers.IntegerField(required=False, allow_null=True)
+        is_for_rahn = serializers.BooleanField(required=False)
+        rahn_amount = serializers.IntegerField(required=False, allow_null=True)
+        area = serializers.DecimalField(max_digits=10, decimal_places=2, required=False, allow_null=True)
+        floor = serializers.IntegerField(required=False, allow_null=True)
+        unit = serializers.CharField(required=False, allow_blank=True)
+        beds = serializers.IntegerField(required=False, allow_null=True)
+        amenities = serializers.ListField(child=serializers.CharField(), required=False, allow_empty=True)
+        cabinet_material = serializers.CharField(required=False, allow_blank=True)
+        build_year = serializers.IntegerField(required=False, allow_null=True)
+        has_storage = serializers.BooleanField(required=False)
+        storage_deed = serializers.BooleanField(required=False)
+        storage_area = serializers.DecimalField(max_digits=8, decimal_places=2, required=False, allow_null=True)
+        has_tobdil = serializers.BooleanField(required=False)
+        has_aqab_neshini = serializers.BooleanField(required=False)
+        aqab_neshini_desc = serializers.CharField(required=False, allow_blank=True)
+        taadad_bar = serializers.IntegerField(required=False, allow_null=True)
+        gozar_kooche = serializers.CharField(required=False, allow_blank=True)
+        taadad_tabaghat = serializers.IntegerField(required=False, allow_null=True)
+        has_hayat = serializers.BooleanField(required=False)
+        hayat_area = serializers.DecimalField(max_digits=8, decimal_places=2, required=False, allow_null=True)
+
+    class OutputSerializer(serializers.Serializer):
+        id = serializers.IntegerField()
+        type = serializers.CharField()
+        status = serializers.CharField()
+        updated_at = serializers.DateTimeField()
+
+    def patch(self, request: Request, property_id: int) -> Response:
+        serializer = self.InputSerializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        update_data: dict = {}
+
+        if "region_id" in data:
+            try:
+                update_data["region"] = Region.objects.get(pk=data["region_id"])
+            except Region.DoesNotExist:
+                raise ApplicationError(message="منطقه مورد نظر یافت نشد.")
+
+        if "owner_id" in data:
+            if data["owner_id"] is None:
+                update_data["owner"] = None
+            else:
+                try:
+                    update_data["owner"] = Person.objects.get(pk=data["owner_id"])
+                except Person.DoesNotExist:
+                    raise ApplicationError(message="مالک مورد نظر یافت نشد.")
+
+        for field, value in data.items():
+            if field not in {"region_id", "owner_id"}:
+                update_data[field] = value
+
+        prop = property_update(agent=request.user, property_id=property_id, data=update_data)
+        return Response(self.OutputSerializer(prop).data)
+
+
+class PropertySetStatusApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class InputSerializer(serializers.Serializer):
+        status = serializers.ChoiceField(choices=[STATUS_VACANT, STATUS_OCCUPIED])
+        tenant_id = serializers.IntegerField(required=False, allow_null=True)
+        occupancy_start = serializers.DateField(required=False, allow_null=True)
+        occupancy_end = serializers.DateField(required=False, allow_null=True)
+
+    def patch(self, request: Request, property_id: int) -> Response:
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        tenant = None
+        if data.get("tenant_id"):
+            try:
+                tenant = Person.objects.get(pk=data["tenant_id"])
+            except Person.DoesNotExist:
+                raise ApplicationError(message="مستأجر مورد نظر یافت نشد.")
+
+        prop = property_set_status(
+            agent=request.user,
+            property_id=property_id,
+            status=data["status"],
+            tenant=tenant,
+            occupancy_start=data.get("occupancy_start"),
+            occupancy_end=data.get("occupancy_end"),
+        )
+        return Response({"id": prop.pk, "status": prop.status})
+
+
+class PropertyMediaAddApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class InputSerializer(serializers.Serializer):
+        photo_files = serializers.ListField(child=serializers.CharField(), min_length=1)
+
+    def post(self, request: Request, property_id: int) -> Response:
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        photos = property_media_add(
+            property_id=property_id,
+            photo_files=serializer.validated_data["photo_files"],
+        )
+        output = [{"id": p.id, "file": p.file, "is_cover": p.is_cover} for p in photos]
+        return Response(output, status=status.HTTP_201_CREATED)
+
+
+class PropertyMediaRemoveApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request: Request, property_id: int, photo_id: int) -> Response:
+        property_get(property_id=property_id)
+        property_media_remove(photo_id=photo_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)

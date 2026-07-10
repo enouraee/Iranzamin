@@ -304,7 +304,7 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ 3 types create; rent vs rahn money semantics; sale target/units; wants_* narrow matches; mark-done sets status+matched_property; done excluded from open list.
   - **Done:** `2026-07-10 / commit 4222977`
 
-- [ ] **45. Property occupancy actual amounts** ⚠️
+- [x] **45. Property occupancy actual amounts** ⚠️
   - **Scope:** Add `occupancy_deposit`, `occupancy_monthly_rent`, `occupancy_rahn` (D4). `clean()`/service: when `occupied`, require the amount(s) for the chosen occupancy kind. `contract_create` sets them from the contract (rent → deposit+rent, rahn → rahn). Update detail serializer.
   - **Docs:** domain-model.md (Occupancy), flows/add-property.md + contract.md.
   - **Tests:** ⚠️ occupied-without-amount rejected; contract populates occupancy amounts; asking amounts left independent.

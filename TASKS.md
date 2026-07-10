@@ -248,10 +248,10 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ **registration flips property status + updates owner/tenant**, end<start rejected, amount required per type, atomic rollback (contract not saved if status update fails), unauth.
   - **Done:** contract registration side-effects proven by tests. `2026-07-10 / commit d6c6fe5`
 
-- [ ] **37. Contract update/delete + urls**
+- [x] **37. Contract update/delete + urls**
   - **Scope:** update/delete services (reverse status side-effects on delete where sensible), apis, `contracts/urls.py`.
   - **Tests:** ⚠️ delete reverts status if appropriate, update validation, 404, unauth.
-  - **Done:** contract CRUD routed. `_____ / commit _____`
+  - **Done:** contract CRUD routed. `2026-07-10 / commit 905bb8c`
 
 - [ ] **38. Request model + create service + apis** ⚠️
   - **Scope:** `apps/requests/`: model (customer, type rent/mortgage vs buy, constraints: persons/beds/needs/floor/area/build-year/max deposit/max rent/budget/مهلت), migration. `request_create` (+ quick-add customer), list/detail/create apis, filters, urls.

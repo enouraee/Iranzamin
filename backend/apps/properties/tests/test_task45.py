@@ -231,6 +231,7 @@ class TestContractCreatePopulatesOccupancyAmounts:
         tenant = PersonFactory()
         contract_create(
             property_id=prop.pk,
+            photo_files=["contracts/deed.jpg"],
             contract_type=CONTRACT_TYPE_RENT,
             party_a_id=owner.pk,
             party_b_id=tenant.pk,
@@ -250,6 +251,7 @@ class TestContractCreatePopulatesOccupancyAmounts:
         tenant = PersonFactory()
         contract_create(
             property_id=prop.pk,
+            photo_files=["contracts/deed.jpg"],
             contract_type=CONTRACT_TYPE_RAHN,
             party_a_id=owner.pk,
             party_b_id=tenant.pk,
@@ -278,6 +280,7 @@ class TestContractCreatePopulatesOccupancyAmounts:
         buyer = PersonFactory()
         contract_create(
             property_id=prop.pk,
+            photo_files=["contracts/deed.jpg"],
             contract_type=CONTRACT_TYPE_SALE,
             party_a_id=owner.pk,
             party_b_id=buyer.pk,
@@ -303,6 +306,7 @@ class TestContractDeleteClearsOccupancyAmounts:
         owner = PersonFactory()
         contract = contract_create(
             property_id=prop.pk,
+            photo_files=["contracts/deed.jpg"],
             contract_type=CONTRACT_TYPE_RENT,
             party_a_id=owner.pk,
             party_b_id=tenant.pk,
@@ -324,6 +328,7 @@ class TestContractDeleteClearsOccupancyAmounts:
         owner = PersonFactory()
         contract = contract_create(
             property_id=prop.pk,
+            photo_files=["contracts/deed.jpg"],
             contract_type=CONTRACT_TYPE_RAHN,
             party_a_id=owner.pk,
             party_b_id=tenant.pk,
@@ -349,6 +354,7 @@ class TestContractUpdateSyncsOccupancyAmounts:
         owner = PersonFactory()
         contract = contract_create(
             property_id=prop.pk,
+            photo_files=["contracts/deed.jpg"],
             contract_type=CONTRACT_TYPE_RENT,
             party_a_id=owner.pk,
             party_b_id=tenant.pk,

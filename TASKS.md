@@ -316,11 +316,11 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ blank → auto-fill; provided title kept; search matches title; picker finds by title/owner/region.
   - **Done:** `b1dcea9 / feat: add searchable title field to Property (task 46)`
 
-- [ ] **47. Contract multiple photos** ⚠️
+- [x] **47. Contract multiple photos** ⚠️
   - **Scope:** Add `ContractPhoto` related model (D6); deprecate single `contract_image`. `contract_create`/`contract_update` accept a list; detail serializer returns all. Flow enforces ≥1 (service-level optional/configurable).
   - **Docs:** domain-model.md (Contract), flows/contract.md.
   - **Tests:** ⚠️ multiple photos stored + returned; zero rejected at flow level; delete cascades.
-  - **Done:** `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit b48e4ea
 
 - [ ] **48. Contract-ending + request-deadline selectors (notifications read model)** ⚠️
   - **Scope:** Selector `contracts_ending_soon(*, within_days=30)` (rent/rahn, sorted by soonest `end_date`) and `requests_due_soon(*, within_days)` for follow-ups. Expose on the dashboard api. Windows configurable (setting/const), Asia/Tehran timezone. Delivery channels are **future (O3)** — read model only.

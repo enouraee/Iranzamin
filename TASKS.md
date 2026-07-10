@@ -199,7 +199,7 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 - [x] **27. Property list selector + filters + api** ⚠️
   - **Scope:** `apps/properties/`: Property model (thin, all fields from AGENTS.md §4 domain incl. type-specific + deal types + status), migration. `selectors.property_list(*, filters)`, `filters.py` (type/region/deal/status/search), `PropertyListApi` (paginated OutputSerializer).
   - **Tests:** ⚠️ filter by status خالی/پر, region, deal type, search, pagination boundary, empty result.
-  - **Done:** 2026-07-10 / commit TBD
+  - **Done:** 2026-07-10 / commit 2964944
 
 - [ ] **28. Property detail selector + api**
   - **Scope:** `selectors.property_get`, `PropertyDetailApi` with full nested output (specs, owner, media, status/tenant/dates).

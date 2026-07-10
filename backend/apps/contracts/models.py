@@ -56,7 +56,6 @@ class Contract(BaseModel):
     rahn_amount = models.PositiveBigIntegerField(null=True, blank=True)
 
     # Docs
-    contract_image = models.CharField(max_length=512, blank=True, default="")
     notes = models.TextField(blank=True, default="")
 
     class Meta:
@@ -94,3 +93,18 @@ class Contract(BaseModel):
             raise ValidationError(
                 {"rahn_amount": "مبلغ رهن برای قرارداد رهن کامل الزامی است."}
             )
+
+
+class ContractPhoto(BaseModel):
+    contract = models.ForeignKey(
+        Contract,
+        on_delete=models.CASCADE,
+        related_name="photos",
+    )
+    file = models.CharField(max_length=512)
+    order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "created_at"]
+        verbose_name = "تصویر قرارداد"
+        verbose_name_plural = "تصاویر قرارداد"

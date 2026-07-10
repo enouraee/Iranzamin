@@ -45,7 +45,7 @@ class ContractListApi(APIView):
         deposit_amount = serializers.IntegerField(allow_null=True)
         monthly_rent = serializers.IntegerField(allow_null=True)
         rahn_amount = serializers.IntegerField(allow_null=True)
-        contract_image = serializers.CharField()
+        photos = serializers.SerializerMethodField()
         notes = serializers.CharField()
         created_at = serializers.DateTimeField()
 
@@ -57,6 +57,9 @@ class ContractListApi(APIView):
 
         def get_party_b(self, obj):
             return _person_data(obj.party_b)
+
+        def get_photos(self, obj):
+            return [{"id": p.pk, "file": p.file, "order": p.order} for p in obj.photos.all()]
 
     def get(self, request: Request) -> Response:
         filters = dict(request.query_params)
@@ -86,7 +89,7 @@ class ContractDetailApi(APIView):
         deposit_amount = serializers.IntegerField(allow_null=True)
         monthly_rent = serializers.IntegerField(allow_null=True)
         rahn_amount = serializers.IntegerField(allow_null=True)
-        contract_image = serializers.CharField()
+        photos = serializers.SerializerMethodField()
         notes = serializers.CharField()
         created_at = serializers.DateTimeField()
         updated_at = serializers.DateTimeField()
@@ -99,6 +102,9 @@ class ContractDetailApi(APIView):
 
         def get_party_b(self, obj):
             return _person_data(obj.party_b)
+
+        def get_photos(self, obj):
+            return [{"id": p.pk, "file": p.file, "order": p.order} for p in obj.photos.all()]
 
     def get(self, request: Request, contract_id: int) -> Response:
         contract = contract_get(contract_id=contract_id)
@@ -120,7 +126,11 @@ class ContractCreateApi(APIView):
         deposit_amount = serializers.IntegerField(required=False, allow_null=True, min_value=1)
         monthly_rent = serializers.IntegerField(required=False, allow_null=True, min_value=1)
         rahn_amount = serializers.IntegerField(required=False, allow_null=True, min_value=1)
-        contract_image = serializers.CharField(required=False, allow_blank=True, default="")
+        photo_files = serializers.ListField(
+            child=serializers.CharField(max_length=512),
+            required=False,
+            default=list,
+        )
         notes = serializers.CharField(required=False, allow_blank=True, default="")
 
     class OutputSerializer(serializers.Serializer):
@@ -135,7 +145,7 @@ class ContractCreateApi(APIView):
         deposit_amount = serializers.IntegerField(allow_null=True)
         monthly_rent = serializers.IntegerField(allow_null=True)
         rahn_amount = serializers.IntegerField(allow_null=True)
-        contract_image = serializers.CharField()
+        photos = serializers.SerializerMethodField()
         notes = serializers.CharField()
         created_at = serializers.DateTimeField()
 
@@ -147,6 +157,9 @@ class ContractCreateApi(APIView):
 
         def get_party_b(self, obj):
             return _person_data(obj.party_b)
+
+        def get_photos(self, obj):
+            return [{"id": p.pk, "file": p.file, "order": p.order} for p in obj.photos.all()]
 
     def post(self, request: Request) -> Response:
         serializer = self.InputSerializer(data=request.data)
@@ -164,7 +177,7 @@ class ContractCreateApi(APIView):
             deposit_amount=data.get("deposit_amount"),
             monthly_rent=data.get("monthly_rent"),
             rahn_amount=data.get("rahn_amount"),
-            contract_image=data.get("contract_image", ""),
+            photo_files=data.get("photo_files", []),
             notes=data.get("notes", ""),
             changed_by=request.user,
         )
@@ -184,7 +197,10 @@ class ContractUpdateApi(APIView):
         deposit_amount = serializers.IntegerField(required=False, allow_null=True, min_value=1)
         monthly_rent = serializers.IntegerField(required=False, allow_null=True, min_value=1)
         rahn_amount = serializers.IntegerField(required=False, allow_null=True, min_value=1)
-        contract_image = serializers.CharField(required=False, allow_blank=True)
+        photo_files = serializers.ListField(
+            child=serializers.CharField(max_length=512),
+            required=False,
+        )
         notes = serializers.CharField(required=False, allow_blank=True)
 
     class OutputSerializer(serializers.Serializer):
@@ -198,7 +214,7 @@ class ContractUpdateApi(APIView):
         deposit_amount = serializers.IntegerField(allow_null=True)
         monthly_rent = serializers.IntegerField(allow_null=True)
         rahn_amount = serializers.IntegerField(allow_null=True)
-        contract_image = serializers.CharField()
+        photos = serializers.SerializerMethodField()
         notes = serializers.CharField()
         updated_at = serializers.DateTimeField()
 
@@ -207,6 +223,9 @@ class ContractUpdateApi(APIView):
 
         def get_party_b(self, obj):
             return _person_data(obj.party_b)
+
+        def get_photos(self, obj):
+            return [{"id": p.pk, "file": p.file, "order": p.order} for p in obj.photos.all()]
 
     def patch(self, request: Request, contract_id: int) -> Response:
         serializer = self.InputSerializer(data=request.data, partial=True)

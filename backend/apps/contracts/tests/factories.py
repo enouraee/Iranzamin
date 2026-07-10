@@ -1,6 +1,6 @@
 import factory
 
-from apps.contracts.models import CONTRACT_TYPE_SALE, Contract
+from apps.contracts.models import CONTRACT_TYPE_SALE, Contract, ContractPhoto
 from apps.people.tests.factories import PersonFactory
 from apps.properties.tests.factories import PropertyFactory
 
@@ -16,8 +16,16 @@ class ContractFactory(factory.django.DjangoModelFactory):
     deposit_amount = None
     monthly_rent = None
     rahn_amount = None
-    contract_image = ""
     notes = ""
 
     class Meta:
         model = Contract
+
+
+class ContractPhotoFactory(factory.django.DjangoModelFactory):
+    contract = factory.SubFactory(ContractFactory)
+    file = factory.Sequence(lambda n: f"contracts/photo_{n}.jpg")
+    order = 0
+
+    class Meta:
+        model = ContractPhoto

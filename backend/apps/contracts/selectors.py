@@ -12,7 +12,7 @@ def contract_list(*, filters: dict | None = None) -> QuerySet[Contract]:
         "property__region",
         "party_a",
         "party_b",
-    )
+    ).prefetch_related("photos")
     if filters:
         qs = ContractFilter(data=filters, queryset=qs).qs
     return qs
@@ -27,6 +27,7 @@ def contract_get(*, contract_id: int) -> Contract:
                 "party_a",
                 "party_b",
             )
+            .prefetch_related("photos")
             .get(pk=contract_id)
         )
     except Contract.DoesNotExist:

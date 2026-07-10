@@ -1,10 +1,14 @@
 from django.db import transaction
 
+from apps.common.exceptions import ApplicationError
 from apps.properties.models import STATUS_OCCUPIED, STATUS_VACANT
 from apps.properties.selectors import property_get
 
-from .models import CONTRACT_TYPE_RENT, CONTRACT_TYPE_RAHN, CONTRACT_TYPE_SALE, Contract
+from .models import CONTRACT_TYPE_RENT, CONTRACT_TYPE_RAHN, CONTRACT_TYPE_SALE, Contract, ContractPhoto
 from .selectors import contract_get
+
+# Set to False to allow contracts without photos (e.g. legacy imports, tests).
+REQUIRE_CONTRACT_PHOTO = True
 
 _UPDATABLE_FIELDS = frozenset([
     "start_date",
@@ -13,7 +17,6 @@ _UPDATABLE_FIELDS = frozenset([
     "deposit_amount",
     "monthly_rent",
     "rahn_amount",
-    "contract_image",
     "notes",
 ])
 
@@ -30,10 +33,14 @@ def contract_create(
     deposit_amount: int | None = None,
     monthly_rent: int | None = None,
     rahn_amount: int | None = None,
-    contract_image: str = "",
+    photo_files: list[str] | None = None,
     notes: str = "",
     changed_by=None,
 ) -> Contract:
+    _photos = photo_files or []
+    if REQUIRE_CONTRACT_PHOTO and not _photos:
+        raise ApplicationError(message="حداقل یک تصویر برای قرارداد الزامی است.")
+
     from apps.people.selectors import person_get
     from apps.properties.models import (
         CHANGE_TYPE_OWNER,
@@ -59,11 +66,13 @@ def contract_create(
             deposit_amount=deposit_amount,
             monthly_rent=monthly_rent,
             rahn_amount=rahn_amount,
-            contract_image=contract_image,
             notes=notes,
         )
         contract.full_clean()
         contract.save()
+
+        for i, file_path in enumerate(_photos):
+            ContractPhoto.objects.create(contract=contract, file=file_path, order=i)
 
         # Side effects: update property status atomically with the contract save.
         # Rent / rahn: property becomes occupied, tenant is set to party_b.
@@ -131,6 +140,8 @@ def contract_update(*, contract_id: int, data: dict) -> Contract:
 
     contract = contract_get(contract_id=contract_id)
 
+    photo_files = data.get("photo_files")  # None → don't touch; [] → replace with empty (blocked by REQUIRE check)
+
     for field, value in data.items():
         if field in _UPDATABLE_FIELDS:
             setattr(contract, field, value)
@@ -145,6 +156,13 @@ def contract_update(*, contract_id: int, data: dict) -> Contract:
     with transaction.atomic():
         contract.full_clean()
         contract.save()
+
+        if photo_files is not None:
+            if REQUIRE_CONTRACT_PHOTO and not photo_files:
+                raise ApplicationError(message="حداقل یک تصویر برای قرارداد الزامی است.")
+            contract.photos.all().delete()
+            for i, file_path in enumerate(photo_files):
+                ContractPhoto.objects.create(contract=contract, file=file_path, order=i)
 
         if contract.contract_type in (CONTRACT_TYPE_RENT, CONTRACT_TYPE_RAHN):
             prop.tenant = contract.party_b

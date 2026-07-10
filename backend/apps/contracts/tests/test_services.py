@@ -7,9 +7,10 @@ from apps.contracts.models import (
     CONTRACT_TYPE_RAHN,
     CONTRACT_TYPE_SALE,
     Contract,
+    ContractPhoto,
 )
-from apps.contracts.services import contract_create, contract_delete, contract_update
-from apps.contracts.tests.factories import ContractFactory
+from apps.contracts.services import REQUIRE_CONTRACT_PHOTO, contract_create, contract_delete, contract_update
+from apps.contracts.tests.factories import ContractFactory, ContractPhotoFactory
 from apps.people.tests.factories import PersonFactory
 from apps.properties.models import STATUS_OCCUPIED, STATUS_VACANT
 from apps.properties.tests.factories import PropertyFactory
@@ -35,6 +36,7 @@ class TestContractCreate:
             end_date="2025-01-01",
             deposit_amount=2_000_000,
             monthly_rent=500_000,
+            photo_files=["photo.jpg"],
         )
 
         prop.refresh_from_db()
@@ -61,6 +63,7 @@ class TestContractCreate:
             start_date="2024-03-01",
             end_date="2025-03-01",
             rahn_amount=50_000_000,
+            photo_files=["photo.jpg"],
         )
 
         prop.refresh_from_db()
@@ -86,6 +89,7 @@ class TestContractCreate:
             party_b_id=buyer.pk,
             start_date="2024-06-01",
             sale_price=3_000_000_000,
+            photo_files=["photo.jpg"],
         )
 
         prop.refresh_from_db()
@@ -109,6 +113,7 @@ class TestContractCreate:
                 start_date="2024-06-01",
                 end_date="2024-05-01",
                 sale_price=1_000_000,
+                photo_files=["photo.jpg"],
             )
         assert "end_date" in exc_info.value.message_dict
 
@@ -124,6 +129,7 @@ class TestContractCreate:
                 contract_type=CONTRACT_TYPE_SALE,
                 start_date="2024-01-01",
                 sale_price=None,
+                photo_files=["photo.jpg"],
             )
         assert "sale_price" in exc_info.value.message_dict
 
@@ -137,6 +143,7 @@ class TestContractCreate:
                 end_date="2025-01-01",
                 deposit_amount=None,
                 monthly_rent=500_000,
+                photo_files=["photo.jpg"],
             )
         assert "deposit_amount" in exc_info.value.message_dict
 
@@ -150,6 +157,7 @@ class TestContractCreate:
                 end_date="2025-01-01",
                 deposit_amount=2_000_000,
                 monthly_rent=None,
+                photo_files=["photo.jpg"],
             )
         assert "monthly_rent" in exc_info.value.message_dict
 
@@ -162,6 +170,7 @@ class TestContractCreate:
                 start_date="2024-01-01",
                 end_date="2025-01-01",
                 rahn_amount=None,
+                photo_files=["photo.jpg"],
             )
         assert "rahn_amount" in exc_info.value.message_dict
 
@@ -187,6 +196,7 @@ class TestContractCreate:
                 end_date=None,  # missing → property full_clean fails
                 deposit_amount=1_000_000,
                 monthly_rent=500_000,
+                photo_files=["photo.jpg"],
             )
 
         # Contract was not persisted
@@ -206,6 +216,7 @@ class TestContractCreate:
                 contract_type=CONTRACT_TYPE_SALE,
                 start_date="2024-01-01",
                 sale_price=1_000_000,
+                photo_files=["photo.jpg"],
             )
 
     # -----------------------------------------------------------------
@@ -221,19 +232,37 @@ class TestContractCreate:
                 party_a_id=99999,
                 start_date="2024-01-01",
                 sale_price=1_000_000,
+                photo_files=["photo.jpg"],
             )
 
 
 @pytest.mark.django_db
 class TestContractUpdate:
-    def test_update_notes_and_image(self):
-        contract = ContractFactory(notes="", contract_image="")
+    def test_update_notes(self):
+        contract = ContractFactory(notes="")
         updated = contract_update(
             contract_id=contract.pk,
-            data={"notes": "یادداشت جدید", "contract_image": "img.jpg"},
+            data={"notes": "یادداشت جدید"},
         )
         assert updated.notes == "یادداشت جدید"
-        assert updated.contract_image == "img.jpg"
+
+    def test_update_photos_replaces_all(self):
+        contract = ContractFactory()
+        ContractPhotoFactory(contract=contract, file="old.jpg", order=0)
+        updated = contract_update(
+            contract_id=contract.pk,
+            data={"photo_files": ["new1.jpg", "new2.jpg"]},
+        )
+        photos = list(updated.photos.all())
+        assert len(photos) == 2
+        assert photos[0].file == "new1.jpg"
+        assert photos[1].file == "new2.jpg"
+
+    def test_update_without_photo_files_leaves_photos_unchanged(self):
+        contract = ContractFactory()
+        ContractPhotoFactory(contract=contract, file="keep.jpg", order=0)
+        contract_update(contract_id=contract.pk, data={"notes": "updated"})
+        assert ContractPhoto.objects.filter(contract=contract).count() == 1
 
     def test_update_sale_price(self):
         contract = ContractFactory(contract_type=CONTRACT_TYPE_SALE, sale_price=1_000_000)
@@ -414,6 +443,7 @@ class TestContractCreateHistory:
             end_date="2025-01-01",
             deposit_amount=1_000_000,
             monthly_rent=500_000,
+            photo_files=["photo.jpg"],
             changed_by=agent,
         )
 
@@ -441,6 +471,7 @@ class TestContractCreateHistory:
             end_date="2025-01-01",
             deposit_amount=1_000_000,
             monthly_rent=500_000,
+            photo_files=["photo.jpg"],
         )
 
         entry = PropertyHistory.objects.get(property=prop, field="tenant")
@@ -462,6 +493,7 @@ class TestContractCreateHistory:
             party_b_id=buyer.pk,
             start_date="2024-06-01",
             sale_price=3_000_000_000,
+            photo_files=["photo.jpg"],
         )
 
         entry = PropertyHistory.objects.get(property=prop, field="owner")
@@ -490,6 +522,7 @@ class TestContractCreateHistory:
             party_b_id=buyer.pk,
             start_date="2024-06-01",
             sale_price=3_000_000_000,
+            photo_files=["photo.jpg"],
         )
 
         entry = PropertyHistory.objects.get(property=prop, field="status")
@@ -510,9 +543,81 @@ class TestContractCreateHistory:
             end_date="2025-01-01",
             deposit_amount=1_000_000,
             monthly_rent=500_000,
+            photo_files=["photo.jpg"],
             changed_by=None,
         )
 
         assert PropertyHistory.objects.filter(property=prop).count() >= 1
         # changed_by is nullable
         assert PropertyHistory.objects.filter(property=prop, changed_by__isnull=True).exists()
+
+
+@pytest.mark.django_db
+class TestContractPhotos:
+    def test_create_stores_multiple_photos(self):
+        prop = PropertyFactory()
+        contract = contract_create(
+            property_id=prop.pk,
+            contract_type=CONTRACT_TYPE_SALE,
+            start_date="2024-01-01",
+            sale_price=1_000_000,
+            photo_files=["a.jpg", "b.jpg", "c.jpg"],
+        )
+        photos = list(contract.photos.all())
+        assert len(photos) == 3
+        assert photos[0].file == "a.jpg"
+        assert photos[1].file == "b.jpg"
+        assert photos[2].file == "c.jpg"
+
+    def test_create_preserves_photo_order(self):
+        prop = PropertyFactory()
+        contract = contract_create(
+            property_id=prop.pk,
+            contract_type=CONTRACT_TYPE_SALE,
+            start_date="2024-01-01",
+            sale_price=1_000_000,
+            photo_files=["first.jpg", "second.jpg"],
+        )
+        photos = list(contract.photos.all())
+        assert photos[0].order == 0
+        assert photos[1].order == 1
+
+    def test_create_zero_photos_rejected_when_required(self):
+        prop = PropertyFactory()
+        assert REQUIRE_CONTRACT_PHOTO is True
+        with pytest.raises(ApplicationError) as exc_info:
+            contract_create(
+                property_id=prop.pk,
+                contract_type=CONTRACT_TYPE_SALE,
+                start_date="2024-01-01",
+                sale_price=1_000_000,
+                photo_files=[],
+            )
+        assert "تصویر" in exc_info.value.message
+
+    def test_create_no_photo_files_arg_rejected_when_required(self):
+        prop = PropertyFactory()
+        with pytest.raises(ApplicationError):
+            contract_create(
+                property_id=prop.pk,
+                contract_type=CONTRACT_TYPE_SALE,
+                start_date="2024-01-01",
+                sale_price=1_000_000,
+            )
+
+    def test_delete_contract_cascades_photos(self):
+        contract = ContractFactory()
+        ContractPhotoFactory(contract=contract, file="x.jpg", order=0)
+        ContractPhotoFactory(contract=contract, file="y.jpg", order=1)
+        contract_id = contract.pk
+
+        contract_delete(contract_id=contract_id)
+
+        assert not Contract.objects.filter(pk=contract_id).exists()
+        assert not ContractPhoto.objects.filter(contract_id=contract_id).exists()
+
+    def test_update_empty_photo_files_rejected_when_required(self):
+        contract = ContractFactory()
+        ContractPhotoFactory(contract=contract, file="photo.jpg", order=0)
+        with pytest.raises(ApplicationError):
+            contract_update(contract_id=contract.pk, data={"photo_files": []})

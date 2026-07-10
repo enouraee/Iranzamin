@@ -81,7 +81,7 @@ class TestContractListApi:
         for field in [
             "id", "property", "contract_type", "party_a", "party_b",
             "start_date", "end_date", "sale_price", "deposit_amount",
-            "monthly_rent", "rahn_amount", "contract_image", "notes", "created_at",
+            "monthly_rent", "rahn_amount", "photos", "notes", "created_at",
         ]:
             assert field in contract
 
@@ -149,7 +149,7 @@ class TestContractDetailApi:
         for field in [
             "id", "property", "contract_type", "party_a", "party_b",
             "start_date", "end_date", "sale_price", "deposit_amount",
-            "monthly_rent", "rahn_amount", "contract_image", "notes",
+            "monthly_rent", "rahn_amount", "photos", "notes",
             "created_at", "updated_at",
         ]:
             assert field in response.data
@@ -180,6 +180,7 @@ class TestContractCreateApi:
             "party_b_id": buyer.pk,
             "start_date": "2024-01-01",
             "sale_price": 5_000_000_000,
+            "photo_files": ["contract.jpg"],
         }
         response = auth_client.post(CREATE_URL, payload, format="json")
         assert response.status_code == status.HTTP_201_CREATED
@@ -198,6 +199,7 @@ class TestContractCreateApi:
             "end_date": "2025-03-01",
             "deposit_amount": 2_000_000,
             "monthly_rent": 500_000,
+            "photo_files": ["contract.jpg"],
         }
         response = auth_client.post(CREATE_URL, payload, format="json")
         assert response.status_code == status.HTTP_201_CREATED
@@ -233,17 +235,20 @@ class TestContractCreateApi:
             "start_date": "2024-01-01",
             "sale_price": 3_000_000_000,
             "notes": "یادداشت",
+            "photo_files": ["contract.jpg"],
         }
         response = auth_client.post(CREATE_URL, payload, format="json")
         assert response.status_code == status.HTTP_201_CREATED
         for field in [
             "id", "property", "contract_type", "party_a", "party_b",
             "start_date", "end_date", "sale_price", "deposit_amount",
-            "monthly_rent", "rahn_amount", "contract_image", "notes", "created_at",
+            "monthly_rent", "rahn_amount", "photos", "notes", "created_at",
         ]:
             assert field in response.data
         assert response.data["notes"] == "یادداشت"
         assert response.data["sale_price"] == 3_000_000_000
+        assert isinstance(response.data["photos"], list)
+        assert len(response.data["photos"]) == 1
 
     def test_create_rahn_contract(self, auth_client):
         prop = PropertyFactory(is_for_rahn=True, rahn_amount=50_000_000, is_for_sale=False)
@@ -257,6 +262,7 @@ class TestContractCreateApi:
             "start_date": "2024-05-01",
             "end_date": "2025-05-01",
             "rahn_amount": 50_000_000,
+            "photo_files": ["contract.jpg"],
         }
         response = auth_client.post(CREATE_URL, payload, format="json")
         assert response.status_code == status.HTTP_201_CREATED
@@ -304,7 +310,7 @@ class TestContractUpdateApi:
         for field in [
             "id", "contract_type", "party_a", "party_b", "start_date", "end_date",
             "sale_price", "deposit_amount", "monthly_rent", "rahn_amount",
-            "contract_image", "notes", "updated_at",
+            "photos", "notes", "updated_at",
         ]:
             assert field in response.data
 
@@ -383,3 +389,62 @@ class TestContractDeleteApi:
         prop.refresh_from_db()
         assert prop.status == "vacant"
         assert prop.tenant_id is None
+
+
+# ---------------------------------------------------------------------------
+# Photos
+# ---------------------------------------------------------------------------
+
+@pytest.mark.django_db
+class TestContractPhotoApi:
+    def test_create_without_photos_returns_400(self, auth_client):
+        prop = PropertyFactory()
+        payload = {
+            "property_id": prop.pk,
+            "contract_type": CONTRACT_TYPE_SALE,
+            "start_date": "2024-01-01",
+            "sale_price": 1_000_000,
+            "photo_files": [],
+        }
+        response = auth_client.post(CREATE_URL, payload, format="json")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_create_returns_photos_list(self, auth_client):
+        prop = PropertyFactory()
+        payload = {
+            "property_id": prop.pk,
+            "contract_type": CONTRACT_TYPE_SALE,
+            "start_date": "2024-01-01",
+            "sale_price": 1_000_000,
+            "photo_files": ["img1.jpg", "img2.jpg"],
+        }
+        response = auth_client.post(CREATE_URL, payload, format="json")
+        assert response.status_code == status.HTTP_201_CREATED
+        photos = response.data["photos"]
+        assert len(photos) == 2
+        assert photos[0]["file"] == "img1.jpg"
+        assert photos[1]["file"] == "img2.jpg"
+
+    def test_detail_returns_photos(self, auth_client):
+        from apps.contracts.tests.factories import ContractPhotoFactory
+        contract = ContractFactory()
+        ContractPhotoFactory(contract=contract, file="doc.jpg", order=0)
+        response = auth_client.get(detail_url(contract.pk))
+        assert response.status_code == status.HTTP_200_OK
+        assert isinstance(response.data["photos"], list)
+        assert response.data["photos"][0]["file"] == "doc.jpg"
+
+    def test_update_photo_files_replaces_photos(self, auth_client):
+        from apps.contracts.models import ContractPhoto
+        from apps.contracts.tests.factories import ContractPhotoFactory
+        contract = ContractFactory()
+        ContractPhotoFactory(contract=contract, file="old.jpg", order=0)
+        response = auth_client.patch(
+            update_url(contract.pk),
+            {"photo_files": ["new.jpg"]},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data["photos"]) == 1
+        assert response.data["photos"][0]["file"] == "new.jpg"
+        assert not ContractPhoto.objects.filter(contract=contract, file="old.jpg").exists()

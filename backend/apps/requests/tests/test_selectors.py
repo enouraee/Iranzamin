@@ -3,9 +3,11 @@ import pytest
 from apps.common.exceptions import ApplicationError
 from apps.people.models import ROLE_CUSTOMER
 from apps.people.tests.factories import PersonFactory
+from apps.properties.models import STATUS_OCCUPIED, STATUS_VACANT, TYPE_APARTMENT, TYPE_LAND
+from apps.properties.tests.factories import PropertyFactory
 from apps.regions.models import Region
 from apps.requests.models import REQUEST_TYPE_BUY, REQUEST_TYPE_RENT_MORTGAGE
-from apps.requests.selectors import request_get, request_list
+from apps.requests.selectors import request_get, request_list, request_matches
 from apps.requests.tests.factories import RequestFactory
 
 
@@ -74,3 +76,224 @@ class TestRequestGet:
         req = RequestFactory()
         fetched = request_get(request_id=req.pk)
         assert fetched.customer_id is not None
+
+
+@pytest.mark.django_db
+class TestRequestMatches:
+    # --- status ---
+
+    def test_excludes_occupied_properties(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY)
+        PropertyFactory(
+            status=STATUS_OCCUPIED,
+            is_for_sale=True,
+            tenant=PersonFactory(),
+            occupancy_start="2024-01-01",
+            occupancy_end="2025-01-01",
+        )
+        assert request_matches(request=req).count() == 0
+
+    def test_includes_vacant_properties(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None)
+        PropertyFactory(status=STATUS_VACANT, is_for_sale=True)
+        assert request_matches(request=req).count() == 1
+
+    # --- buy: deal type + budget ---
+
+    def test_buy_requires_is_for_sale(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None)
+        PropertyFactory(is_for_sale=False, is_for_rent=True, deposit=1_000_000, monthly_rent=500_000)
+        assert request_matches(request=req).count() == 0
+
+    def test_buy_matches_for_sale_property(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None)
+        PropertyFactory(is_for_sale=True, total_price=5_000_000_000)
+        assert request_matches(request=req).count() == 1
+
+    def test_buy_excludes_over_budget(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=3_000_000_000)
+        PropertyFactory(is_for_sale=True, total_price=5_000_000_000)
+        assert request_matches(request=req).count() == 0
+
+    def test_buy_includes_within_budget(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=5_000_000_000)
+        PropertyFactory(is_for_sale=True, total_price=4_000_000_000)
+        assert request_matches(request=req).count() == 1
+
+    def test_buy_includes_exact_budget(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=5_000_000_000)
+        PropertyFactory(is_for_sale=True, total_price=5_000_000_000)
+        assert request_matches(request=req).count() == 1
+
+    # --- rent/mortgage: deal type + deposit/rent ---
+
+    def test_rent_mortgage_excludes_sale_only(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_RENT_MORTGAGE, budget=None)
+        PropertyFactory(is_for_sale=True, is_for_rent=False, is_for_rahn=False)
+        assert request_matches(request=req).count() == 0
+
+    def test_rent_mortgage_matches_for_rent(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_RENT_MORTGAGE, budget=None)
+        PropertyFactory(is_for_sale=False, is_for_rent=True, deposit=2_000_000, monthly_rent=1_000_000)
+        assert request_matches(request=req).count() == 1
+
+    def test_rent_mortgage_matches_for_rahn(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_RENT_MORTGAGE, budget=None)
+        PropertyFactory(is_for_sale=False, is_for_rahn=True, rahn_amount=10_000_000)
+        assert request_matches(request=req).count() == 1
+
+    def test_rent_mortgage_deposit_over_max_excluded(self):
+        req = RequestFactory(
+            request_type=REQUEST_TYPE_RENT_MORTGAGE,
+            budget=None,
+            max_deposit=5_000_000,
+        )
+        PropertyFactory(
+            is_for_sale=False,
+            is_for_rent=True,
+            deposit=10_000_000,
+            monthly_rent=1_000_000,
+        )
+        assert request_matches(request=req).count() == 0
+
+    def test_rent_mortgage_rahn_over_max_deposit_excluded(self):
+        req = RequestFactory(
+            request_type=REQUEST_TYPE_RENT_MORTGAGE,
+            budget=None,
+            max_deposit=5_000_000,
+        )
+        PropertyFactory(is_for_sale=False, is_for_rahn=True, rahn_amount=8_000_000)
+        assert request_matches(request=req).count() == 0
+
+    def test_rent_mortgage_one_deal_type_satisfies_deposit(self):
+        # Property has both rent (deposit over limit) and rahn (within limit)
+        req = RequestFactory(
+            request_type=REQUEST_TYPE_RENT_MORTGAGE,
+            budget=None,
+            max_deposit=5_000_000,
+        )
+        PropertyFactory(
+            is_for_sale=False,
+            is_for_rent=True,
+            deposit=8_000_000,
+            monthly_rent=500_000,
+            is_for_rahn=True,
+            rahn_amount=4_000_000,
+        )
+        assert request_matches(request=req).count() == 1
+
+    def test_rent_mortgage_max_rent_excludes_high_monthly_rent(self):
+        req = RequestFactory(
+            request_type=REQUEST_TYPE_RENT_MORTGAGE,
+            budget=None,
+            max_rent=1_000_000,
+        )
+        PropertyFactory(
+            is_for_sale=False,
+            is_for_rent=True,
+            deposit=1_000_000,
+            monthly_rent=2_000_000,
+        )
+        assert request_matches(request=req).count() == 0
+
+    def test_rent_mortgage_rahn_only_not_excluded_by_max_rent(self):
+        # Rahn-only property has no monthly rent → max_rent should not exclude it
+        req = RequestFactory(
+            request_type=REQUEST_TYPE_RENT_MORTGAGE,
+            budget=None,
+            max_rent=500_000,
+        )
+        PropertyFactory(is_for_sale=False, is_for_rahn=True, rahn_amount=5_000_000)
+        assert request_matches(request=req).count() == 1
+
+    # --- region ---
+
+    def test_region_filter_excludes_other_regions(self):
+        r1 = Region.objects.create(name="شمال")
+        r2 = Region.objects.create(name="جنوب")
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, region=r1)
+        PropertyFactory(is_for_sale=True, region=r2)
+        assert request_matches(request=req).count() == 0
+
+    def test_region_filter_includes_matching_region(self):
+        r1 = Region.objects.create(name="شمال")
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, region=r1)
+        PropertyFactory(is_for_sale=True, region=r1)
+        assert request_matches(request=req).count() == 1
+
+    def test_no_region_on_request_matches_all_regions(self):
+        r1 = Region.objects.create(name="شمال")
+        r2 = Region.objects.create(name="جنوب")
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, region=None)
+        PropertyFactory(is_for_sale=True, region=r1)
+        PropertyFactory(is_for_sale=True, region=r2)
+        assert request_matches(request=req).count() == 2
+
+    # --- beds ---
+
+    def test_beds_excludes_fewer_beds(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, beds=3)
+        PropertyFactory(is_for_sale=True, beds=2)
+        assert request_matches(request=req).count() == 0
+
+    def test_beds_includes_exact_and_more(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, beds=2)
+        PropertyFactory(is_for_sale=True, beds=2)
+        PropertyFactory(is_for_sale=True, beds=3)
+        assert request_matches(request=req).count() == 2
+
+    # --- area ---
+
+    def test_min_area_excludes_smaller(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, min_area=100)
+        PropertyFactory(is_for_sale=True, area="80.00")
+        assert request_matches(request=req).count() == 0
+
+    def test_max_area_excludes_larger(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, max_area=100)
+        PropertyFactory(is_for_sale=True, area="120.00")
+        assert request_matches(request=req).count() == 0
+
+    def test_area_range_includes_within(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, min_area=80, max_area=120)
+        PropertyFactory(is_for_sale=True, area="100.00")
+        assert request_matches(request=req).count() == 1
+
+    # --- build year ---
+
+    def test_min_build_year_excludes_older(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, min_build_year=1390)
+        PropertyFactory(is_for_sale=True, build_year=1380)
+        assert request_matches(request=req).count() == 0
+
+    def test_max_build_year_excludes_newer(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, max_build_year=1390)
+        PropertyFactory(is_for_sale=True, build_year=1400)
+        assert request_matches(request=req).count() == 0
+
+    # --- no matches ---
+
+    def test_no_matching_properties_returns_empty(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=1_000)
+        PropertyFactory(is_for_sale=True, total_price=5_000_000_000)
+        assert request_matches(request=req).count() == 0
+
+    def test_no_properties_at_all_returns_empty(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY)
+        assert request_matches(request=req).count() == 0
+
+    # --- ordering ---
+
+    def test_preferred_floor_match_ranks_first(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, preferred_floor=3)
+        p_other = PropertyFactory(is_for_sale=True, floor=5)
+        p_match = PropertyFactory(is_for_sale=True, floor=3)
+        results = list(request_matches(request=req))
+        assert results[0].pk == p_match.pk
+
+    def test_no_preferred_floor_orders_by_newest(self):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None, preferred_floor=None)
+        p_old = PropertyFactory(is_for_sale=True)
+        p_new = PropertyFactory(is_for_sale=True)
+        results = list(request_matches(request=req))
+        assert results[0].pk == p_new.pk

@@ -5,6 +5,7 @@ from rest_framework.test import APIClient
 
 from apps.people.models import ROLE_CUSTOMER
 from apps.people.tests.factories import PersonFactory
+from apps.properties.tests.factories import PropertyFactory
 from apps.regions.models import Region
 from apps.requests.models import REQUEST_TYPE_BUY, REQUEST_TYPE_RENT_MORTGAGE, Request
 from apps.requests.tests.factories import RequestFactory
@@ -255,3 +256,67 @@ class TestRequestDeleteApi:
     def test_404_for_nonexistent(self, auth_client):
         resp = auth_client.delete(self.url(99999))
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+class TestRequestMatchesApi:
+    def url(self, pk):
+        return f"/api/requests/{pk}/matches/"
+
+    def test_requires_auth(self, client):
+        req = RequestFactory()
+        resp = client.get(self.url(req.pk))
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_404_for_nonexistent_request(self, auth_client):
+        resp = auth_client.get(self.url(99999))
+        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_returns_matching_properties(self, auth_client):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None)
+        PropertyFactory(is_for_sale=True)
+        resp = auth_client.get(self.url(req.pk))
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["count"] == 1
+
+    def test_no_matches_returns_empty_list(self, auth_client):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=1_000)
+        PropertyFactory(is_for_sale=True, total_price=5_000_000_000)
+        resp = auth_client.get(self.url(req.pk))
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["count"] == 0
+
+    def test_response_shape(self, auth_client):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None)
+        PropertyFactory(is_for_sale=True)
+        resp = auth_client.get(self.url(req.pk))
+        item = resp.data["results"][0]
+        for field in ("id", "type", "region", "address", "status", "area", "is_for_sale", "created_at"):
+            assert field in item
+
+    def test_excludes_occupied(self, auth_client):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None)
+        PropertyFactory(
+            is_for_sale=True,
+            status="occupied",
+            tenant=PersonFactory(),
+            occupancy_start="2024-01-01",
+            occupancy_end="2025-01-01",
+        )
+        resp = auth_client.get(self.url(req.pk))
+        assert resp.data["count"] == 0
+
+    def test_rent_mortgage_request_returns_rent_properties(self, auth_client):
+        req = RequestFactory(request_type=REQUEST_TYPE_RENT_MORTGAGE, budget=None)
+        PropertyFactory(is_for_sale=False, is_for_rent=True, deposit=1_000_000, monthly_rent=500_000)
+        PropertyFactory(is_for_sale=True, is_for_rent=False)
+        resp = auth_client.get(self.url(req.pk))
+        assert resp.data["count"] == 1
+
+    def test_pagination_works(self, auth_client):
+        req = RequestFactory(request_type=REQUEST_TYPE_BUY, budget=None)
+        PropertyFactory.create_batch(5, is_for_sale=True)
+        resp = auth_client.get(self.url(req.pk) + "?page_size=2")
+        assert resp.status_code == status.HTTP_200_OK
+        assert len(resp.data["results"]) == 2
+        assert resp.data["count"] == 5

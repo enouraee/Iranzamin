@@ -46,11 +46,11 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** render each; Badge خالی=green / پر=red; Button disabled has `opacity .5`, no hover; RTL layout.
   - **Done:** 2026-07-10 / commit ca80949
 
-- [ ] **5. App shell: routing + bottom nav + desktop sidebar** 🎨
+- [x] **5. App shell: routing + bottom nav + desktop sidebar** 🎨
   - **Scope:** React Router routes for every screen. Chrome: 56px top app bar, **64px bottom nav** on mobile; at ≥920px switch to fixed **right-side sidebar** (RTL) and hide bottom nav — exactly as the design. Nav items: داشبورد · فایل‌ها · (+) · قراردادها/درخواست‌ها · پروفایل. Active item bumps icon stroke.
   - **Design:** whole-page chrome in `DealEstate.dc.html`.
   - **Tests:** active route highlights; bottom nav hidden ≥920px, sidebar shown; nav navigates.
-  - **Done:** chrome pixel-matches at both breakpoints. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit b11922f
 
 - [x] **6. Typed API client + React Query setup** ⚠️
   - **Scope:** `src/api/client.ts` axios instance (base `/api/`, JWT header from storage, 401 → login redirect). React Query provider. Typed request helpers + shared TS domain types (`Property`, `Person`, `Contract`, `Request`, `Region`). Error-toast on network failure.

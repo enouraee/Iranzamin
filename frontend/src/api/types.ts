@@ -84,13 +84,32 @@ export interface PropertyRequest {
   createdAt: string
 }
 
+export interface RecentPropertySummary {
+  id: number
+  type: PropertyType
+  address: string
+  region_name: string
+  status: PropertyStatus
+  created_at: string
+}
+
 export interface DashboardStats {
-  totalProperties: number
-  availableProperties: number
-  occupiedProperties: number
-  totalContracts: number
-  openRequests: number
-  recentProperties: Property[]
+  total_properties: number
+  vacant_properties: number
+  occupied_properties: number
+  total_contracts: number
+  open_requests: number
+  recent_properties: RecentPropertySummary[]
+}
+
+export interface UserProfile {
+  id: number
+  mobile: string
+  first_name: string
+  last_name: string
+  full_name: string
+  notifications_enabled: boolean
+  dark_mode: boolean
 }
 
 export interface PaginatedResponse<T> {

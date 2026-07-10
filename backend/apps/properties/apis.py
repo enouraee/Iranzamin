@@ -11,7 +11,7 @@ from apps.regions.models import Region
 
 from .models import STATUS_CHOICES, STATUS_OCCUPIED, STATUS_VACANT, TYPE_CHOICES
 from .selectors import property_get, property_list
-from .services import property_create, property_media_add, property_media_remove, property_set_status, property_update
+from .services import property_create, property_delete, property_media_add, property_media_remove, property_set_status, property_update
 
 
 class PropertyListApi(APIView):
@@ -384,6 +384,14 @@ class PropertySetStatusApi(APIView):
             occupancy_end=data.get("occupancy_end"),
         )
         return Response({"id": prop.pk, "status": prop.status})
+
+
+class PropertyDeleteApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request: Request, property_id: int) -> Response:
+        property_delete(agent=request.user, property_id=property_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class PropertyMediaAddApi(APIView):

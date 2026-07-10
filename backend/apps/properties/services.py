@@ -218,6 +218,17 @@ def property_media_add(*, property_id: int, photo_files: list[str]) -> list[Prop
     return created
 
 
+def property_delete(*, agent, property_id: int) -> None:
+    from .selectors import property_get
+
+    prop = property_get(property_id=property_id)
+
+    if prop.agent_id != agent.pk:
+        raise ApplicationError(message="شما مجاز به حذف این ملک نیستید.")
+
+    prop.delete()
+
+
 def property_media_remove(*, photo_id: int) -> None:
     try:
         photo = PropertyPhoto.objects.get(pk=photo_id)

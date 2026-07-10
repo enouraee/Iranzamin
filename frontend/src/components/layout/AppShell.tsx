@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Home, Building2, PlusCircle, FileText, User } from 'lucide-react'
 import { TopBar } from './TopBar'
 import { Sidebar } from './Sidebar'
-import { BottomNav, BottomNavItem } from '../navigation/BottomNav'
+import { BottomNav, type BottomNavItem } from '../navigation/BottomNav'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 const NAV_ITEMS: BottomNavItem[] = [

@@ -61,12 +61,12 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 
 ## Screens
 
-- [ ] **7. Login screen** 🎨🔒
+- [x] **7. Login screen** 🎨🔒
   - **Scope:** mobile-number + password login, gradient header block per design, validation messages in Persian. On success store JWT, go to Dashboard.
   - **Design:** login screen (`DealEstate.dc.html`, ~line 889).
   - **Depends on backend:** task 22.
   - **Tests:** ⚠️ empty fields, wrong creds error, invalid phone format, successful login redirect (mock).
-  - **Done:** matches design; flow works. `_____ / commit _____`
+  - **Done:** 2026-07-10 / commit TBD
 
 - [ ] **8. Dashboard screen** 🎨
   - **Scope:** greeting header (`سلام، رضا 👋` — the one allowed emoji), StatCards, quick actions, recent files. Persian digits throughout.

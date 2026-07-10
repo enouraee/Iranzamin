@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import type { ReactNode } from 'react'
 import { AppShell } from './components/layout/AppShell'
 import DashboardScreen from './screens/DashboardScreen'
 import FilesScreen from './screens/FilesScreen'
@@ -8,6 +9,12 @@ import ProfileScreen from './screens/ProfileScreen'
 import LoginScreen from './screens/LoginScreen'
 import NotFoundScreen from './screens/NotFoundScreen'
 
+function RequireAuth({ children }: { children: ReactNode }) {
+  const isAuthenticated = !!localStorage.getItem('access_token')
+  if (!isAuthenticated) return <Navigate to="/login" replace />
+  return <>{children}</>
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -16,41 +23,51 @@ export default function App() {
         <Route
           path="/"
           element={
-            <AppShell title="داشبورد">
-              <DashboardScreen />
-            </AppShell>
+            <RequireAuth>
+              <AppShell title="داشبورد">
+                <DashboardScreen />
+              </AppShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/files"
           element={
-            <AppShell title="فایل‌ها">
-              <FilesScreen />
-            </AppShell>
+            <RequireAuth>
+              <AppShell title="فایل‌ها">
+                <FilesScreen />
+              </AppShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/files/new"
           element={
-            <AppShell title="افزودن فایل">
-              <AddFileScreen />
-            </AppShell>
+            <RequireAuth>
+              <AppShell title="افزودن فایل">
+                <AddFileScreen />
+              </AppShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/contracts"
           element={
-            <AppShell title="قراردادها">
-              <ContractsScreen />
-            </AppShell>
+            <RequireAuth>
+              <AppShell title="قراردادها">
+                <ContractsScreen />
+              </AppShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/profile"
           element={
-            <AppShell title="پروفایل">
-              <ProfileScreen />
-            </AppShell>
+            <RequireAuth>
+              <AppShell title="پروفایل">
+                <ProfileScreen />
+              </AppShell>
+            </RequireAuth>
           }
         />
         <Route path="*" element={<NotFoundScreen />} />

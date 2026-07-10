@@ -30,7 +30,9 @@ class PropertyFilter(django_filters.FilterSet):
         from django.db.models import Q
 
         return queryset.filter(
-            Q(address__icontains=value) | Q(region__name__icontains=value)
+            Q(title__icontains=value)
+            | Q(address__icontains=value)
+            | Q(region__name__icontains=value)
         )
 
     class Meta:

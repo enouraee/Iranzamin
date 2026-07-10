@@ -56,6 +56,7 @@ CABINET_CHOICES = [
 
 class Property(BaseModel):
     # Core
+    title = models.CharField(max_length=128, blank=True, default="", db_index=True)
     type = models.CharField(max_length=16, choices=TYPE_CHOICES)
     region = models.ForeignKey(
         "regions.Region",

@@ -13,12 +13,15 @@ from .models import (
     SOURCE_CONTRACT,
     SOURCE_MANUAL,
     STATUS_VACANT,
+    TYPE_CHOICES,
     TYPE_LAND,
     Property,
     PropertyHistory,
     PropertyPhoto,
     PropertyVideo,
 )
+
+_TYPE_LABELS = dict(TYPE_CHOICES)
 
 _PRICE_FIELDS = frozenset({"price_per_meter", "total_price", "deposit", "monthly_rent", "rahn_amount"})
 
@@ -60,6 +63,7 @@ def record_property_history(
 
 _UPDATABLE_FIELDS = frozenset(
     {
+        "title",
         "region",
         "address",
         "plak",
@@ -104,6 +108,7 @@ def property_create(
     type: str,
     region: Region,
     address: str,
+    title: str = "",
     plak: str = "",
     owner: Person | None = None,
     status: str = STATUS_VACANT,
@@ -153,9 +158,13 @@ def property_create(
     photo_files: list[str] | None = None,
     video_files: list[str] | None = None,
 ) -> Property:
+    if not title:
+        title = f"{_TYPE_LABELS.get(type, type)} {region.name} پلاک {plak}".strip()
+
     with transaction.atomic():
         prop = Property(
             agent=agent,
+            title=title,
             type=type,
             region=region,
             address=address,

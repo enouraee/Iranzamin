@@ -28,6 +28,7 @@ class PropertyListApi(APIView):
 
     class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
+        title = serializers.CharField()
         type = serializers.CharField()
         region = serializers.SerializerMethodField()
         address = serializers.CharField()
@@ -69,6 +70,7 @@ class PropertyDetailApi(APIView):
 
     class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
+        title = serializers.CharField()
         type = serializers.CharField()
         region = serializers.SerializerMethodField()
         address = serializers.CharField()
@@ -203,6 +205,7 @@ class PropertyCreateApi(APIView):
         type = serializers.ChoiceField(choices=[c[0] for c in TYPE_CHOICES])
         region_id = serializers.IntegerField()
         address = serializers.CharField()
+        title = serializers.CharField(default="", allow_blank=True)
         plak = serializers.CharField(default="", allow_blank=True)
         owner_id = serializers.IntegerField(required=False, allow_null=True)
         status = serializers.ChoiceField(
@@ -300,6 +303,7 @@ class PropertyCreateApi(APIView):
             type=data["type"],
             region=region,
             address=data["address"],
+            title=data.get("title", ""),
             plak=data.get("plak", ""),
             owner=owner,
             status=data["status"],
@@ -351,6 +355,7 @@ class PropertyUpdateApi(APIView):
     permission_classes = [IsAuthenticated]
 
     class InputSerializer(serializers.Serializer):
+        title = serializers.CharField(required=False, allow_blank=True)
         region_id = serializers.IntegerField(required=False)
         address = serializers.CharField(required=False)
         plak = serializers.CharField(required=False, allow_blank=True)

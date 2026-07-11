@@ -92,11 +92,11 @@ line or a skipped test.
   - **Acceptance:** ⚠️ toggles persist via PATCH (optimistic + confirmed); logout clears tokens + redirects to login; pixel-match.
   - **Done:** `_____ / commit _____`
 
-- [ ] **19. Dark mode** 🎨
+- [x] **19. Dark mode** 🎨
   - **Scope:** wire the profile dark-mode toggle to a theme (token overrides). Respect `prefers-color-scheme` default. No layout shift.
   - **Design:** DS "Backgrounds"/"States" (`./design/DealEstate/_ds/`).
   - **Acceptance:** ⚠️ toggle flips `data-theme`; key colors invert; no layout shift; snapshot both themes; persists across reload (from `/api/me/` `dark_mode`).
-  - **Done:** `_____ / commit _____`
+  - **Done:** `2026-07-11 / 9c5336d`
 
 - [ ] **20. Frontend E2E pass (Playwright)** ⚠️
   - **Scope:** full behavioral flows against the running backend: login → dashboard → add-property (each type branch) → detail → create contract → create request → search/filter → logout.

@@ -1,0 +1,25 @@
+/* DealEstate — Dark mode token overrides
+ * Applied when <html data-theme="dark">.
+ * Only semantic aliases change; raw palette stays the same.
+ */
+[data-theme="dark"] {
+  --bg-app:         #1A2129;
+  --surface-card:   #2A323C;
+  --surface-sunken: #1A2129;
+  --surface-hover:  #3E4956;
+
+  --border-default: #3E4956;
+  --border-strong:  #586472;
+
+  --text-primary:   #F5F7FA;
+  --text-secondary: #9AA6B4;
+  --text-muted:     #72808F;
+
+  --color-primary-soft:  #102A3D;
+  --color-accent-soft:   #2A1E0A;
+  --color-success-soft:  #0F2B1A;
+  --color-success-text:  #5BC489;
+  --color-danger-soft:   #2C1210;
+  --color-danger-text:   #F5A09A;
+  --color-warning-soft:  #2A1F08;
+}

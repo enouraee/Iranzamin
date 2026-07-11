@@ -7,6 +7,9 @@ import FilesScreen from './screens/FilesScreen'
 import PropertyDetailScreen from './screens/PropertyDetailScreen'
 import AddFileScreen from './screens/AddFileScreen'
 import ContractsScreen from './screens/ContractsScreen'
+import ContractWizardScreen from './screens/ContractWizardScreen'
+import RequestsScreen from './screens/RequestsScreen'
+import RequestWizardScreen from './screens/RequestWizardScreen'
 import PersonsScreen from './screens/PersonsScreen'
 import PersonDetailScreen from './screens/PersonDetailScreen'
 import ProfileScreen from './screens/ProfileScreen'
@@ -96,11 +99,41 @@ export default function App() {
           }
         />
         <Route
+          path="/contracts/new"
+          element={
+            <RequireAuth>
+              <AppShell title="ثبت قرارداد جدید">
+                <ContractWizardScreen />
+              </AppShell>
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/profile"
           element={
             <RequireAuth>
               <AppShell title="پروفایل">
                 <ProfileScreen />
+              </AppShell>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/requests"
+          element={
+            <RequireAuth>
+              <AppShell title="درخواست‌ها">
+                <RequestsScreen />
+              </AppShell>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/requests/new"
+          element={
+            <RequireAuth>
+              <AppShell title="ثبت درخواست">
+                <RequestWizardScreen />
               </AppShell>
             </RequireAuth>
           }

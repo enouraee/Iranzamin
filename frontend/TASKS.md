@@ -44,14 +44,14 @@ line or a skipped test.
   - **Design:** dashboard (`./design/DealEstate/DealEstate.dc.html` ~line 56).
   - **API:** `GET /api/dashboard/stats/` → `total_properties`, `vacant_properties`, `occupied_properties`, `total_contracts`, `open_requests`, `recent_properties[]`.
   - **Acceptance:** ⚠️ renders each stat with Persian digits; recent-files list maps `recent_properties`; empty DB → zeros + empty state; loading + error (toast) states; pixel-match both widths.
-  - **Done:** `2026-07-11 / commit _____`
+  - **Done:** `2026-07-11 / 5d493f7`
 
-- [ ] **9. Files / Properties list screen** 🎨⚠️
+- [x] **9. Files / Properties list screen** 🎨⚠️
   - **Scope:** searchable/filterable list of `PropertyCard`s. Filters: type, region, deal type, status خالی/پر. Empty state `ملکی با این مشخصات یافت نشد.` Pagination/infinite scroll.
   - **Design:** files list (~line 60). Flow: `../docs/flows/add-property.md` (card fields).
   - **API:** `GET /api/properties/` — params `type`, `region`(id), `status`, `deal_type`(sale/rent/rahn), `has_parking`…, `search`(title/address/region), `page`, `page_size`. Paginated `{count,next,previous,results}`; item has `title`, `region`, `status`, `cover_photo`, deal flags + prices.
   - **Acceptance:** ⚠️ filter by status/type/region/deal narrows list; search by title matches; empty result shows the Persian empty state; pagination boundary (next/previous) works; Persian digits for area/price; pixel-match.
-  - **Done:** `_____ / commit _____`
+  - **Done:** `2026-07-11 / commit _____`
 
 - [ ] **10. Property detail screen** 🎨
   - **Scope:** gallery placeholder (blue-500→700 gradient), title (fallback `{typeLabel} {region}`), specs (area/beds/floor/amenity columns…), price block (asking) + occupancy actual amounts when پر, owner, status pill, contact action, photo-count chip, **video** if present, **history timeline**.

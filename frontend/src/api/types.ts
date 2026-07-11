@@ -1,15 +1,68 @@
 // All prices are in Toman, stored as integers
 // All dates are ISO strings on the wire, Jalali on display (handled in UI layer)
 
+// ---- Wire (API) enum values ----
+export type PropertyTypeApi = 'apartment' | 'kalnagi' | 'land' | 'commercial' | 'office' | 'villa'
+export type PropertyStatusApi = 'vacant' | 'occupied'
+export type DealTypeApi = 'sale' | 'rent' | 'rahn'
+export type PersonRoleApi = 'owner' | 'customer'
+export type ContractTypeApi = 'sale' | 'rent' | 'rahn'
+
+// ---- Display (UI) labels ----
 export type PropertyType = 'آپارتمان' | 'کلنگی' | 'زمین' | 'تجاری' | 'اداری' | 'ویلا'
 export type DealType = 'فروش' | 'اجاره' | 'رهن کامل'
 export type PropertyStatus = 'خالی' | 'پر'
 export type PersonRole = 'مالک' | 'مشتری'
 export type ContractType = 'فروش' | 'اجاره' | 'رهن'
 
+export const PROPERTY_TYPE_LABEL: Record<PropertyTypeApi, string> = {
+  apartment: 'آپارتمان',
+  kalnagi: 'کلنگی',
+  land: 'زمین',
+  commercial: 'تجاری',
+  office: 'اداری',
+  villa: 'ویلا',
+}
+
+export const DEAL_TYPE_LABEL: Record<DealTypeApi, string> = {
+  sale: 'فروش',
+  rent: 'اجاره',
+  rahn: 'رهن کامل',
+}
+
 export interface Region {
   id: number
   name: string
+}
+
+// Property list item — shape returned by GET /api/properties/
+export interface PropertyListItem {
+  id: number
+  title: string
+  type: PropertyTypeApi
+  region: Region
+  address: string
+  plak: string | null
+  status: PropertyStatusApi
+  area: string | null        // "120.00" decimal string
+  is_for_sale: boolean
+  is_for_rent: boolean
+  is_for_rahn: boolean
+  total_price: number | null
+  monthly_rent: number | null
+  rahn_amount: number | null
+  cover_photo: string | null
+  created_at: string
+}
+
+export interface PropertyListFilters {
+  search?: string
+  type?: PropertyTypeApi
+  region?: number
+  status?: PropertyStatusApi
+  deal_type?: DealTypeApi
+  page?: number
+  page_size?: number
 }
 
 export interface Person {

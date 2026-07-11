@@ -54,22 +54,22 @@ line or a skipped test.
   - **Done:** `2026-07-11 / 8cab1df`
 
 - [x] **10. Property detail screen** 🎨
-  - **Done:** `2026-07-11 / commit _____`
+  - **Done:** `2026-07-11 / b0181cd`
 
 - [x] **11. Add-property wizard — shared frame + Step 1** 🎨⚠️
-  - **Done:** `2026-07-11 / commit _____`
+  - **Done:** `2026-07-11 / b0181cd`
 
 - [x] **12. Add-property wizard — Step 2 (type-specific specs)** 🎨⚠️
-  - **Done:** `2026-07-11 / commit _____`
+  - **Done:** `2026-07-11 / b0181cd`
 
 - [x] **13. Add-property wizard — Step 3 (deal types + status)** 🎨⚠️
-  - **Done:** `2026-07-11 / commit _____`
+  - **Done:** `2026-07-11 / b0181cd`
 
 - [x] **14. Add-property wizard — Step 4 (owner + media) + submit** 🎨⚠️
-  - **Done:** `2026-07-11 / commit _____`
+  - **Done:** `2026-07-11 / b0181cd`
 
 - [x] **15. Persons screen (list + detail + quick-add)** 🎨⚠️
-  - **Done:** `2026-07-11 / commit _____`
+  - **Done:** `2026-07-11 / b0181cd`
 
 - [ ] **16. Contract wizard (4 steps)** 🎨⚠️
   - **Scope:** Step 1 pick property (search by title/owner/region); Step 2 parties (seller/owner + buyer/renter, quick-add); Step 3 type فروش/اجاره/رهن + Jalali dates + amounts; Step 4 **multiple** contract photos + notes + warning banner. On submit → register contract (flips property owner/tenant/status, writes history).

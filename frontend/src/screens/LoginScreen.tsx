@@ -87,7 +87,7 @@ export default function LoginScreen() {
 
     setLoading(true)
     try {
-      const tokens = await authLogin({ phone: normalizedPhone, password })
+      const tokens = await authLogin({ mobile: normalizedPhone, password })
       storeTokens(tokens.access, tokens.refresh)
       navigate('/', { replace: true })
     } catch (err) {

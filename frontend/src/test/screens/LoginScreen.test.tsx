@@ -82,7 +82,7 @@ describe('LoginScreen', () => {
       fireEvent.click(screen.getByRole('button', { name: /ورود/ }))
     })
     await waitFor(() => {
-      expect(mockAuthLogin).toHaveBeenCalledWith({ phone: '09123456789', password: 'pass' })
+      expect(mockAuthLogin).toHaveBeenCalledWith({ mobile: '09123456789', password: 'pass' })
     })
   })
 
@@ -95,7 +95,7 @@ describe('LoginScreen', () => {
       fireEvent.click(screen.getByRole('button', { name: /ورود/ }))
     })
     await waitFor(() => {
-      expect(mockAuthLogin).toHaveBeenCalledWith({ phone: '09123456789', password: 'pass' })
+      expect(mockAuthLogin).toHaveBeenCalledWith({ mobile: '09123456789', password: 'pass' })
     })
   })
 

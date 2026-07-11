@@ -33,18 +33,18 @@ line or a skipped test.
 - [x] **5. App shell: routing + bottom nav + desktop sidebar** 🎨 — 56px top bar, 64px bottom nav (mobile), right sidebar ≥920px. `Done: 2026-07-10 / b11922f`
 - [x] **6. Typed API client + React Query** ⚠️ — axios (`/api/`, JWT header, 401→login), Query provider, typed helpers + domain types, error toast. `Done: 2026-07-10 / e08a60e`
 - [x] **7. Login screen** 🎨🔒 — mobile+password, gradient header, Persian validation, store JWT → dashboard. `Done: 2026-07-10 / 0821a90`
-  - ⚠️ **Known bug to fix when touched:** `src/api/auth.ts` sends `{ phone }`; the endpoint expects **`mobile`** (see API.md §2). Also add the Vite `/api` proxy (AGENTS.md §4).
+  - ✅ Bug fixed: `auth.ts` now sends `mobile`; Vite `/api` proxy added; Providers moved into App.
 
 ---
 
 ## Screens (to build)
 
-- [ ] **8. Dashboard screen** 🎨
+- [x] **8. Dashboard screen** 🎨
   - **Scope:** greeting header (`سلام، رضا 👋` — the one allowed emoji), StatCards, quick actions, recent files. Persian digits throughout.
   - **Design:** dashboard (`./design/DealEstate/DealEstate.dc.html` ~line 56).
   - **API:** `GET /api/dashboard/stats/` → `total_properties`, `vacant_properties`, `occupied_properties`, `total_contracts`, `open_requests`, `recent_properties[]`.
   - **Acceptance:** ⚠️ renders each stat with Persian digits; recent-files list maps `recent_properties`; empty DB → zeros + empty state; loading + error (toast) states; pixel-match both widths.
-  - **Done:** `_____ / commit _____`
+  - **Done:** `2026-07-11 / commit _____`
 
 - [ ] **9. Files / Properties list screen** 🎨⚠️
   - **Scope:** searchable/filterable list of `PropertyCard`s. Filters: type, region, deal type, status خالی/پر. Empty state `ملکی با این مشخصات یافت نشد.` Pagination/infinite scroll.

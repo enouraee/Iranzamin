@@ -2,7 +2,7 @@ import { apiPost } from './client'
 import type { AuthTokens } from './types'
 
 export interface LoginPayload {
-  phone: string
+  mobile: string
   password: string
 }
 

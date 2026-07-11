@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
+import { Providers } from './components/common/Providers'
 import { AppShell } from './components/layout/AppShell'
 import DashboardScreen from './screens/DashboardScreen'
 import FilesScreen from './screens/FilesScreen'
@@ -17,6 +18,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
 
 export default function App() {
   return (
+    <Providers>
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginScreen />} />
@@ -73,5 +75,6 @@ export default function App() {
         <Route path="*" element={<NotFoundScreen />} />
       </Routes>
     </BrowserRouter>
+    </Providers>
   )
 }

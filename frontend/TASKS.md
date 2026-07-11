@@ -71,12 +71,12 @@ line or a skipped test.
 - [x] **15. Persons screen (list + detail + quick-add)** 🎨⚠️
   - **Done:** `2026-07-11 / b0181cd`
 
-- [ ] **16. Contract wizard (4 steps)** 🎨⚠️
+- [x] **16. Contract wizard (4 steps)** 🎨⚠️
   - **Scope:** Step 1 pick property (search by title/owner/region); Step 2 parties (seller/owner + buyer/renter, quick-add); Step 3 type فروش/اجاره/رهن + Jalali dates + amounts; Step 4 **multiple** contract photos + notes + warning banner. On submit → register contract (flips property owner/tenant/status, writes history).
   - **Design:** `CONTRACT STEP 1..4`. Flow: `../docs/flows/contract.md`.
   - **API:** `GET /api/properties/`(picker), `POST /api/people/create/`(quick-add), `POST /api/contracts/create/`. **≥1 `photo_files` is mandatory** (400 `حداقل یک تصویر…` otherwise). Registering mutates the property.
   - **Acceptance:** ⚠️ missing party handled; end < start rejected; amount required per type (sale→`sale_price`, rent→`deposit_amount`+`monthly_rent`, rahn→`rahn_amount`); **≥1 photo enforced client-side**; on success the property's status/owner/tenant reflect the change (re-fetch detail to prove); pixel-match.
-  - **Done:** `_____ / commit _____`
+  - **Done:** `2026-07-11 / pending`
 
 - [ ] **17. Request wizard (4 steps) + matching** 🎨⚠️
   - **Scope:** Step 1 customer (existing/quick-add); Step 2 type (اجاره/رهن/فروش — 3 types); Step 3 branch by type — rent/rahn constraints (persons/beds/floor/area/`wants_parking`/`wants_elevator`/`wants_storage`/max deposit/max rent/region/مهلت) vs sale constraints (`target_property_type`/build-year/`units_count`/floor/area/beds/budget/wants_*); Step 4 summary + auto-suggested matching files + mark-done.

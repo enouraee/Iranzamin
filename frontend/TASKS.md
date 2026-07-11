@@ -78,12 +78,12 @@ line or a skipped test.
   - **Acceptance:** ⚠️ missing party handled; end < start rejected; amount required per type (sale→`sale_price`, rent→`deposit_amount`+`monthly_rent`, rahn→`rahn_amount`); **≥1 photo enforced client-side**; on success the property's status/owner/tenant reflect the change (re-fetch detail to prove); pixel-match.
   - **Done:** `2026-07-11 / cb843a7`
 
-- [ ] **17. Request wizard (4 steps) + matching** 🎨⚠️
+- [x] **17. Request wizard (4 steps) + matching** 🎨⚠️
   - **Scope:** Step 1 customer (existing/quick-add); Step 2 type (اجاره/رهن/فروش — 3 types); Step 3 branch by type — rent/rahn constraints (persons/beds/floor/area/`wants_parking`/`wants_elevator`/`wants_storage`/max deposit/max rent/region/مهلت) vs sale constraints (`target_property_type`/build-year/`units_count`/floor/area/beds/budget/wants_*); Step 4 summary + auto-suggested matching files + mark-done.
   - **Design:** `REQUEST STEP 1..4`. Flow: `../docs/flows/request.md`.
   - **API:** `POST /api/requests/create/` (`customer_id` OR quick-add trio; fields per type), `GET /api/requests/{id}/matches/` (paginated properties), `POST /api/requests/{id}/mark-done/ {property_id}`.
   - **Acceptance:** ⚠️ 3 type branches render distinct fields; rent vs rahn money fields differ; sale shows target-type/units; `wants_*` toggles present; budget/deadline validation; matches list + empty state; mark-done sets status done and removes it from the open list; pixel-match.
-  - **Done:** `_____ / commit _____`
+  - **Done:** `2026-07-11 / 6484314`
 
 - [ ] **18. Profile screen** 🎨
   - **Scope:** name/phone, notification toggle, dark-mode toggle (Switch), logout.

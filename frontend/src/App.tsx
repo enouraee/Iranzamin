@@ -4,8 +4,11 @@ import { Providers } from './components/common/Providers'
 import { AppShell } from './components/layout/AppShell'
 import DashboardScreen from './screens/DashboardScreen'
 import FilesScreen from './screens/FilesScreen'
+import PropertyDetailScreen from './screens/PropertyDetailScreen'
 import AddFileScreen from './screens/AddFileScreen'
 import ContractsScreen from './screens/ContractsScreen'
+import PersonsScreen from './screens/PersonsScreen'
+import PersonDetailScreen from './screens/PersonDetailScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import LoginScreen from './screens/LoginScreen'
 import NotFoundScreen from './screens/NotFoundScreen'
@@ -43,11 +46,41 @@ export default function App() {
           }
         />
         <Route
+          path="/files/:id"
+          element={
+            <RequireAuth>
+              <AppShell title="جزئیات ملک">
+                <PropertyDetailScreen />
+              </AppShell>
+            </RequireAuth>
+          }
+        />
+        <Route
           path="/files/new"
           element={
             <RequireAuth>
-              <AppShell title="افزودن فایل">
+              <AppShell title="افزودن فایل جدید">
                 <AddFileScreen />
+              </AppShell>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/persons"
+          element={
+            <RequireAuth>
+              <AppShell title="اشخاص">
+                <PersonsScreen />
+              </AppShell>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/persons/:id"
+          element={
+            <RequireAuth>
+              <AppShell title="جزئیات شخص">
+                <PersonDetailScreen />
               </AppShell>
             </RequireAuth>
           }

@@ -1,5 +1,5 @@
-import { apiGet } from './client'
-import type { PropertyListItem, PropertyListFilters, PaginatedResponse } from './types'
+import { apiGet, apiPost } from './client'
+import type { PropertyListItem, PropertyListFilters, PropertyDetail, PropertyCreatePayload, PaginatedResponse } from './types'
 
 export function getProperties(
   filters: PropertyListFilters = {},
@@ -13,4 +13,12 @@ export function getProperties(
   if (filters.page) params.page = filters.page
   if (filters.page_size) params.page_size = filters.page_size
   return apiGet<PaginatedResponse<PropertyListItem>>('properties/', params)
+}
+
+export function getProperty(id: number): Promise<PropertyDetail> {
+  return apiGet<PropertyDetail>(`properties/${id}/`)
+}
+
+export function createProperty(payload: PropertyCreatePayload): Promise<{ id: number; type: string; status: string; created_at: string }> {
+  return apiPost('properties/create/', payload)
 }

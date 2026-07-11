@@ -33,7 +33,28 @@ export const DEAL_TYPE_LABEL: Record<DealTypeApi, string> = {
 export interface Region {
   id: number
   name: string
+  created_at?: string
 }
+
+// ---- People (wire shape) ----
+export interface PersonApi {
+  id: number
+  first_name: string
+  last_name: string
+  full_name: string
+  phone: string
+  national_id: string | null
+  birth_date: string | null  // ISO date
+  role: PersonRoleApi
+  created_at: string
+}
+
+export interface PersonDetailApi extends PersonApi {
+  owned_properties: Array<{ id: number; address: string; type: PropertyTypeApi; status: PropertyStatusApi }>
+  rented_properties: Array<{ id: number; address: string; type: PropertyTypeApi; status: PropertyStatusApi }>
+}
+
+export type CabinetMaterialApi = 'open' | 'mdf' | ''
 
 // Property list item — shape returned by GET /api/properties/
 export interface PropertyListItem {
@@ -75,44 +96,139 @@ export interface Person {
   role: PersonRole
 }
 
-export interface PropertyMedia {
+export interface PropertyPhoto {
   id: number
-  url: string
-  type: 'photo' | 'video'
+  file: string
+  is_cover: boolean
 }
 
-export interface Property {
+export interface PropertyVideo {
   id: number
-  type: PropertyType
-  region: Region
+  file: string
+}
+
+export interface PropertyHistoryEntry {
+  id: number
+  change_type: 'owner' | 'tenant' | 'status' | 'price' | 'other'
+  field: string
+  old_value: string
+  new_value: string
+  source: 'manual' | 'contract'
+  contract_id: number | null
+  changed_by: { id: number; first_name: string; last_name: string } | null
+  created_at: string
+}
+
+export interface PersonStub {
+  id: number
+  first_name: string
+  last_name: string
+  phone: string
+}
+
+// Full property detail — returned by GET /api/properties/{id}/
+export interface PropertyDetail extends PropertyListItem {
+  // Parties
+  agent: { id: number; first_name: string; last_name: string }
+  owner: PersonStub | null
+  tenant: PersonStub | null
+  // Occupancy
+  occupancy_start: string | null
+  occupancy_end: string | null
+  occupancy_deposit: number | null
+  occupancy_monthly_rent: number | null
+  occupancy_rahn: number | null
+  // Deal pricing
+  price_per_meter: number | null
+  deposit: number | null
+  // Apartment specs
+  floor: number | null
+  unit: string | null
+  beds: number | null
+  has_parking: boolean
+  has_obstructive_parking: boolean
+  has_balcony: boolean
+  has_backyard: boolean
+  has_elevator: boolean
+  cabinet_material: CabinetMaterialApi
+  build_year: number | null
+  has_storage: boolean
+  storage_deed: boolean
+  storage_area: string | null
+  has_tobdil: boolean
+  // Kalnagi + Land specs
+  has_aqab_neshini: boolean
+  aqab_neshini_desc: string | null
+  taadad_bar: number | null
+  gozar_kooche: string | null
+  // Kalnagi only
+  taadad_tabaghat: number | null
+  has_hayat: boolean
+  hayat_area: string | null
+  // Media
+  photos: PropertyPhoto[]
+  videos: PropertyVideo[]
+  history: PropertyHistoryEntry[]
+  updated_at: string
+}
+
+// Payload for POST /api/properties/create/
+export interface PropertyCreatePayload {
+  type: PropertyTypeApi
+  region_id: number
   address: string
   plak?: string
-  status: PropertyStatus
-  dealTypes: DealType[]
-  owner?: Person
-  tenant?: Person
-  occupiedFrom?: string
-  occupiedTo?: string
-  // Apartment-specific
+  title?: string
+  owner_id?: number
+  status?: PropertyStatusApi
+  // occupancy
+  tenant_id?: number
+  occupancy_start?: string
+  occupancy_end?: string
+  occupancy_deposit?: number
+  occupancy_monthly_rent?: number
+  occupancy_rahn?: number
+  // deals
+  is_for_sale?: boolean
+  price_per_meter?: number
+  total_price?: number
+  is_for_rent?: boolean
+  deposit?: number
+  monthly_rent?: number
+  is_for_rahn?: boolean
+  rahn_amount?: number
+  // apt specs
   floor?: number
   unit?: string
   area?: number
-  bedrooms?: number
-  buildYear?: number
-  // Pricing
-  salePrice?: number
-  salePricePerMeter?: number
-  rentDeposit?: number
-  rentMonthly?: number
-  mortgageAmount?: number
-  media: PropertyMedia[]
-  createdAt: string
-  updatedAt: string
+  beds?: number
+  has_parking?: boolean
+  has_obstructive_parking?: boolean
+  has_balcony?: boolean
+  has_backyard?: boolean
+  has_elevator?: boolean
+  cabinet_material?: CabinetMaterialApi
+  build_year?: number
+  has_storage?: boolean
+  storage_deed?: boolean
+  storage_area?: number
+  has_tobdil?: boolean
+  // kalnagi/land
+  has_aqab_neshini?: boolean
+  aqab_neshini_desc?: string
+  taadad_bar?: number
+  gozar_kooche?: number
+  taadad_tabaghat?: number
+  has_hayat?: boolean
+  hayat_area?: number
+  // media (string arrays)
+  photo_files?: string[]
+  video_files?: string[]
 }
 
 export interface Contract {
   id: number
-  property: Property
+  property: PropertyListItem
   type: ContractType
   startDate: string
   endDate: string

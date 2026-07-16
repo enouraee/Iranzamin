@@ -85,12 +85,12 @@ line or a skipped test.
   - **Acceptance:** ⚠️ 3 type branches render distinct fields; rent vs rahn money fields differ; sale shows target-type/units; `wants_*` toggles present; budget/deadline validation; matches list + empty state; mark-done sets status done and removes it from the open list; pixel-match.
   - **Done:** `2026-07-11 / 6484314`
 
-- [ ] **18. Profile screen** 🎨
+- [x] **18. Profile screen** 🎨
   - **Scope:** name/phone, notification toggle, dark-mode toggle (Switch), logout.
   - **Design:** profile (~line 99).
   - **API:** `GET /api/me/`, `PATCH /api/me/` (`notifications_enabled`, `dark_mode`, `first_name`, `last_name`).
   - **Acceptance:** ⚠️ toggles persist via PATCH (optimistic + confirmed); logout clears tokens + redirects to login; pixel-match.
-  - **Done:** `_____ / commit _____`
+  - **Done:** `2026-07-11 / 1c79cf4`
 
 - [x] **19. Dark mode** 🎨
   - **Scope:** wire the profile dark-mode toggle to a theme (token overrides). Respect `prefers-color-scheme` default. No layout shift.

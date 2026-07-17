@@ -58,3 +58,53 @@ class TestDashboardStats:
         stats = dashboard_stats()
         assert stats["total_contracts"] == 0
         assert stats["open_requests"] == 0
+
+    def test_ending_contracts_and_due_requests_empty_by_default(self):
+        stats = dashboard_stats()
+        assert stats["ending_contracts"] == []
+        assert stats["due_requests"] == []
+
+    def test_ending_contracts_surfaced(self):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        from apps.contracts.models import CONTRACT_TYPE_RENT
+        from apps.contracts.tests.factories import ContractFactory
+
+        today = timezone.localdate()
+        contract = ContractFactory(
+            contract_type=CONTRACT_TYPE_RENT,
+            sale_price=None,
+            deposit_amount=100_000_000,
+            monthly_rent=10_000_000,
+            start_date=today - timedelta(days=100),
+            end_date=today + timedelta(days=7),
+        )
+
+        stats = dashboard_stats()
+        assert len(stats["ending_contracts"]) == 1
+        item = stats["ending_contracts"][0]
+        assert item["id"] == contract.pk
+        assert item["property_address"] == contract.property.address
+        assert item["region_name"] == contract.property.region.name
+        assert item["contract_type"] == CONTRACT_TYPE_RENT
+        assert item["end_date"] == contract.end_date
+        assert item["tenant_name"] == contract.party_b.full_name
+
+    def test_due_requests_surfaced(self):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        from apps.requests.tests.factories import RequestFactory
+
+        req = RequestFactory(deadline=timezone.localdate() + timedelta(days=3))
+
+        stats = dashboard_stats()
+        assert len(stats["due_requests"]) == 1
+        item = stats["due_requests"][0]
+        assert item["id"] == req.pk
+        assert item["customer_name"] == req.customer.full_name
+        assert item["request_type"] == req.request_type
+        assert item["deadline"] == req.deadline

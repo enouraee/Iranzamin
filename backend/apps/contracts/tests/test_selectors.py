@@ -121,3 +121,109 @@ class TestContractGet:
         assert result.notes == "یادداشت تست"
         assert result.property is not None
         assert result.party_a is not None
+
+
+@pytest.mark.django_db
+class TestContractsEndingSoon:
+    from datetime import date, timedelta
+
+    def _rent(self, *, days_from_today, start_offset_days=-200):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        today = timezone.localdate()
+        return ContractFactory(
+            contract_type=CONTRACT_TYPE_RENT,
+            sale_price=None,
+            deposit_amount=100_000_000,
+            monthly_rent=10_000_000,
+            start_date=today + timedelta(days=start_offset_days),
+            end_date=today + timedelta(days=days_from_today),
+        )
+
+    def test_within_window_included(self):
+        from apps.contracts.selectors import contracts_ending_soon
+
+        c = self._rent(days_from_today=10)
+        assert list(contracts_ending_soon()) == [c]
+
+    def test_ending_today_included(self):
+        from apps.contracts.selectors import contracts_ending_soon
+
+        c = self._rent(days_from_today=0)
+        assert c in list(contracts_ending_soon())
+
+    def test_already_ended_excluded(self):
+        from apps.contracts.selectors import contracts_ending_soon
+
+        self._rent(days_from_today=-5, start_offset_days=-400)
+        assert list(contracts_ending_soon()) == []
+
+    def test_beyond_window_excluded(self):
+        from apps.contracts.selectors import contracts_ending_soon
+
+        self._rent(days_from_today=45)  # default window 30
+        assert list(contracts_ending_soon()) == []
+
+    def test_custom_window(self):
+        from apps.contracts.selectors import contracts_ending_soon
+
+        c = self._rent(days_from_today=45)
+        assert list(contracts_ending_soon(within_days=60)) == [c]
+
+    def test_sale_contracts_excluded(self):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        from apps.contracts.selectors import contracts_ending_soon
+
+        today = timezone.localdate()
+        ContractFactory(
+            contract_type=CONTRACT_TYPE_SALE,
+            end_date=today + timedelta(days=5),
+        )
+        assert list(contracts_ending_soon()) == []
+
+    def test_rahn_included(self):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        from apps.contracts.selectors import contracts_ending_soon
+
+        today = timezone.localdate()
+        c = ContractFactory(
+            contract_type=CONTRACT_TYPE_RAHN,
+            sale_price=None,
+            rahn_amount=500_000_000,
+            start_date=today - timedelta(days=100),
+            end_date=today + timedelta(days=5),
+        )
+        assert list(contracts_ending_soon()) == [c]
+
+    def test_no_end_date_excluded(self):
+        ContractFactory(
+            contract_type=CONTRACT_TYPE_RENT,
+            sale_price=None,
+            deposit_amount=100_000_000,
+            monthly_rent=10_000_000,
+            end_date=None,
+        )
+        from apps.contracts.selectors import contracts_ending_soon
+
+        assert list(contracts_ending_soon()) == []
+
+    def test_empty_returns_empty(self):
+        from apps.contracts.selectors import contracts_ending_soon
+
+        assert list(contracts_ending_soon()) == []
+
+    def test_ordered_by_soonest_end_date(self):
+        from apps.contracts.selectors import contracts_ending_soon
+
+        far = self._rent(days_from_today=25)
+        near = self._rent(days_from_today=3)
+        mid = self._rent(days_from_today=15)
+        assert list(contracts_ending_soon()) == [near, mid, far]

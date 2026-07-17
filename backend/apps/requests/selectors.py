@@ -1,8 +1,17 @@
-from django.db.models import Case, IntegerField, Q, QuerySet, Value, When
+from datetime import timedelta
+
+from django.conf import settings
+from django.db.models import Case, IntegerField, QuerySet, Value, When
+from django.utils import timezone
 
 from apps.common.exceptions import ApplicationError
 
-from .models import REQUEST_TYPE_RAHN, REQUEST_TYPE_RENT, REQUEST_TYPE_SALE, Request
+from .models import (
+    REQUEST_STATUS_OPEN,
+    REQUEST_TYPE_RAHN,
+    REQUEST_TYPE_SALE,
+    Request,
+)
 
 
 def request_list(*, filters: dict | None = None) -> QuerySet[Request]:
@@ -19,6 +28,29 @@ def request_get(*, request_id: int) -> Request:
         return Request.objects.select_related("customer", "region", "matched_property").get(pk=request_id)
     except Request.DoesNotExist:
         raise ApplicationError(message="درخواست مورد نظر یافت نشد.")
+
+
+def requests_due_soon(*, within_days: int | None = None) -> QuerySet[Request]:
+    """Open requests at/near (or past) their deadline — a follow-up list.
+
+    Requests with no deadline are excluded. Overdue requests (deadline before
+    today) are included so they aren't lost. Sorted by soonest deadline first.
+    """
+    if within_days is None:
+        within_days = settings.REQUEST_DEADLINE_WINDOW_DAYS
+
+    cutoff = timezone.localdate() + timedelta(days=within_days)
+
+    return (
+        Request.objects
+        .select_related("customer", "region", "matched_property")
+        .filter(
+            status=REQUEST_STATUS_OPEN,
+            deadline__isnull=False,
+            deadline__lte=cutoff,
+        )
+        .order_by("deadline")
+    )
 
 
 def request_matches(*, request: Request) -> QuerySet:

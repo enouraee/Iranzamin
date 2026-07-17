@@ -110,3 +110,8 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=12),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
 }
+
+# Dashboard notification read-model windows, in days (Asia/Tehran timezone).
+# How far ahead to surface contracts nearing their end / requests near deadline.
+CONTRACT_ENDING_WINDOW_DAYS = 30
+REQUEST_DEADLINE_WINDOW_DAYS = 30

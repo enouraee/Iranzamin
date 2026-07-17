@@ -12,9 +12,11 @@
 ## Notifications / follow-ups
 Design already shows **`قراردادهای نزدیک به پایان`** (contracts nearing end). Build the read model now; delivery beyond in-app is future.
 
-### Now (in scope)
-- Selector: contracts whose `end_date` is within N days (default 30), for rent/rahn. Surface on the dashboard as a list.
-- Selector: open requests past or near their `deadline` — a follow-up list.
+### Now (in scope) — implemented (task 48)
+- Selector `contracts_ending_soon(*, within_days=None)` (contracts/selectors.py): rent/rahn contracts with `end_date` from today through today+window (default `CONTRACT_ENDING_WINDOW_DAYS=30`), sorted by soonest `end_date`. Ending exactly today included; already-ended excluded.
+- Selector `requests_due_soon(*, within_days=None)` (requests/selectors.py): open requests with a `deadline` at/before today+window (default `REQUEST_DEADLINE_WINDOW_DAYS=30`); overdue included, no-deadline excluded, sorted by soonest `deadline`.
+- Both windows are settings (`config/settings/base.py`), overridable per call. Dates via `timezone.localdate()` (Asia/Tehran).
+- Surfaced on `dashboard_stats` / `GET /api/dashboard/stats/` as `ending_contracts` + `due_requests` lists.
 
 ### Future (O3 — do not build yet)
 - Push/SMS/email delivery.
@@ -22,9 +24,9 @@ Design already shows **`قراردادهای نزدیک به پایان`** (cont
 
 ## Acceptance criteria (in-scope only)
 - [ ] Dashboard renders all stats with Persian digits; empty DB → zeros. ⚠️
-- [ ] `قراردادهای نزدیک به پایان` lists rent/rahn contracts within the window, sorted by soonest end. ⚠️
-- [ ] Follow-up list surfaces requests at/near deadline.
-- [ ] Windows are configurable (constant/setting), not hardcoded magic numbers.
+- [x] `قراردادهای نزدیک به پایان` lists rent/rahn contracts within the window, sorted by soonest end. ⚠️
+- [x] Follow-up list surfaces requests at/near deadline.
+- [x] Windows are configurable (constant/setting), not hardcoded magic numbers.
 - [ ] Unauth → 401. Visual matches design both widths.
 
 ## Edge cases ⚠️

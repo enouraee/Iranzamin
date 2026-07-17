@@ -356,3 +356,74 @@ class TestRequestMatches:
         p_new = PropertyFactory(is_for_sale=True)
         results = list(request_matches(request=req))
         assert results[0].pk == p_new.pk
+
+
+@pytest.mark.django_db
+class TestRequestsDueSoon:
+    def _req(self, *, days_from_today=None, status=REQUEST_STATUS_OPEN, deadline=...):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        if deadline is ...:
+            deadline = (
+                None
+                if days_from_today is None
+                else timezone.localdate() + timedelta(days=days_from_today)
+            )
+        return RequestFactory(status=status, deadline=deadline)
+
+    def test_within_window_included(self):
+        from apps.requests.selectors import requests_due_soon
+
+        r = self._req(days_from_today=10)
+        assert list(requests_due_soon()) == [r]
+
+    def test_due_today_included(self):
+        from apps.requests.selectors import requests_due_soon
+
+        r = self._req(days_from_today=0)
+        assert r in list(requests_due_soon())
+
+    def test_overdue_included(self):
+        from apps.requests.selectors import requests_due_soon
+
+        r = self._req(days_from_today=-5)
+        assert list(requests_due_soon()) == [r]
+
+    def test_beyond_window_excluded(self):
+        from apps.requests.selectors import requests_due_soon
+
+        self._req(days_from_today=45)  # default window 30
+        assert list(requests_due_soon()) == []
+
+    def test_custom_window(self):
+        from apps.requests.selectors import requests_due_soon
+
+        r = self._req(days_from_today=45)
+        assert list(requests_due_soon(within_days=60)) == [r]
+
+    def test_no_deadline_excluded(self):
+        from apps.requests.selectors import requests_due_soon
+
+        self._req(days_from_today=None)
+        assert list(requests_due_soon()) == []
+
+    def test_done_requests_excluded(self):
+        from apps.requests.selectors import requests_due_soon
+
+        self._req(days_from_today=5, status=REQUEST_STATUS_DONE)
+        assert list(requests_due_soon()) == []
+
+    def test_empty_returns_empty(self):
+        from apps.requests.selectors import requests_due_soon
+
+        assert list(requests_due_soon()) == []
+
+    def test_ordered_by_soonest_deadline(self):
+        from apps.requests.selectors import requests_due_soon
+
+        far = self._req(days_from_today=20)
+        overdue = self._req(days_from_today=-3)
+        near = self._req(days_from_today=5)
+        assert list(requests_due_soon()) == [overdue, near, far]

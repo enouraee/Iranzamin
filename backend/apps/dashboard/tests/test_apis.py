@@ -44,6 +44,8 @@ class TestDashboardStatsApi:
         assert data["total_contracts"] == 0
         assert data["open_requests"] == 0
         assert data["recent_properties"] == []
+        assert data["ending_contracts"] == []
+        assert data["due_requests"] == []
 
     def test_counts_correct_with_seeded_data(self, auth_client):
         PropertyFactory.create_batch(4, status=STATUS_VACANT)
@@ -75,3 +77,39 @@ class TestDashboardStatsApi:
 
         response = auth_client.get(URL)
         assert len(response.data["recent_properties"]) == 5
+
+
+@pytest.mark.django_db
+class TestDashboardNotificationsApi:
+    def test_ending_contracts_and_due_requests_in_response(self, auth_client):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        from apps.contracts.models import CONTRACT_TYPE_RENT
+        from apps.contracts.tests.factories import ContractFactory
+        from apps.requests.tests.factories import RequestFactory
+
+        today = timezone.localdate()
+        contract = ContractFactory(
+            contract_type=CONTRACT_TYPE_RENT,
+            sale_price=None,
+            deposit_amount=100_000_000,
+            monthly_rent=10_000_000,
+            start_date=today - timedelta(days=100),
+            end_date=today + timedelta(days=7),
+        )
+        req = RequestFactory(deadline=today + timedelta(days=3))
+
+        response = auth_client.get(URL)
+        assert response.status_code == status.HTTP_200_OK
+
+        ending = response.data["ending_contracts"]
+        assert len(ending) == 1
+        assert ending[0]["id"] == contract.pk
+        assert ending[0]["tenant_name"] == contract.party_b.full_name
+
+        due = response.data["due_requests"]
+        assert len(due) == 1
+        assert due[0]["id"] == req.pk
+        assert due[0]["customer_name"] == req.customer.full_name

@@ -322,11 +322,11 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ multiple photos stored + returned; zero rejected at flow level; delete cascades.
   - **Done:** 2026-07-10 / commit b48e4ea
 
-- [ ] **48. Contract-ending + request-deadline selectors (notifications read model)** ⚠️
+- [x] **48. Contract-ending + request-deadline selectors (notifications read model)** ⚠️
   - **Scope:** Selector `contracts_ending_soon(*, within_days=30)` (rent/rahn, sorted by soonest `end_date`) and `requests_due_soon(*, within_days)` for follow-ups. Expose on the dashboard api. Windows configurable (setting/const), Asia/Tehran timezone. Delivery channels are **future (O3)** — read model only.
   - **Docs:** flows/dashboard-notifications.md.
   - **Tests:** ⚠️ within-window inclusion boundary (today/ended); no-deadline requests excluded; empty → empty; ordering by soonest.
-  - **Done:** `_____ / commit _____`
+  - **Done:** `c2d2daa / feat(dashboard): contract-ending + request-deadline read model (task 48)`
 
 - [ ] **49. Update admin, factories, seed for new fields**
   - **Scope:** Extend task-40 factories + seed command + `admin.py` to cover amenity columns, video, PropertyHistory, occupancy amounts, title, ContractPhoto, and the reworked Request. Keep seed idempotent and realistically Persian.

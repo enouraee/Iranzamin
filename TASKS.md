@@ -332,7 +332,7 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Scope:** Extend task-40 factories + seed command + `admin.py` to cover amenity columns, video, PropertyHistory, occupancy amounts, title, ContractPhoto, and the reworked Request. Keep seed idempotent and realistically Persian.
   - **Note:** if task 40 isn't done yet, fold this into it instead of duplicating.
   - **Tests:** factories build valid objects with new fields; seed runs idempotently.
-  - **Done:** folded task 40 in — new `apps/common` `seed` command (idempotent, Persian demo data), `PropertyHistoryFactory`, and admin for `PropertyVideo`/`PropertyHistory` + inlines. Commit pending.
+  - **Done:** folded task 40 in — new `apps/common` `seed` command (idempotent, Persian demo data), `PropertyHistoryFactory`, and admin for `PropertyVideo`/`PropertyHistory` + inlines. `1f8eace`
 
 ---
 

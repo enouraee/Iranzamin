@@ -105,3 +105,60 @@ class TestPersonGet:
         result = person_get(person_id=person.id)
         assert list(result.owned_properties.all()) == []
         assert list(result.rented_properties.all()) == []
+
+
+@pytest.mark.django_db
+class TestPersonListKindFilter:
+    def test_owners_kind_returns_only_owners(self):
+        PersonFactory(phone="09200008001", role=ROLE_OWNER)
+        PersonFactory(phone="09200008002", role=ROLE_CUSTOMER)
+        result = person_list(filters={"kind": "owners"})
+        assert result.count() == 1
+        assert result.first().role == ROLE_OWNER
+
+    def test_customers_kind_returns_only_customers(self):
+        PersonFactory(phone="09200008003", role=ROLE_OWNER)
+        PersonFactory(phone="09200008004", role=ROLE_CUSTOMER)
+        result = person_list(filters={"kind": "customers"})
+        assert result.count() == 1
+        assert result.first().role == ROLE_CUSTOMER
+
+    def test_renters_kind_returns_property_tenants(self):
+        from apps.properties.models import STATUS_OCCUPIED
+        from apps.properties.tests.factories import PropertyFactory
+
+        tenant = PersonFactory(phone="09200008005", role=ROLE_CUSTOMER)
+        non_tenant = PersonFactory(phone="09200008006", role=ROLE_CUSTOMER)
+        PropertyFactory(tenant=tenant, status=STATUS_OCCUPIED)
+
+        result = person_list(filters={"kind": "renters"})
+        ids = set(result.values_list("id", flat=True))
+        assert tenant.id in ids
+        assert non_tenant.id not in ids
+
+    def test_renters_kind_no_duplicates_when_multiple_properties(self):
+        from apps.properties.models import STATUS_OCCUPIED
+        from apps.properties.tests.factories import PropertyFactory
+
+        tenant = PersonFactory(phone="09200008007", role=ROLE_CUSTOMER)
+        PropertyFactory(tenant=tenant, status=STATUS_OCCUPIED)
+        PropertyFactory(tenant=tenant, status=STATUS_OCCUPIED)
+
+        result = person_list(filters={"kind": "renters"})
+        assert list(result.values_list("id", flat=True)).count(tenant.id) == 1
+
+
+@pytest.mark.django_db
+class TestPersonHistoryList:
+    def test_returns_history_newest_first(self):
+        from apps.people.selectors import person_history_list
+        from apps.people.services import person_update
+
+        person = PersonFactory(phone="09200008008", first_name="الف")
+        person_update(person_id=person.pk, data={"first_name": "ب"})
+        person_update(person_id=person.pk, data={"first_name": "ج"})
+
+        entries = list(person_history_list(person_id=person.pk))
+        assert len(entries) == 2
+        assert entries[0].new_value == "ج"
+        assert entries[1].new_value == "ب"

@@ -2,7 +2,7 @@ from django.db.models import QuerySet
 
 from apps.common.exceptions import ApplicationError
 
-from .models import Person
+from .models import Person, PersonHistory
 
 
 def person_list(*, filters: dict | None = None) -> QuerySet[Person]:
@@ -26,3 +26,11 @@ def person_get(*, person_id: int) -> Person:
         )
     except Person.DoesNotExist:
         raise ApplicationError(message="شخص مورد نظر یافت نشد.")
+
+
+def person_history_list(*, person_id: int) -> QuerySet[PersonHistory]:
+    return (
+        PersonHistory.objects
+        .filter(person_id=person_id)
+        .select_related("changed_by")
+    )

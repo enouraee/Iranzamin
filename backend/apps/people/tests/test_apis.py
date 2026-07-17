@@ -357,3 +357,61 @@ class TestPersonUpdateApi:
         assert response.status_code == status.HTTP_200_OK
         for field in ("id", "first_name", "last_name", "full_name", "phone", "national_id", "role", "updated_at"):
             assert field in response.data
+
+
+def history_url(person_id):
+    return f"/api/people/{person_id}/history/"
+
+
+@pytest.mark.django_db
+class TestPersonHistoryApi:
+    def test_unauthenticated_returns_401(self, client):
+        person = PersonFactory()
+        response = client.get(history_url(person.pk))
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_missing_person_returns_error(self, auth_client):
+        response = auth_client.get(history_url(999999))
+        assert response.status_code >= 400
+
+    def test_empty_history_returns_empty_list(self, auth_client):
+        person = PersonFactory(phone="09200007001")
+        response = auth_client.get(history_url(person.pk))
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == []
+
+    def test_history_returned_after_update(self, auth_client):
+        person = PersonFactory(phone="09200007002", first_name="قبل")
+        auth_client.patch(update_url(person.pk), {"first_name": "بعد"}, format="json")
+
+        response = auth_client.get(history_url(person.pk))
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 1
+        entry = response.data[0]
+        assert entry["field"] == "first_name"
+        assert entry["field_label"] == "نام"
+        assert entry["old_value"] == "قبل"
+        assert entry["new_value"] == "بعد"
+        assert entry["changed_by"] is not None
+
+
+@pytest.mark.django_db
+class TestPersonListKindFilterApi:
+    def test_kind_owners_filters(self, auth_client):
+        PersonFactory(phone="09200007003", role=ROLE_OWNER)
+        PersonFactory(phone="09200007004", role=ROLE_CUSTOMER)
+        response = auth_client.get(LIST_URL, {"kind": "owners"})
+        assert response.data["count"] == 1
+        assert response.data["results"][0]["role"] == ROLE_OWNER
+
+    def test_kind_renters_filters(self, auth_client):
+        from apps.properties.models import STATUS_OCCUPIED
+        from apps.properties.tests.factories import PropertyFactory
+
+        tenant = PersonFactory(phone="09200007005", role=ROLE_CUSTOMER)
+        PersonFactory(phone="09200007006", role=ROLE_CUSTOMER)
+        PropertyFactory(tenant=tenant, status=STATUS_OCCUPIED)
+
+        response = auth_client.get(LIST_URL, {"kind": "renters"})
+        assert response.data["count"] == 1
+        assert response.data["results"][0]["id"] == tenant.id

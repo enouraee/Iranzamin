@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from apps.common.pagination import StandardResultsPagination
 
 from .models import ROLE_CHOICES
-from .selectors import person_get, person_list
+from .selectors import person_get, person_history_list, person_list
 from .services import person_create, person_update
 
 
@@ -127,5 +127,31 @@ class PersonUpdateApi(APIView):
     def patch(self, request: Request, person_id: int) -> Response:
         serializer = self.InputSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        person = person_update(person_id=person_id, data=serializer.validated_data)
+        person = person_update(
+            person_id=person_id,
+            data=serializer.validated_data,
+            changed_by=request.user,
+        )
         return Response(self.OutputSerializer(person).data)
+
+
+class PersonHistoryApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    class OutputSerializer(serializers.Serializer):
+        id = serializers.IntegerField()
+        field = serializers.CharField()
+        field_label = serializers.CharField()
+        old_value = serializers.CharField(allow_blank=True)
+        new_value = serializers.CharField(allow_blank=True)
+        changed_by = serializers.SerializerMethodField()
+        created_at = serializers.DateTimeField()
+
+        def get_changed_by(self, obj):
+            return obj.changed_by.full_name if obj.changed_by else None
+
+    def get(self, request: Request, person_id: int) -> Response:
+        person_get(person_id=person_id)  # 404s if the person does not exist
+        entries = person_history_list(person_id=person_id)
+        output = self.OutputSerializer(entries, many=True)
+        return Response(output.data, status=status.HTTP_200_OK)

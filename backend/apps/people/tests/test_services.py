@@ -204,3 +204,50 @@ class TestPersonUpdate:
         person_update(person_id=person.pk, data={"first_name": "بعد"})
         person.refresh_from_db()
         assert person.first_name == "بعد"
+
+
+@pytest.mark.django_db
+class TestPersonUpdateHistory:
+    def test_logs_history_for_changed_field(self):
+        from apps.people.models import PersonHistory
+        from apps.users.tests.factories import UserFactory
+
+        agent = UserFactory(mobile="09120009001", password="x")
+        person = PersonFactory(phone="09200009001", first_name="قبل")
+
+        person_update(person_id=person.pk, data={"first_name": "بعد"}, changed_by=agent)
+
+        entries = PersonHistory.objects.filter(person=person)
+        assert entries.count() == 1
+        entry = entries.first()
+        assert entry.field == "first_name"
+        assert entry.old_value == "قبل"
+        assert entry.new_value == "بعد"
+        assert entry.changed_by == agent
+
+    def test_no_history_when_value_unchanged(self):
+        from apps.people.models import PersonHistory
+
+        person = PersonFactory(phone="09200009002", first_name="ثابت")
+        person_update(person_id=person.pk, data={"first_name": "ثابت"})
+        assert PersonHistory.objects.filter(person=person).count() == 0
+
+    def test_logs_each_changed_field_separately(self):
+        from apps.people.models import PersonHistory
+
+        person = PersonFactory(phone="09200009003", first_name="الف", last_name="ب")
+        person_update(person_id=person.pk, data={"first_name": "ج", "last_name": "د"})
+
+        fields = set(
+            PersonHistory.objects.filter(person=person).values_list("field", flat=True)
+        )
+        assert fields == {"first_name", "last_name"}
+
+    def test_history_records_normalized_phone(self):
+        from apps.people.models import PersonHistory
+
+        person = PersonFactory(phone="09200009004")
+        person_update(person_id=person.pk, data={"phone": "+989200009099"})
+
+        entry = PersonHistory.objects.get(person=person, field="phone")
+        assert entry.new_value == "09200009099"

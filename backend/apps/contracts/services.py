@@ -186,16 +186,28 @@ def contract_update(*, contract_id: int, data: dict) -> Contract:
     return contract
 
 
-def contract_delete(*, contract_id: int) -> None:
+def contract_delete(*, contract_id: int, changed_by=None) -> None:
+    from apps.properties.models import (
+        CHANGE_TYPE_OWNER,
+        CHANGE_TYPE_STATUS,
+        CHANGE_TYPE_TENANT,
+        SOURCE_CONTRACT,
+    )
+    from apps.properties.services import record_property_history
+
     contract = contract_get(contract_id=contract_id)
     prop = contract.property
     contract_type = contract.contract_type
     party_a = contract.party_a
 
     with transaction.atomic():
+        # Contract row is removed; PropertyHistory.contract is SET_NULL, so the
+        # reversing entries below reference contract=None but keep source=contract.
         contract.delete()
 
         if contract_type in (CONTRACT_TYPE_RENT, CONTRACT_TYPE_RAHN):
+            old_status = prop.status
+            old_tenant = prop.tenant
             prop.status = STATUS_VACANT
             prop.tenant = None
             prop.occupancy_start = None
@@ -205,7 +217,26 @@ def contract_delete(*, contract_id: int) -> None:
             prop.occupancy_rahn = None
             prop.full_clean()
             prop.save()
+            if old_status != prop.status:
+                record_property_history(
+                    prop=prop, changed_by=changed_by,
+                    field="status", old_val=old_status, new_val=prop.status,
+                    change_type=CHANGE_TYPE_STATUS, source=SOURCE_CONTRACT,
+                )
+            if old_tenant != prop.tenant:
+                record_property_history(
+                    prop=prop, changed_by=changed_by,
+                    field="tenant", old_val=old_tenant, new_val=prop.tenant,
+                    change_type=CHANGE_TYPE_TENANT, source=SOURCE_CONTRACT,
+                )
         elif contract_type == CONTRACT_TYPE_SALE:
+            old_owner = prop.owner
             prop.owner = party_a
             prop.full_clean()
             prop.save()
+            if old_owner != prop.owner:
+                record_property_history(
+                    prop=prop, changed_by=changed_by,
+                    field="owner", old_val=old_owner, new_val=prop.owner,
+                    change_type=CHANGE_TYPE_OWNER, source=SOURCE_CONTRACT,
+                )

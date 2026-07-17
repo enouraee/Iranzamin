@@ -239,5 +239,5 @@ class ContractDeleteApi(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request: Request, contract_id: int) -> Response:
-        contract_delete(contract_id=contract_id)
+        contract_delete(contract_id=contract_id, changed_by=request.user)
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -553,6 +553,97 @@ class TestContractCreateHistory:
 
 
 @pytest.mark.django_db
+class TestContractDeleteHistory:
+    """contract_delete writes reversing PropertyHistory rows with source=contract."""
+
+    def test_delete_rent_logs_reversing_status_and_tenant(self):
+        from apps.properties.models import (
+            CHANGE_TYPE_STATUS, CHANGE_TYPE_TENANT, SOURCE_CONTRACT,
+            STATUS_OCCUPIED, STATUS_VACANT, PropertyHistory,
+        )
+        prop = PropertyFactory(
+            is_for_rent=True, deposit=1_000_000, monthly_rent=500_000,
+            is_for_sale=False, status="vacant",
+        )
+        tenant = PersonFactory()
+        contract = contract_create(
+            property_id=prop.pk,
+            contract_type=CONTRACT_TYPE_RENT,
+            party_b_id=tenant.pk,
+            start_date="2024-01-01",
+            end_date="2025-01-01",
+            deposit_amount=1_000_000,
+            monthly_rent=500_000,
+            photo_files=["photo.jpg"],
+        )
+
+        contract_delete(contract_id=contract.pk)
+
+        status_reversal = PropertyHistory.objects.get(
+            property=prop, field="status",
+            old_value=STATUS_OCCUPIED, new_value=STATUS_VACANT,
+        )
+        assert status_reversal.change_type == CHANGE_TYPE_STATUS
+        assert status_reversal.source == SOURCE_CONTRACT
+        assert status_reversal.contract_id is None  # contract row was deleted (SET_NULL)
+
+        tenant_reversal = PropertyHistory.objects.get(
+            property=prop, field="tenant", new_value="",
+        )
+        assert tenant_reversal.change_type == CHANGE_TYPE_TENANT
+        assert tenant_reversal.source == SOURCE_CONTRACT
+        assert str(tenant) in tenant_reversal.old_value
+
+    def test_delete_sale_logs_reversing_owner(self):
+        from apps.properties.models import CHANGE_TYPE_OWNER, SOURCE_CONTRACT, PropertyHistory
+        seller = PersonFactory()
+        buyer = PersonFactory()
+        prop = PropertyFactory(owner=seller, is_for_sale=True)
+        contract = contract_create(
+            property_id=prop.pk,
+            contract_type=CONTRACT_TYPE_SALE,
+            party_a_id=seller.pk,
+            party_b_id=buyer.pk,
+            start_date="2024-06-01",
+            sale_price=3_000_000_000,
+            photo_files=["photo.jpg"],
+        )
+
+        contract_delete(contract_id=contract.pk)
+
+        owner_reversal = PropertyHistory.objects.get(
+            property=prop, field="owner",
+            old_value=str(buyer), new_value=str(seller),
+        )
+        assert owner_reversal.change_type == CHANGE_TYPE_OWNER
+        assert owner_reversal.source == SOURCE_CONTRACT
+        assert owner_reversal.contract_id is None
+
+    def test_delete_records_changed_by(self):
+        from apps.properties.models import PropertyHistory
+        prop = PropertyFactory(is_for_rent=True, deposit=1_000_000, monthly_rent=500_000, is_for_sale=False)
+        tenant = PersonFactory()
+        agent = prop.agent
+        contract = contract_create(
+            property_id=prop.pk,
+            contract_type=CONTRACT_TYPE_RENT,
+            party_b_id=tenant.pk,
+            start_date="2024-01-01",
+            end_date="2025-01-01",
+            deposit_amount=1_000_000,
+            monthly_rent=500_000,
+            photo_files=["photo.jpg"],
+            changed_by=agent,
+        )
+
+        contract_delete(contract_id=contract.pk, changed_by=agent)
+
+        assert PropertyHistory.objects.filter(
+            property=prop, field="status", new_value="vacant", changed_by=agent,
+        ).exists()
+
+
+@pytest.mark.django_db
 class TestContractPhotos:
     def test_create_stores_multiple_photos(self):
         prop = PropertyFactory()

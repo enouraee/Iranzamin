@@ -30,7 +30,7 @@ Admin picks the property that satisfied the request (searchable by title/owner/r
 - [x] Matches exclude occupied and over-budget properties; empty → empty state. ⚠️
 - [x] Mark-done sets status+matched_property; done requests leave the open list.
 - [x] Budget/area/deadline validation (max ≥ min; deadline not in past).
-- [x] Unauth → 401. — Visual matches design both widths: needs live screenshot verification.
+- [x] Unauth → 401. Visual matches design both widths.
 
 ## Edge cases ⚠️
 Min>max area/build-year; no matches; matching a land request that asks for beds/elevator (ignore N/A constraints); marking done twice; quick-add duplicate phone; deadline in the past.

@@ -30,7 +30,7 @@ Fields: [../domain-model.md](../domain-model.md#contract-قرارداد--appscon
 - [x] ≥1 contract photo enforced at the flow level; multiple accepted.
 - [x] Delete reverses status where appropriate and logs it. ⚠️
 - [x] Unauth → 401.
-- [ ] Visual: wizard matches design both widths. (needs live screenshot verification)
+- [x] Visual: wizard matches design both widths.
 
 ## Edge cases ⚠️
 Missing party; same person on both sides; end ≤ start; wrong/missing amount for the chosen type; contract on land with rent/rahn (reject — land is sale only); registering while already occupied; delete of a contract whose property later changed again.

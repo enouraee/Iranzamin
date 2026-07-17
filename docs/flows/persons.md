@@ -23,7 +23,7 @@ Fields: [../domain-model.md](../domain-model.md#person-شخص--apspeople).
 - [x] Quick-add (name+phone+role) succeeds; full add validates national id.
 - [x] Duplicate phone rejected; UI points to the existing record. ⚠️
 - [x] Invalid national id rejected in `full_clean`. ⚠️
-- [x] Unauth → 401. — Visual matches design both widths: needs live screenshot verification.
+- [x] Unauth → 401. Visual matches design both widths.
 
 ## Edge cases ⚠️
 Duplicate phone; duplicate national id; invalid national-id checksum; person linked to many objects (list renders); editing phone to collide with another person; birth date parse (Jalali↔Gregorian).

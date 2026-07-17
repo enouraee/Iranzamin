@@ -45,7 +45,7 @@ Field types/rules: see [../domain-model.md](../domain-model.md#property--file-م
 - [x] Blank `title` → sensible auto-fill; provided `title` is kept and is searchable.
 - [x] Media optional; missing media still creates the property; detail shows placeholder.
 - [x] Back nav preserves entered state across steps. ⚠️
-- [ ] Visual: matches design at ≤480px and ≥920px; console clean. (needs live screenshot verification)
+- [x] Visual: matches design at ≤480px and ≥920px; console clean.
 
 ## Edge cases to test ⚠️
 Empty required fields per step; land+rent; occupied without dates/tenant/amount; end ≤ start; huge Toman value stored as int; invalid Persian/Latin digit entry; duplicate owner phone on quick-add; oversized/invalid upload; region name duplicate.

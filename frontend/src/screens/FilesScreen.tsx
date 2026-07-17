@@ -12,9 +12,7 @@ const TYPE_OPTIONS: { value: PropertyTypeApi; label: string }[] = [
   { value: 'apartment', label: 'آپارتمان' },
   { value: 'kalnagi', label: 'کلنگی' },
   { value: 'land', label: 'زمین' },
-  { value: 'commercial', label: 'تجاری' },
-  { value: 'office', label: 'اداری' },
-  { value: 'villa', label: 'ویلا' },
+  // تجاری / اداری / ویلا are hidden for now — may be unhidden later.
 ]
 
 const DEAL_OPTIONS: { value: DealTypeApi; label: string }[] = [

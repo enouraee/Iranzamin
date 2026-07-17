@@ -53,7 +53,8 @@ function moneyDisplay(s: string): string {
   return n !== null ? formatToman(n) : ''
 }
 
-const SALE_TYPES: PropertyTypeApi[] = ['apartment', 'kalnagi', 'land', 'commercial', 'office', 'villa']
+// تجاری / اداری / ویلا are hidden for now — may be unhidden later.
+const SALE_TYPES: PropertyTypeApi[] = ['apartment', 'kalnagi', 'land']
 
 const inputStyle: React.CSSProperties = {
   width: '100%',

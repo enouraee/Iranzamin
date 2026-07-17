@@ -10,7 +10,8 @@ interface Props {
   onNext: () => void
 }
 
-const TYPE_ORDER: PropertyTypeApi[] = ['apartment', 'kalnagi', 'land', 'commercial', 'office', 'villa']
+// تجاری / اداری / ویلا are hidden for now — may be unhidden later.
+const TYPE_ORDER: PropertyTypeApi[] = ['apartment', 'kalnagi', 'land']
 
 // For land type, force is_for_sale
 function typeDefaults(type: PropertyTypeApi): Partial<WizardData> {

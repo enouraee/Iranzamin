@@ -194,3 +194,59 @@ def test_ordering_by_last_name_then_first_name():
     # Within last_name="ب": "ر" (U+0631) sorts before "ع" (U+0639)
     assert people[1].first_name == "رضا"
     assert people[2].first_name == "علی"
+
+
+# ---------------------------------------------------------------------------
+# Phone / national-id normalization (via clean)
+# ---------------------------------------------------------------------------
+
+
+def _to_persian(value: str) -> str:
+    return value.translate({ord(str(i)): "۰۱۲۳۴۵۶۷۸۹"[i] for i in range(10)})
+
+
+@pytest.mark.django_db
+class TestPhoneNormalization:
+    """Normalization runs in clean(); exercise it via full_clean() like the app does."""
+
+    def _clean_save(self, phone):
+        person = PersonFactory.build(phone=phone, national_id=None)
+        person.full_clean()
+        person.save()
+        return person
+
+    def test_persian_digits_normalized_on_save(self):
+        p = self._clean_save("۰۹۱۲۳۴۵۶۷۸۹")
+        p.refresh_from_db()
+        assert p.phone == "09123456789"
+
+    def test_plus98_prefix_normalized(self):
+        assert self._clean_save("+989120000011").phone == "09120000011"
+
+    def test_0098_prefix_normalized(self):
+        assert self._clean_save("00989120000012").phone == "09120000012"
+
+    def test_normalized_duplicate_is_rejected(self):
+        self._clean_save("09120000013")
+        with pytest.raises(ValidationError):
+            # Same number expressed in international form must collide.
+            person = PersonFactory.build(phone="+989120000013", national_id=None)
+            person.full_clean()
+
+    def test_invalid_phone_still_rejected(self):
+        with pytest.raises(ValidationError):
+            person = PersonFactory.build(phone="12345", national_id=None)
+            person.full_clean()
+
+
+@pytest.mark.django_db
+class TestNationalIdNormalization:
+    def test_persian_digit_national_id_normalized(self):
+        # VALID_NATIONAL_ID in Persian digits should pass and store ASCII.
+        person = PersonFactory.build(
+            phone="09120000014", national_id=_to_persian(VALID_NATIONAL_ID)
+        )
+        person.full_clean()
+        person.save()
+        person.refresh_from_db()
+        assert person.national_id == VALID_NATIONAL_ID

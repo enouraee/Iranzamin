@@ -81,9 +81,13 @@ describe('AddFileScreen wizard', () => {
     expect(screen.getByText('آپارتمان')).toBeInTheDocument()
     expect(screen.getByText('کلنگی')).toBeInTheDocument()
     expect(screen.getByText('زمین')).toBeInTheDocument()
-    expect(screen.getByText('تجاری')).toBeInTheDocument()
-    expect(screen.getByText('اداری')).toBeInTheDocument()
-    expect(screen.getByText('ویلا')).toBeInTheDocument()
+  })
+
+  it('hides the تجاری / اداری / ویلا types for now', () => {
+    renderWizard()
+    expect(screen.queryByText('تجاری')).not.toBeInTheDocument()
+    expect(screen.queryByText('اداری')).not.toBeInTheDocument()
+    expect(screen.queryByText('ویلا')).not.toBeInTheDocument()
   })
 
   it('shows error when Next clicked without selecting type', async () => {
@@ -139,13 +143,14 @@ describe('AddFileScreen wizard', () => {
     expect(screen.queryByText('واحد')).not.toBeInTheDocument()
   })
 
-  it('shows floor and unit for villa type (same as apartment)', async () => {
+  it('does not show floor/unit for land type', async () => {
     renderWizard()
-    await act(async () => { fireEvent.click(screen.getByText('ویلا')) })
+    await act(async () => { fireEvent.click(screen.getByText('زمین')) })
     await waitFor(() => {
-      expect(screen.getByText('طبقه')).toBeInTheDocument()
-      expect(screen.getByText('واحد')).toBeInTheDocument()
+      expect(screen.getByText('منطقه')).toBeInTheDocument()
     })
+    expect(screen.queryByText('طبقه')).not.toBeInTheDocument()
+    expect(screen.queryByText('واحد')).not.toBeInTheDocument()
   })
 
   // ── Progress bar ──

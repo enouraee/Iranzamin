@@ -4,13 +4,17 @@ import { useNavigate } from 'react-router-dom'
 import { Search, Plus } from 'lucide-react'
 import type { AxiosError } from 'axios'
 import { getPeople, createPerson } from '../api/people'
-import type { PersonCreatePayload } from '../api/people'
+import type { PersonCreatePayload, PersonKind } from '../api/people'
 import type { PersonApi } from '../api/types'
 import { toPersianDigits, formatPhone } from '../lib/fmt'
 import { Button } from '../components/forms/Button'
 import { Input } from '../components/forms/Input'
 
-type RoleFilter = 'owner' | 'customer' | undefined
+const KIND_TABS: { value: PersonKind; label: string }[] = [
+  { value: 'owners', label: 'مالکین' },
+  { value: 'renters', label: 'مستأجرین' },
+  { value: 'customers', label: 'مشتریان' },
+]
 
 function initials(person: PersonApi): string {
   const first = person.first_name?.[0] ?? ''
@@ -420,7 +424,7 @@ export default function PersonsScreen() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
-  const [roleFilter, setRoleFilter] = useState<RoleFilter>(undefined)
+  const [kind, setKind] = useState<PersonKind>('owners')
   const [page, setPage] = useState(1)
   const [showAddModal, setShowAddModal] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(0 as unknown as ReturnType<typeof setTimeout>)
@@ -435,11 +439,11 @@ export default function PersonsScreen() {
   }, [])
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['people', debouncedSearch, roleFilter, page],
+    queryKey: ['people', debouncedSearch, kind, page],
     queryFn: () =>
       getPeople({
         search: debouncedSearch || undefined,
-        role: roleFilter,
+        kind,
         page,
         page_size: 20,
       }),
@@ -509,21 +513,14 @@ export default function PersonsScreen() {
           scrollbarWidth: 'none',
         }}
       >
-        <FilterTab
-          label="همه"
-          active={roleFilter === undefined}
-          onClick={() => { setRoleFilter(undefined); setPage(1) }}
-        />
-        <FilterTab
-          label="مالک"
-          active={roleFilter === 'owner'}
-          onClick={() => { setRoleFilter('owner'); setPage(1) }}
-        />
-        <FilterTab
-          label="مشتری"
-          active={roleFilter === 'customer'}
-          onClick={() => { setRoleFilter('customer'); setPage(1) }}
-        />
+        {KIND_TABS.map((tab) => (
+          <FilterTab
+            key={tab.value}
+            label={tab.label}
+            active={kind === tab.value}
+            onClick={() => { setKind(tab.value); setPage(1) }}
+          />
+        ))}
       </div>
 
       {!isLoading && (

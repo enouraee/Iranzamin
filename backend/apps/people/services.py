@@ -1,7 +1,13 @@
 from django.db import transaction
 
-from .models import Person
+from .models import Person, PersonHistory
 from .selectors import person_get
+
+
+def _history_value(value) -> str:
+    if value is None or value == "":
+        return ""
+    return str(value)
 
 _UPDATABLE_FIELDS = frozenset(
     {
@@ -54,11 +60,32 @@ def person_quick_add(
 
 
 @transaction.atomic
-def person_update(*, person_id: int, data: dict) -> Person:
+def person_update(*, person_id: int, data: dict, changed_by=None) -> Person:
     person = person_get(person_id=person_id)
+
+    # Snapshot the previous values so we can log exactly what changed. clean()
+    # normalizes phone/national_id, so we compare against the post-clean values.
+    old_values = {field: getattr(person, field) for field in _UPDATABLE_FIELDS}
+
     for field, value in data.items():
         if field in _UPDATABLE_FIELDS:
             setattr(person, field, value)
+
     person.full_clean()
     person.save()
+
+    entries = [
+        PersonHistory(
+            person=person,
+            changed_by=changed_by,
+            field=field,
+            old_value=_history_value(old_values[field]),
+            new_value=_history_value(getattr(person, field)),
+        )
+        for field in _UPDATABLE_FIELDS
+        if field in data and old_values[field] != getattr(person, field)
+    ]
+    if entries:
+        PersonHistory.objects.bulk_create(entries)
+
     return person

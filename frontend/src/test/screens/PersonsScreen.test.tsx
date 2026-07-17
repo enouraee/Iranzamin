@@ -63,12 +63,22 @@ describe('PersonsScreen', () => {
     expect(screen.getByRole('button', { name: /افزودن/i })).toBeInTheDocument()
   })
 
-  it('renders role filter tabs', () => {
+  it('renders kind filter tabs', () => {
     mockGetPeople.mockResolvedValue(EMPTY_PAGE)
     renderPersons()
-    expect(screen.getByText('همه')).toBeInTheDocument()
-    expect(screen.getByText('مالک')).toBeInTheDocument()
-    expect(screen.getByText('مشتری')).toBeInTheDocument()
+    expect(screen.getByText('مالکین')).toBeInTheDocument()
+    expect(screen.getByText('مستأجرین')).toBeInTheDocument()
+    expect(screen.getByText('مشتریان')).toBeInTheDocument()
+  })
+
+  it('defaults to the owners kind on load', async () => {
+    mockGetPeople.mockResolvedValue(EMPTY_PAGE)
+    renderPersons()
+    await waitFor(() => {
+      expect(mockGetPeople).toHaveBeenCalledWith(
+        expect.objectContaining({ kind: 'owners' }),
+      )
+    })
   })
 
   it('shows loading skeleton while fetching', () => {
@@ -107,52 +117,52 @@ describe('PersonsScreen', () => {
     })
   })
 
-  it('calls getPeople with owner role when مالک tab clicked', async () => {
+  it('calls getPeople with renters kind when مستأجرین tab clicked', async () => {
     mockGetPeople.mockResolvedValue(EMPTY_PAGE)
     renderPersons()
     await waitFor(() => screen.getByText('شخصی با این مشخصات یافت نشد.'))
 
     await act(async () => {
-      fireEvent.click(screen.getByText('مالک'))
+      fireEvent.click(screen.getByText('مستأجرین'))
     })
 
     await waitFor(() => {
       expect(mockGetPeople).toHaveBeenCalledWith(
-        expect.objectContaining({ role: 'owner' }),
+        expect.objectContaining({ kind: 'renters' }),
       )
     })
   })
 
-  it('calls getPeople with customer role when مشتری tab clicked', async () => {
+  it('calls getPeople with customers kind when مشتریان tab clicked', async () => {
     mockGetPeople.mockResolvedValue(EMPTY_PAGE)
     renderPersons()
     await waitFor(() => screen.getByText('شخصی با این مشخصات یافت نشد.'))
 
     await act(async () => {
-      fireEvent.click(screen.getByText('مشتری'))
+      fireEvent.click(screen.getByText('مشتریان'))
     })
 
     await waitFor(() => {
       expect(mockGetPeople).toHaveBeenCalledWith(
-        expect.objectContaining({ role: 'customer' }),
+        expect.objectContaining({ kind: 'customers' }),
       )
     })
   })
 
-  it('resets role filter to undefined when همه tab clicked', async () => {
+  it('switches back to owners kind when مالکین tab clicked', async () => {
     mockGetPeople.mockResolvedValue(EMPTY_PAGE)
     renderPersons()
     await waitFor(() => screen.getByText('شخصی با این مشخصات یافت نشد.'))
 
-    await act(async () => { fireEvent.click(screen.getByText('مالک')) })
+    await act(async () => { fireEvent.click(screen.getByText('مشتریان')) })
     await waitFor(() =>
-      expect(mockGetPeople).toHaveBeenCalledWith(expect.objectContaining({ role: 'owner' })),
+      expect(mockGetPeople).toHaveBeenCalledWith(expect.objectContaining({ kind: 'customers' })),
     )
 
-    await act(async () => { fireEvent.click(screen.getByText('همه')) })
+    await act(async () => { fireEvent.click(screen.getByText('مالکین')) })
     await waitFor(() =>
       expect(mockGetPeople).toHaveBeenCalledWith(
-        expect.objectContaining({ role: undefined }),
+        expect.objectContaining({ kind: 'owners' }),
       ),
     )
   })

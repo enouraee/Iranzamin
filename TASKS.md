@@ -270,10 +270,10 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
 
 ## Cross-cutting
 
-- [ ] **40. Admin + factories + seed data**
+- [x] **40. Admin + factories + seed data**
   - **Scope:** register all models in `admin.py`; `factory_boy` factories for every model (used by all tests); a management command to seed realistic Persian demo data for local frontend work.
   - **Tests:** factories build valid objects; seed command runs idempotently.
-  - **Done:** admin usable, factories cover all models, seed populates DB. `_____ / commit _____`
+  - **Done:** completed together with task 49 (`apps/common` seed command + admin/factory updates covering all new fields).
 
 - [ ] **41. Lint, types, coverage gate, CORS**
   - **Scope:** `ruff check .` + `mypy .` clean; `pytest --cov` with a coverage threshold; `django-cors-headers` configured for the frontend origin; CI-ready `pyproject` scripts.
@@ -328,11 +328,11 @@ Legend: 🎨 = design fidelity critical · 🔒 = auth-gated · ⚠️ = has edg
   - **Tests:** ⚠️ within-window inclusion boundary (today/ended); no-deadline requests excluded; empty → empty; ordering by soonest.
   - **Done:** `c2d2daa / feat(dashboard): contract-ending + request-deadline read model (task 48)`
 
-- [ ] **49. Update admin, factories, seed for new fields**
+- [x] **49. Update admin, factories, seed for new fields**
   - **Scope:** Extend task-40 factories + seed command + `admin.py` to cover amenity columns, video, PropertyHistory, occupancy amounts, title, ContractPhoto, and the reworked Request. Keep seed idempotent and realistically Persian.
   - **Note:** if task 40 isn't done yet, fold this into it instead of duplicating.
   - **Tests:** factories build valid objects with new fields; seed runs idempotently.
-  - **Done:** `_____ / commit _____`
+  - **Done:** folded task 40 in — new `apps/common` `seed` command (idempotent, Persian demo data), `PropertyHistoryFactory`, and admin for `PropertyVideo`/`PropertyHistory` + inlines. Commit pending.
 
 ---
 

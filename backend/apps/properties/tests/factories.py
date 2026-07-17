@@ -2,9 +2,12 @@ import factory
 
 from apps.people.tests.factories import PersonFactory
 from apps.properties.models import (
+    CHANGE_TYPE_PRICE,
     Property,
+    PropertyHistory,
     PropertyPhoto,
     PropertyVideo,
+    SOURCE_MANUAL,
     STATUS_VACANT,
     TYPE_APARTMENT,
 )
@@ -49,3 +52,17 @@ class PropertyVideoFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = PropertyVideo
+
+
+class PropertyHistoryFactory(factory.django.DjangoModelFactory):
+    property = factory.SubFactory(PropertyFactory)
+    changed_by = factory.SubFactory(UserFactory)
+    change_type = CHANGE_TYPE_PRICE
+    field = "total_price"
+    old_value = "4000000000"
+    new_value = "5000000000"
+    source = SOURCE_MANUAL
+    contract = None
+
+    class Meta:
+        model = PropertyHistory

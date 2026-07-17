@@ -187,6 +187,55 @@ class TestRequestCreate:
                 max_build_year=1390,
             )
 
+    def test_past_deadline_rejected(self, customer):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        with pytest.raises(ValidationError):
+            request_create(
+                customer_id=customer.pk,
+                request_type=REQUEST_TYPE_SALE,
+                deadline=timezone.localdate() - timedelta(days=1),
+            )
+
+    def test_today_deadline_accepted(self, customer):
+        from django.utils import timezone
+
+        req = request_create(
+            customer_id=customer.pk,
+            request_type=REQUEST_TYPE_SALE,
+            deadline=timezone.localdate(),
+        )
+        assert req.pk is not None
+
+    def test_future_deadline_accepted(self, customer):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        req = request_create(
+            customer_id=customer.pk,
+            request_type=REQUEST_TYPE_SALE,
+            deadline=timezone.localdate() + timedelta(days=30),
+        )
+        assert req.pk is not None
+
+    def test_update_allows_existing_past_deadline(self, customer):
+        """An aged request (deadline now in the past) stays editable."""
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        req = RequestFactory(customer=customer, request_type=REQUEST_TYPE_SALE)
+        Request.objects.filter(pk=req.pk).update(
+            deadline=timezone.localdate() - timedelta(days=10)
+        )
+        req.refresh_from_db()
+
+        updated = request_update(request_id=req.pk, data={"notes": "پیگیری شد"})
+        assert updated.notes == "پیگیری شد"
+
     def test_nonexistent_customer_raises_error(self):
         with pytest.raises(ApplicationError):
             request_create(customer_id=99999, request_type=REQUEST_TYPE_SALE)

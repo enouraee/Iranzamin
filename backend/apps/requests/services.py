@@ -1,5 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.utils import timezone
+from django.utils.dateparse import parse_date
 
 from apps.people.models import ROLE_CUSTOMER
 from apps.people.services import person_quick_add
@@ -59,6 +61,12 @@ def request_create(
 ) -> Request:
     from apps.people.selectors import person_get
     from apps.regions.models import Region
+
+    # A brand-new request must not already be past its follow-up deadline.
+    # (Existing requests are allowed to age past it — see requests_due_soon.)
+    _deadline = parse_date(deadline) if isinstance(deadline, str) else deadline
+    if _deadline is not None and _deadline < timezone.localdate():
+        raise ValidationError({"deadline": "مهلت درخواست نمی‌تواند در گذشته باشد."})
 
     with transaction.atomic():
         if customer_id is not None:

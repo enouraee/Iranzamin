@@ -3,8 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ChevronDown, ChevronUp, Pencil } from 'lucide-react'
 import type { AxiosError } from 'axios'
-import { getPerson, updatePerson } from '../api/people'
-import type { PersonCreatePayload } from '../api/people'
+import { getPerson, updatePerson, getPersonHistory } from '../api/people'
+import type { PersonCreatePayload, PersonHistoryEntry } from '../api/people'
 import type { PersonDetailApi, PersonRoleApi, PropertyTypeApi, PropertyStatusApi } from '../api/types'
 import { PROPERTY_TYPE_LABEL } from '../api/types'
 import { toPersianDigits, formatPhone, toJalali } from '../lib/fmt'
@@ -156,6 +156,7 @@ function EditSheet({
     mutationFn: (payload: Partial<PersonCreatePayload>) => updatePerson(person.id, payload),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['person', person.id] })
+      qc.invalidateQueries({ queryKey: ['person-history', person.id] })
       qc.invalidateQueries({ queryKey: ['people'] })
       onClose()
     },
@@ -344,6 +345,35 @@ function EditSheet({
   )
 }
 
+function historyValue(v: string): string {
+  return v.trim() === '' ? '—' : v
+}
+
+function HistoryRow({ entry }: { entry: PersonHistoryEntry }) {
+  const date = entry.created_at ? toJalali(entry.created_at.slice(0, 10)) : ''
+  return (
+    <li
+      style={{
+        fontSize: 'var(--text-sm)',
+        fontFamily: 'var(--font-sans)',
+        color: 'var(--text-secondary)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        direction: 'rtl',
+      }}
+    >
+      <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>
+        {entry.field_label}: {historyValue(entry.old_value)} ← {historyValue(entry.new_value)}
+      </span>
+      <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>
+        {date}
+        {entry.changed_by ? ` · ${entry.changed_by}` : ''}
+      </span>
+    </li>
+  )
+}
+
 export default function PersonDetailScreen() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -354,6 +384,12 @@ export default function PersonDetailScreen() {
     queryKey: ['person', Number(id)],
     queryFn: () => getPerson(Number(id)),
     enabled: !!id,
+  })
+
+  const { data: history = [] } = useQuery({
+    queryKey: ['person-history', Number(id)],
+    queryFn: () => getPersonHistory(Number(id)),
+    enabled: !!id && historyOpen,
   })
 
   if (isLoading) {
@@ -531,16 +567,37 @@ export default function PersonDetailScreen() {
           <div
             style={{
               padding: 'var(--space-4)',
-              paddingTop: 0,
-              fontSize: 'var(--text-sm)',
-              color: 'var(--text-muted)',
-              fontFamily: 'var(--font-sans)',
-              textAlign: 'center',
+              paddingTop: 'var(--space-3)',
               borderTop: '1px solid var(--border-default)',
-              paddingBottom: 'var(--space-4)',
             }}
           >
-            تاریخچه‌ای ثبت نشده.
+            {history.length === 0 ? (
+              <div
+                style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--text-muted)',
+                  fontFamily: 'var(--font-sans)',
+                  textAlign: 'center',
+                }}
+              >
+                تاریخچه‌ای ثبت نشده.
+              </div>
+            ) : (
+              <ul
+                style={{
+                  listStyle: 'none',
+                  margin: 0,
+                  padding: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 'var(--space-3)',
+                }}
+              >
+                {history.map((entry) => (
+                  <HistoryRow key={entry.id} entry={entry} />
+                ))}
+              </ul>
+            )}
           </div>
         )}
       </div>

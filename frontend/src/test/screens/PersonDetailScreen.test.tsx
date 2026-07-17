@@ -9,10 +9,12 @@ import { ToastProvider } from '../../components/common/Toast'
 vi.mock('../../api/people', () => ({
   getPerson: vi.fn(),
   updatePerson: vi.fn(),
+  getPersonHistory: vi.fn(),
 }))
 
-import { getPerson } from '../../api/people'
+import { getPerson, getPersonHistory } from '../../api/people'
 const mockGetPerson = vi.mocked(getPerson)
+const mockGetPersonHistory = vi.mocked(getPersonHistory)
 
 function renderDetail(id = '1') {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } })
@@ -139,6 +141,7 @@ describe('PersonDetailScreen', () => {
 
   it('shows empty history state when toggle clicked', async () => {
     mockGetPerson.mockResolvedValue(makePerson())
+    mockGetPersonHistory.mockResolvedValue([])
     renderDetail()
     await waitFor(() => screen.getByText('تاریخچه تغییرات'))
 
@@ -146,6 +149,30 @@ describe('PersonDetailScreen', () => {
 
     await waitFor(() => {
       expect(screen.getByText('تاریخچه‌ای ثبت نشده.')).toBeInTheDocument()
+    })
+  })
+
+  it('renders history entries when present', async () => {
+    mockGetPerson.mockResolvedValue(makePerson())
+    mockGetPersonHistory.mockResolvedValue([
+      {
+        id: 1,
+        field: 'first_name',
+        field_label: 'نام',
+        old_value: 'قبل',
+        new_value: 'بعد',
+        changed_by: 'مدیر سیستم',
+        created_at: '2024-05-01T10:00:00Z',
+      },
+    ])
+    renderDetail()
+    await waitFor(() => screen.getByText('تاریخچه تغییرات'))
+
+    fireEvent.click(screen.getByText('تاریخچه تغییرات'))
+
+    await waitFor(() => {
+      expect(screen.getByText(/نام: قبل ← بعد/)).toBeInTheDocument()
+      expect(screen.getByText(/مدیر سیستم/)).toBeInTheDocument()
     })
   })
 

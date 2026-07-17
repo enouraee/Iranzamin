@@ -23,11 +23,11 @@ Design already shows **`قراردادهای نزدیک به پایان`** (cont
 - Recommendation engine beyond hard matching (O2).
 
 ## Acceptance criteria (in-scope only)
-- [ ] Dashboard renders all stats with Persian digits; empty DB → zeros. ⚠️
+- [x] Dashboard renders all stats with Persian digits; empty DB → zeros. ⚠️
 - [x] `قراردادهای نزدیک به پایان` lists rent/rahn contracts within the window, sorted by soonest end. ⚠️
 - [x] Follow-up list surfaces requests at/near deadline.
 - [x] Windows are configurable (constant/setting), not hardcoded magic numbers.
-- [ ] Unauth → 401. Visual matches design both widths.
+- [x] Unauth → 401. — Visual matches design both widths: needs live screenshot verification.
 
 ## Edge cases ⚠️
 No contracts/requests → empty states; contract ending exactly today / already ended; request with no deadline excluded; timezone = Asia/Tehran boundary (end-of-day).

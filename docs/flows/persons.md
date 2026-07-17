@@ -17,13 +17,13 @@ Fields: [../domain-model.md](../domain-model.md#person-شخص--apspeople).
 `person_list` (+search/filter), `person_get` (with linked objects), `person_create`, `person_update`.
 
 ## Acceptance criteria
-- [ ] Search matches name / phone / national id. ⚠️
-- [ ] Role filter works; empty state shows the exact copy.
-- [ ] Detail lists linked properties/contracts/requests; links resolve. ⚠️
-- [ ] Quick-add (name+phone+role) succeeds; full add validates national id.
-- [ ] Duplicate phone rejected; UI points to the existing record. ⚠️
-- [ ] Invalid national id rejected in `full_clean`. ⚠️
-- [ ] Unauth → 401. Visual matches design both widths.
+- [x] Search matches name / phone / national id. ⚠️
+- [x] Role filter works; empty state shows the exact copy.
+- [x] Detail lists linked properties/contracts/requests; links resolve. ⚠️
+- [x] Quick-add (name+phone+role) succeeds; full add validates national id.
+- [x] Duplicate phone rejected; UI points to the existing record. ⚠️
+- [x] Invalid national id rejected in `full_clean`. ⚠️
+- [x] Unauth → 401. — Visual matches design both widths: needs live screenshot verification.
 
 ## Edge cases ⚠️
 Duplicate phone; duplicate national id; invalid national-id checksum; person linked to many objects (list renders); editing phone to collide with another person; birth date parse (Jalali↔Gregorian).

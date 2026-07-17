@@ -22,15 +22,15 @@ Admin picks the property that satisfied the request (searchable by title/owner/r
 - Matching respects: type→deal flag (rent→is_for_rent, rahn→is_for_rahn, sale→is_for_sale), area range, beds, budget/deposit/rent ceilings, region, `wants_*`→amenity columns, and only `status=vacant`.
 
 ## Acceptance criteria
-- [ ] Three type branches render their correct field sets. ⚠️
-- [ ] rent vs rahn money fields differ (پیش+کرایه vs رهن). ⚠️
-- [ ] sale branch collects target type / units / build year / budget. ⚠️
-- [ ] Quick-add customer with name+phone works.
-- [ ] `wants_parking/elevator/storage` narrow the match set. ⚠️
-- [ ] Matches exclude occupied and over-budget properties; empty → empty state. ⚠️
-- [ ] Mark-done sets status+matched_property; done requests leave the open list.
-- [ ] Budget/area/deadline validation (max ≥ min; deadline not in past).
-- [ ] Unauth → 401. Visual matches design both widths.
+- [x] Three type branches render their correct field sets. ⚠️
+- [x] rent vs rahn money fields differ (پیش+کرایه vs رهن). ⚠️
+- [x] sale branch collects target type / units / build year / budget. ⚠️
+- [x] Quick-add customer with name+phone works.
+- [x] `wants_parking/elevator/storage` narrow the match set. ⚠️
+- [x] Matches exclude occupied and over-budget properties; empty → empty state. ⚠️
+- [x] Mark-done sets status+matched_property; done requests leave the open list.
+- [~] Budget/area/deadline validation (max ≥ min; deadline not in past). — max≥min for area + build_year done; **deadline-not-in-past NOT enforced** (missing in model/service/serializer).
+- [x] Unauth → 401. — Visual matches design both widths: needs live screenshot verification.
 
 ## Edge cases ⚠️
 Min>max area/build-year; no matches; matching a land request that asks for beds/elevator (ignore N/A constraints); marking done twice; quick-add duplicate phone; deadline in the past.

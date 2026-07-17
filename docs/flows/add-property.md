@@ -34,18 +34,18 @@ Field types/rules: see [../domain-model.md](../domain-model.md#property--file-م
 - `property_create` auto-fills `title` if blank (D5); enforces land-sale-only, deal-amount requirements, occupied-requires-tenant+dates+amounts.
 
 ## Acceptance criteria
-- [ ] All three branches render exactly their fields; conditional sub-fields toggle. ⚠️
-- [ ] ≥1 deal type required; per-type amount fields required when selected. ⚠️
-- [ ] Land: rent/rahn impossible in UI **and** rejected by server. ⚠️
-- [ ] Occupied (پر) requires tenant + start/end + occupancy actual amount for the chosen kind; end > start. ⚠️
-- [ ] Amenities persist as the D1 boolean columns; round-trip to detail. ⚠️
-- [ ] Inline region add works and selects the new region.
-- [ ] Owner quick-add with only name+phone succeeds.
-- [ ] Price fields format Persian digits + show spelled-out helper.
-- [ ] Blank `title` → sensible auto-fill; provided `title` is kept and is searchable.
-- [ ] Media optional; missing media still creates the property; detail shows placeholder.
-- [ ] Back nav preserves entered state across steps. ⚠️
-- [ ] Visual: matches design at ≤480px and ≥920px; console clean.
+- [x] All three branches render exactly their fields; conditional sub-fields toggle. ⚠️
+- [x] ≥1 deal type required; per-type amount fields required when selected. ⚠️
+- [x] Land: rent/rahn impossible in UI **and** rejected by server. ⚠️
+- [x] Occupied (پر) requires tenant + start/end + occupancy actual amount for the chosen kind; end > start. ⚠️
+- [x] Amenities persist as the D1 boolean columns; round-trip to detail. ⚠️
+- [x] Inline region add works and selects the new region.
+- [x] Owner quick-add with only name+phone succeeds.
+- [x] Price fields format Persian digits + show spelled-out helper.
+- [x] Blank `title` → sensible auto-fill; provided `title` is kept and is searchable.
+- [x] Media optional; missing media still creates the property; detail shows placeholder.
+- [x] Back nav preserves entered state across steps. ⚠️
+- [ ] Visual: matches design at ≤480px and ≥920px; console clean. (needs live screenshot verification)
 
 ## Edge cases to test ⚠️
 Empty required fields per step; land+rent; occupied without dates/tenant/amount; end ≤ start; huge Toman value stored as int; invalid Persian/Latin digit entry; duplicate owner phone on quick-add; oversized/invalid upload; region name duplicate.

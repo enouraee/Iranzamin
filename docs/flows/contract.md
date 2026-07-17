@@ -21,16 +21,16 @@ Fields: [../domain-model.md](../domain-model.md#contract-قرارداد--appscon
 - `contract_update` / `contract_delete` — on delete, reverse the status side-effect where sensible and log a reversing `PropertyHistory`.
 
 ## Acceptance criteria
-- [ ] Property search finds by title / owner / region. ⚠️
-- [ ] Parties resolvable by phone/name/national id; quick-add works.
-- [ ] Amount required per type; `end_date` required + > `start_date` for rent/rahn. ⚠️
-- [ ] Sale registration updates `owner`; rent/rahn updates tenant+status+occupancy amounts. ⚠️ (assert on returned property)
-- [ ] Every owner/tenant/status/price change appears in `PropertyHistory` with source=contract. ⚠️
-- [ ] Atomic: forced failure in the property update leaves **no** contract row. ⚠️
-- [ ] ≥1 contract photo enforced at the flow level; multiple accepted.
-- [ ] Delete reverses status where appropriate and logs it. ⚠️
-- [ ] Unauth → 401.
-- [ ] Visual: wizard matches design both widths.
+- [x] Property search finds by title / owner / region. ⚠️
+- [x] Parties resolvable by phone/name/national id; quick-add works.
+- [x] Amount required per type; `end_date` required + > `start_date` for rent/rahn. ⚠️
+- [x] Sale registration updates `owner`; rent/rahn updates tenant+status+occupancy amounts. ⚠️ (assert on returned property)
+- [x] Every owner/tenant/status/price change appears in `PropertyHistory` with source=contract. ⚠️
+- [x] Atomic: forced failure in the property update leaves **no** contract row. ⚠️
+- [x] ≥1 contract photo enforced at the flow level; multiple accepted.
+- [~] Delete reverses status where appropriate and logs it. ⚠️ (reversal done; reversing `PropertyHistory` NOT written — gap in `contract_delete`)
+- [x] Unauth → 401.
+- [ ] Visual: wizard matches design both widths. (needs live screenshot verification)
 
 ## Edge cases ⚠️
 Missing party; same person on both sides; end ≤ start; wrong/missing amount for the chosen type; contract on land with rent/rahn (reject — land is sale only); registering while already occupied; delete of a contract whose property later changed again.

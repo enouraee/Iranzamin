@@ -4,6 +4,7 @@ import { StatCard } from '../components/data/StatCard'
 import { getDashboardStats, getProfile } from '../api/dashboard'
 import { toPersianDigits } from '../lib/fmt'
 import type { RecentPropertySummary } from '../api/types'
+import { PROPERTY_TYPE_LABEL, PROPERTY_STATUS_LABEL } from '../api/types'
 
 function RecentPropertyRow({
   prop,
@@ -12,7 +13,7 @@ function RecentPropertyRow({
   prop: RecentPropertySummary
   onClick: () => void
 }) {
-  const isVacant = prop.status === 'خالی'
+  const isVacant = prop.status === 'vacant'
   return (
     <div
       onClick={onClick}
@@ -72,7 +73,7 @@ function RecentPropertyRow({
               flex: 1,
             }}
           >
-            {prop.type} {prop.region_name}
+            {PROPERTY_TYPE_LABEL[prop.type]} {prop.region_name}
           </strong>
           <span
             style={{
@@ -87,7 +88,7 @@ function RecentPropertyRow({
               color: isVacant ? 'var(--color-success-text)' : 'var(--color-danger-text)',
             }}
           >
-            {prop.status}
+            {PROPERTY_STATUS_LABEL[prop.status]}
           </span>
         </div>
         <span style={{ fontSize: 12, color: 'var(--text-secondary)', fontFamily: 'var(--font-sans)' }}>

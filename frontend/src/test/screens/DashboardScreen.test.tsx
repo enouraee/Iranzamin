@@ -110,18 +110,18 @@ describe('DashboardScreen', () => {
       recent_properties: [
         {
           id: 1,
-          type: 'آپارتمان',
+          type: 'apartment',
           address: 'خیابان ولیعصر',
           region_name: 'منطقه ۳',
-          status: 'خالی',
+          status: 'vacant',
           created_at: '2026-07-01T10:00:00Z',
         },
         {
           id: 2,
-          type: 'زمین',
+          type: 'land',
           address: 'بلوار کشاورز',
           region_name: 'منطقه ۶',
-          status: 'پر',
+          status: 'occupied',
           created_at: '2026-07-02T10:00:00Z',
         },
       ],

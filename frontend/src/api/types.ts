@@ -30,6 +30,11 @@ export const DEAL_TYPE_LABEL: Record<DealTypeApi, string> = {
   rahn: 'رهن کامل',
 }
 
+export const PROPERTY_STATUS_LABEL: Record<PropertyStatusApi, string> = {
+  vacant: 'خالی',
+  occupied: 'پر',
+}
+
 export interface Region {
   id: number
   name: string
@@ -255,10 +260,10 @@ export interface PropertyRequest {
 
 export interface RecentPropertySummary {
   id: number
-  type: PropertyType
+  type: PropertyTypeApi
   address: string
   region_name: string
-  status: PropertyStatus
+  status: PropertyStatusApi
   created_at: string
 }
 

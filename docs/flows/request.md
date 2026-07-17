@@ -29,7 +29,7 @@ Admin picks the property that satisfied the request (searchable by title/owner/r
 - [x] `wants_parking/elevator/storage` narrow the match set. ⚠️
 - [x] Matches exclude occupied and over-budget properties; empty → empty state. ⚠️
 - [x] Mark-done sets status+matched_property; done requests leave the open list.
-- [~] Budget/area/deadline validation (max ≥ min; deadline not in past). — max≥min for area + build_year done; **deadline-not-in-past NOT enforced** (missing in model/service/serializer).
+- [x] Budget/area/deadline validation (max ≥ min; deadline not in past).
 - [x] Unauth → 401. — Visual matches design both widths: needs live screenshot verification.
 
 ## Edge cases ⚠️

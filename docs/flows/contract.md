@@ -28,7 +28,7 @@ Fields: [../domain-model.md](../domain-model.md#contract-قرارداد--appscon
 - [x] Every owner/tenant/status/price change appears in `PropertyHistory` with source=contract. ⚠️
 - [x] Atomic: forced failure in the property update leaves **no** contract row. ⚠️
 - [x] ≥1 contract photo enforced at the flow level; multiple accepted.
-- [~] Delete reverses status where appropriate and logs it. ⚠️ (reversal done; reversing `PropertyHistory` NOT written — gap in `contract_delete`)
+- [x] Delete reverses status where appropriate and logs it. ⚠️
 - [x] Unauth → 401.
 - [ ] Visual: wizard matches design both widths. (needs live screenshot verification)
 
